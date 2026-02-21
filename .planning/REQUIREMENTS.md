@@ -160,23 +160,69 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 through FOUND-06 | Phase 1 | Pending |
-| DASH-01 through DASH-03 | Phase 2 | Pending |
-| SEAS-01 through SEAS-05 | Phase 2 | Pending |
-| PLAY-01 through PLAY-04 | Phase 3 | Pending |
-| REC-01 through REC-03 | Phase 3 | Pending |
-| NARR-01 through NARR-04 | Phase 4 | Pending |
-| RECR-01 through RECR-04 | Phase 5 | Pending |
-| PORT-01 through PORT-03 | Phase 5 | Pending |
-| DRFT-01 through DRFT-03 | Phase 5 | Pending |
-| PRES-01 through PRES-03 | Phase 5 | Pending |
-| RIVL-01 through RIVL-03 | Phase 6 | Pending |
-| TIME-01 through TIME-02 | Phase 6 | Pending |
+| FOUND-01 | Phase 1 | Pending |
+| FOUND-02 | Phase 1 | Pending |
+| FOUND-03 | Phase 1 | Pending |
+| FOUND-04 | Phase 1 | Pending |
+| FOUND-05 | Phase 1 | Pending |
+| FOUND-06 | Phase 1 | Pending |
+| DASH-01 | Phase 2 | Pending |
+| DASH-02 | Phase 2 | Pending |
+| DASH-03 | Phase 2 | Pending |
+| SEAS-01 | Phase 2 | Pending |
+| SEAS-02 | Phase 2 | Pending |
+| SEAS-03 | Phase 2 | Pending |
+| SEAS-04 | Phase 2 | Pending |
+| SEAS-05 | Phase 2 | Pending |
+| INGST-01 | Phase 2 | Pending |
+| INGST-02 | Phase 2 | Pending |
+| INGST-03 | Phase 2 | Pending |
+| PLAY-01 | Phase 3 | Pending |
+| PLAY-02 | Phase 3 | Pending |
+| PLAY-03 | Phase 3 | Pending |
+| PLAY-04 | Phase 3 | Pending |
+| PLAY-05 | Phase 3 | Pending |
+| PLAY-06 | Phase 3 | Pending |
+| PLAY-07 | Phase 3 | Pending |
+| REC-01 | Phase 3 | Pending |
+| REC-02 | Phase 3 | Pending |
+| REC-03 | Phase 3 | Pending |
+| NARR-01 | Phase 4 | Pending |
+| NARR-02 | Phase 4 | Pending |
+| NARR-03 | Phase 4 | Pending |
+| NARR-04 | Phase 4 | Pending |
+| RECR-01 | Phase 5 | Pending |
+| RECR-02 | Phase 5 | Pending |
+| RECR-03 | Phase 5 | Pending |
+| RECR-04 | Phase 5 | Pending |
+| PORT-01 | Phase 5 | Pending |
+| PORT-02 | Phase 5 | Pending |
+| PORT-03 | Phase 5 | Pending |
+| DRFT-01 | Phase 5 | Pending |
+| DRFT-02 | Phase 5 | Pending |
+| DRFT-03 | Phase 5 | Pending |
+| PRES-01 | Phase 5 | Pending |
+| PRES-02 | Phase 5 | Pending |
+| PRES-03 | Phase 5 | Pending |
+| RIVL-01 | Phase 6 | Pending |
+| RIVL-02 | Phase 6 | Pending |
+| RIVL-03 | Phase 6 | Pending |
+| TIME-01 | Phase 6 | Pending |
+| TIME-02 | Phase 6 | Pending |
 | SCOU-01 | Phase 6 | Pending |
-| ACHV-01 through ACHV-03 | Phase 7 | Pending |
-| INGST-01 through INGST-03 | Phase 2 | Pending |
-| INGST-04 through INGST-06 | Phase 8 | Pending |
-| SYNC-01 through SYNC-07 | Phase 9 | Pending |
+| ACHV-01 | Phase 7 | Pending |
+| ACHV-02 | Phase 7 | Pending |
+| ACHV-03 | Phase 7 | Pending |
+| INGST-04 | Phase 8 | Pending |
+| INGST-05 | Phase 8 | Pending |
+| INGST-06 | Phase 8 | Pending |
+| SYNC-01 | Phase 9 | Pending |
+| SYNC-02 | Phase 9 | Pending |
+| SYNC-03 | Phase 9 | Pending |
+| SYNC-04 | Phase 9 | Pending |
+| SYNC-05 | Phase 9 | Pending |
+| SYNC-06 | Phase 9 | Pending |
+| SYNC-07 | Phase 9 | Pending |
 
 **Coverage:**
 - v1 requirements: 57 total
@@ -185,4 +231,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-21*
-*Last updated: 2026-02-21 after initial definition*
+*Last updated: 2026-02-21 after roadmap creation*
