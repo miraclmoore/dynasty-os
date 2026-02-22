@@ -60,13 +60,14 @@ dashboard that surfaces record, rankings, and recent activity.
   3. Win/loss and conference records auto-calculate and update immediately after logging a game
   4. User can record season-end data (final ranking, bowl/playoff outcome) and see a weekly season snapshot with ranking movement
   5. Clicking any stat cell opens it for inline editing without navigating away
-**Plans**: 4 plans
+**Plans**: 5 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Season & game data layer: service functions with auto-calculated records, Zustand stores
-- [ ] 02-02-PLAN.md — Dashboard layout and widgets: season-at-a-glance, recent activity, weekly snapshot
-- [ ] 02-03-PLAN.md — Game entry and season-end modals: LogGameModal with smart team dropdown, SeasonEndModal
-- [ ] 02-04-PLAN.md — Stat highlights, game log table, and inline editing: calculated stats, full game table, click-to-edit cells
+- [x] 02-01-PLAN.md — Season & game data layer: service functions with auto-calculated records, Zustand stores
+- [x] 02-02-PLAN.md — Dashboard layout and widgets: season-at-a-glance, recent activity, weekly snapshot
+- [x] 02-03-PLAN.md — Game entry and season-end modals: LogGameModal with smart team dropdown, SeasonEndModal
+- [x] 02-04-PLAN.md — Stat highlights, game log table, and inline editing: calculated stats, full game table, click-to-edit cells
+- [ ] 02-05-PLAN.md — Gap closure: per-game teamRanking field, DB migration, ranking movement delta in WeeklySnapshot
 
 ### Phase 3: Player Tracking and Records
 **Goal**: Coaches can build and track their roster across seasons — every player has a career arc
@@ -197,8 +198,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/4 | Planned | - |
-| 2. Core Loop | 0/4 | Planned | - |
+| 1. Foundation | 4/4 | Complete | - |
+| 2. Core Loop | 4/5 | Gap closure | - |
 | 3. Player Tracking and Records | 0/4 | Not started | - |
 | 4. Narrative Engine | 0/2 | Not started | - |
 | 5. CFB Features | 0/4 | Not started | - |
