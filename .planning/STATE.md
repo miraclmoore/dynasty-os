@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 1 of 9 (Foundation)
-Plan: 3 of 4 in current phase (01-01 complete, 01-03 complete; 01-02 and 01-04 pending)
+Plan: 3 of 4 in current phase (01-01, 01-02, 01-03 complete; 01-04 pending)
 Status: In progress
-Last activity: 2026-02-22 — Completed 01-03-PLAN.md (core types, Dexie DB, sport configs)
+Last activity: 2026-02-22 — Completed 01-02-PLAN.md (Tauri 2.x desktop shell)
 
-Progress: [██░░░░░░░░] 6% (2/36 plans complete)
+Progress: [███░░░░░░░] 8% (3/36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
-- Average duration: 5.5 min
-- Total execution time: 11 min
+- Total plans completed: 3
+- Average duration: 6.7 min
+- Total execution time: 20 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-foundation | 2/4 | 11 min | 5.5 min |
+| 01-foundation | 3/4 | 20 min | 6.7 min |
 
 **Recent Trend:**
-- Last 5 plans: 7 min, 4 min
-- Trend: Improving
+- Last 5 plans: 7 min, 4 min, 9 min
+- Trend: Stable
 
 *Updated after each plan completion*
 
@@ -52,6 +52,8 @@ Recent decisions affecting current work:
 - SportType lowercase keys ('cfb' | 'madden'): matches getSportConfig() string lookup without case conversion
 - Dexie Table<T, string> over EntityTable: Dexie v4.3.0 does not export EntityTable
 - PlayerSeason.stats as Record<string, number>: flexible stat storage avoids schema migration per sport
+- Tauri icons must be RGBA PNG: proc-macro validates at compile time (not RGB); generate with color_type=6
+- macOS RSS inflates Tauri memory: WKWebView shared frameworks counted in RSS; Windows Edge WebView2 target expected to read ~30-50MB
 
 ### Pending Todos
 
@@ -61,9 +63,10 @@ None.
 
 - madden-franchise library may not support Madden 26 schema at launch — Phase 9 must include fallback path (planned)
 - CFB ingestion is console-only; screenshot path is the sole automated ingestion method — Phase 8 coverage is critical for user adoption
+- Windows production memory (<80MB target) not yet validated — needs measurement on actual Windows build after Windows dev setup
 
 ## Session Continuity
 
-Last session: 2026-02-22 01:39 UTC
-Stopped at: Completed 01-03-PLAN.md — core types, Dexie ORM schema, CFB and Madden sport configs
+Last session: 2026-02-22 01:44 UTC
+Stopped at: Completed 01-02-PLAN.md — Tauri 2.x native desktop window wrapping React frontend
 Resume file: None
