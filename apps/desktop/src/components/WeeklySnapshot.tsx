@@ -22,6 +22,26 @@ export function WeeklySnapshot({ season, games }: WeeklySnapshotProps) {
   const wins = season?.wins ?? 0;
   const losses = season?.losses ?? 0;
 
+  // Derive current ranking from per-game teamRanking data
+  const gamesWithRanking = [...games]
+    .filter((g) => g.teamRanking != null)
+    .sort((a, b) => b.week - a.week);
+
+  const currentRanking: number | undefined =
+    gamesWithRanking.length > 0 ? gamesWithRanking[0].teamRanking : undefined;
+
+  const previousRanking: number | undefined =
+    gamesWithRanking.length > 1 ? gamesWithRanking[1].teamRanking : undefined;
+
+  const rankingDelta: number | undefined =
+    currentRanking != null && previousRanking != null
+      ? previousRanking - currentRanking
+      : undefined;
+
+  // Effective ranking to display — per-game data takes precedence over season.finalRanking
+  const displayRanking: number | undefined =
+    currentRanking ?? season?.finalRanking ?? undefined;
+
   return (
     <div className="bg-gray-800 rounded-lg p-5">
       <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">
@@ -39,11 +59,22 @@ export function WeeklySnapshot({ season, games }: WeeklySnapshotProps) {
         </span>
       </div>
 
-      {/* Current ranking */}
-      {season?.finalRanking != null && (
+      {/* Ranking with movement delta */}
+      {displayRanking != null && (
         <div className="text-sm text-gray-400 mb-3">
-          Current Ranking:{' '}
-          <span className="text-amber-400 font-semibold">#{season.finalRanking}</span>
+          Ranking:{' '}
+          <span className="text-amber-400 font-semibold">#{displayRanking}</span>
+          {rankingDelta != null && rankingDelta !== 0 && (
+            <span
+              className={
+                rankingDelta > 0
+                  ? 'text-green-400 font-semibold ml-1'
+                  : 'text-red-400 font-semibold ml-1'
+              }
+            >
+              ({rankingDelta > 0 ? '+' : ''}{rankingDelta})
+            </span>
+          )}
         </div>
       )}
 
