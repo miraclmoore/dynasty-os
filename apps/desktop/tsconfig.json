@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "composite": false
+  },
+  "include": ["src"],
+  "references": [
+    { "path": "../../packages/core-types" },
+    { "path": "../../packages/db" },
+    { "path": "../../packages/sport-configs" },
+    { "path": "../../packages/ui-components" }
+  ]
+}

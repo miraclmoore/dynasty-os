@@ -11,5 +11,8 @@
   },
   "devDependencies": {
     "turbo": "latest"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
   }
 }
