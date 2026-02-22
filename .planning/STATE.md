@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 2 of 9 (Core Loop)
-Plan: 2 of 4 in current phase
+Plan: 3 of 4 in current phase
 Status: In progress
-Last activity: 2026-02-22 — Completed 02-02-PLAN.md (dashboard widgets)
+Last activity: 2026-02-22 — Completed 02-03-PLAN.md (log game + season end modals)
 
-Progress: [█████░░░░░] 17% (6/36 plans complete)
+Progress: [██████░░░░] 19% (7/36 plans complete)
 
 ## Performance Metrics
 
@@ -28,10 +28,10 @@ Progress: [█████░░░░░] 17% (6/36 plans complete)
 | Phase | Plans | Total | Avg/Plan | Status |
 |-------|-------|-------|----------|--------|
 | 01-foundation | 4/4 | ~35 min | ~8.8 min | ✓ Complete |
-| 02-core-loop | 2/4 | ~4 min | ~2 min | In progress |
+| 02-core-loop | 3/4 | ~19 min | ~6.3 min | In progress |
 
 **Recent Trend:**
-- Last 5 plans: 4 min, 9 min, 15 min, 2 min, 2 min
+- Last 5 plans: 4 min, 9 min, 15 min, 2 min, 15 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -62,6 +62,8 @@ Recent decisions affecting current work:
 - useSeasonStore.activeSeason: season with highest year (getSeasonsByDynasty returns descending); UI must also call loadSeasons after logGame to reflect updated W/L
 - Dashboard single-subscriber pattern: DashboardPage subscribes to stores and passes props to widgets to avoid duplicate subscriptions and unnecessary re-renders
 - WeeklySnapshot currentWeek = max(game.week)+1: represents next week to play (forward-looking), not last week played
+- Bounded dropdown pattern: any field with a known valid range (1-25) uses select, not number input — prevents invalid/duplicate entry without manual validation
+- usedRankings Set pattern: collect already-used values from store via useMemo, filter from dropdown options to enforce uniqueness per season
 
 ### Pending Todos
 
@@ -76,5 +78,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22 UTC
-Stopped at: Completed 02-02-PLAN.md (dashboard widget grid — SeasonAtGlance, RecentActivity, WeeklySnapshot)
+Stopped at: Completed 02-03-PLAN.md (log game + season end modals with ranking dropdowns)
 Resume file: None
