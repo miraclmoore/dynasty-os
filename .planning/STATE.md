@@ -5,32 +5,32 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** Phase 1 — Foundation
+**Current focus:** Phase 2 — Core Loop
 
 ## Current Position
 
-Phase: 1 of 9 (Foundation)
-Plan: 3 of 4 in current phase (01-01, 01-02, 01-03 complete; 01-04 pending)
-Status: In progress
-Last activity: 2026-02-22 — Completed 01-02-PLAN.md (Tauri 2.x desktop shell)
+Phase: 2 of 9 (Core Loop)
+Plan: 0 of TBD in current phase
+Status: Phase 1 complete ✓ — ready to plan Phase 2
+Last activity: 2026-02-22 — Phase 1 complete, verified 10/10 must-haves
 
-Progress: [███░░░░░░░] 8% (3/36 plans complete)
+Progress: [████░░░░░░] 11% (4/36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 6.7 min
-- Total execution time: 20 min
+- Total plans completed: 4
+- Average duration: ~8 min
+- Total execution time: ~35 min
 
 **By Phase:**
 
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 01-foundation | 3/4 | 20 min | 6.7 min |
+| Phase | Plans | Total | Avg/Plan | Status |
+|-------|-------|-------|----------|--------|
+| 01-foundation | 4/4 | ~35 min | ~8.8 min | ✓ Complete |
 
 **Recent Trend:**
-- Last 5 plans: 7 min, 4 min, 9 min
+- Last 5 plans: 7 min, 4 min, 9 min, 15 min (incl. export fix)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -54,6 +54,8 @@ Recent decisions affecting current work:
 - PlayerSeason.stats as Record<string, number>: flexible stat storage avoids schema migration per sport
 - Tauri icons must be RGBA PNG: proc-macro validates at compile time (not RGB); generate with color_type=6
 - macOS RSS inflates Tauri memory: WKWebView shared frameworks counted in RSS; Windows Edge WebView2 target expected to read ~30-50MB
+- Blob URL downloads don't work in Tauri WebView: WKWebView and WebView2 block anchor.click() blob downloads; use tauri-plugin-dialog (save()) + tauri-plugin-fs (writeTextFile()) for all file export
+- Zustand store pattern: loadDynasties() called after every mutation (create/delete/import); activeDynasty cleared on delete if it matches
 
 ### Pending Todos
 
@@ -67,6 +69,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-22 01:44 UTC
-Stopped at: Completed 01-02-PLAN.md — Tauri 2.x native desktop window wrapping React frontend
+Last session: 2026-02-22 UTC
+Stopped at: Phase 1 complete — all 4 plans executed and verified 10/10
 Resume file: None

@@ -17,7 +17,7 @@ sync — which are isolated adapters that can be built last without blocking any
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Monorepo scaffolding, Tauri setup, DB schema, sport config system, multi-dynasty management
+- [x] **Phase 1: Foundation** - Monorepo scaffolding, Tauri setup, DB schema, sport config system, multi-dynasty management
 - [ ] **Phase 2: Core Loop** - Dashboard, season game logging, auto-calculated records, manual entry UX
 - [ ] **Phase 3: Player Tracking and Records** - Roster management, per-season stats, career totals, Legacy Cards, all-time leaderboards
 - [ ] **Phase 4: Narrative Engine** - Claude AI season recaps with tone presets, cached taglines, season wrap-up flow
@@ -44,10 +44,10 @@ all in place.
 **Plans**: 4 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Monorepo setup: Turborepo + pnpm workspaces, shared packages scaffold (core-types, db, sport-configs, ui-components), React + Vite + Tailwind desktop app
-- [ ] 01-02-PLAN.md — Tauri 2.x shell: Rust backend initialization, WebView wiring to Vite frontend, performance baselines (<80MB RAM, <3s cold start)
-- [ ] 01-03-PLAN.md — DB schema and sport config: Dexie ORM schema for all entities, sport config pattern with CFB and Madden configs, core TypeScript types
-- [ ] 01-04-PLAN.md — Dynasty management UI: create/switch/delete dynasties, Zustand store, JSON export/import, offline-first data persistence
+- [x] 01-01-PLAN.md — Monorepo setup: Turborepo + pnpm workspaces, shared packages scaffold (core-types, db, sport-configs, ui-components), React + Vite + Tailwind desktop app
+- [x] 01-02-PLAN.md — Tauri 2.x shell: Rust backend initialization, WebView wiring to Vite frontend, performance baselines (<80MB RAM, <3s cold start)
+- [x] 01-03-PLAN.md — DB schema and sport config: Dexie ORM schema for all entities, sport config pattern with CFB and Madden configs, core TypeScript types
+- [x] 01-04-PLAN.md — Dynasty management UI: create/switch/delete dynasties, Zustand store, JSON export/import, offline-first data persistence
 
 ### Phase 2: Core Loop
 **Goal**: The app is usable — a coach can log game results and see their season taking shape on a

@@ -9,12 +9,12 @@ Requirements for initial release. Covers P0 (launch-critical) and P1 (launch-com
 
 ### Foundation
 
-- [ ] **FOUND-01**: User can create a new dynasty (sport, team, coach name, start year, game version)
-- [ ] **FOUND-02**: User can manage multiple simultaneous dynasties across sports from a unified launcher
-- [ ] **FOUND-03**: User can switch between dynasties from any screen
-- [ ] **FOUND-04**: User can export dynasty data as a single JSON file
-- [ ] **FOUND-05**: User can import a previously exported dynasty JSON file
-- [ ] **FOUND-06**: App functions 100% offline (except AI narrative features)
+- [x] **FOUND-01**: User can create a new dynasty (sport, team, coach name, start year, game version)
+- [x] **FOUND-02**: User can manage multiple simultaneous dynasties across sports from a unified launcher
+- [x] **FOUND-03**: User can switch between dynasties from any screen
+- [x] **FOUND-04**: User can export dynasty data as a single JSON file
+- [x] **FOUND-05**: User can import a previously exported dynasty JSON file
+- [x] **FOUND-06**: App functions 100% offline (except AI narrative features)
 
 ### Dashboard
 
@@ -160,12 +160,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 | Phase 1 | Pending |
-| FOUND-02 | Phase 1 | Pending |
-| FOUND-03 | Phase 1 | Pending |
-| FOUND-04 | Phase 1 | Pending |
-| FOUND-05 | Phase 1 | Pending |
-| FOUND-06 | Phase 1 | Pending |
+| FOUND-01 | Phase 1 | Complete |
+| FOUND-02 | Phase 1 | Complete |
+| FOUND-03 | Phase 1 | Complete |
+| FOUND-04 | Phase 1 | Complete |
+| FOUND-05 | Phase 1 | Complete |
+| FOUND-06 | Phase 1 | Complete |
 | DASH-01 | Phase 2 | Pending |
 | DASH-02 | Phase 2 | Pending |
 | DASH-03 | Phase 2 | Pending |
