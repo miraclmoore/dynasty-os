@@ -84,8 +84,8 @@ that culminates in a Legacy Card, and program-wide leaderboards show who the all
 
 Plans:
 - [x] 03-01-PLAN.md — Roster foundation: player CRUD service/store, navigation system, Roster page with add/edit/delete/filter
-- [ ] 03-02-PLAN.md — Season stats and career totals: PlayerSeason service/store, career aggregation engine, Player Profile page with departure recording
-- [ ] 03-03-PLAN.md — Legacy Cards: AI blurb via Claude Haiku, PNG export via Tauri dialog+fs, Program Legends gallery with filters
+- [x] 03-02-PLAN.md — Season stats and career totals: PlayerSeason service/store, career aggregation engine, Player Profile page with departure recording
+- [x] 03-03-PLAN.md — Legacy Cards: AI blurb via Claude Haiku, PNG export via Tauri dialog+fs, Program Legends gallery with filters
 - [ ] 03-04-PLAN.md — Records and leaderboards: single-season top N, career top N, head-to-head opponent records with era filter
 
 ### Phase 4: Narrative Engine

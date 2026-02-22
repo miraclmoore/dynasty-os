@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 3 of 9 (Player Tracking and Records)
-Plan: 2 of 4 in current phase
+Plan: 3 of 4 in current phase
 Status: In progress
-Last activity: 2026-02-22 — Completed 03-02-PLAN.md (PlayerSeason service, career stats engine, LogPlayerSeasonModal, PlayerProfilePage)
+Last activity: 2026-02-22 — Completed 03-03-PLAN.md (Legacy Cards, Claude AI blurb, PNG export, Legends gallery)
 
-Progress: [███████░░░] 30% (11/36 plans complete)
+Progress: [███████░░░] 33% (12/36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
-- Average duration: ~6.5 min
-- Total execution time: ~64 min
+- Total plans completed: 12
+- Average duration: ~6.3 min
+- Total execution time: ~68 min
 
 **By Phase:**
 
@@ -29,10 +29,10 @@ Progress: [███████░░░] 30% (11/36 plans complete)
 |-------|-------|-------|----------|--------|
 | 01-foundation | 4/4 | ~35 min | ~8.8 min | ✓ Complete |
 | 02-core-loop | 5/5 | ~36 min | ~7.2 min | ✓ Complete |
-| 03-player-tracking | 2/4 | ~7 min | ~3.5 min | In progress |
+| 03-player-tracking | 3/4 | ~11 min | ~3.7 min | In progress |
 
 **Recent Trend:**
-- Last 5 plans: 15 min, 15 min, 2 min, 3 min, 4 min
+- Last 5 plans: 15 min, 2 min, 3 min, 4 min, 4 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -73,6 +73,10 @@ Recent decisions affecting current work:
 - Sparse stats Record: PlayerSeason.stats only stores non-zero values; computeCareerStats treats missing keys as 0 — keeps records lean without information loss
 - Position-driven stat display: PlayerProfilePage uses POSITION_STAT_KEYS map to show position-relevant columns in season history table; pattern reusable for leaderboards
 - Weighted average for decimal career stats: passerRating/puntAverage/sacks averaged by gamesPlayed (weighted) not summed — falls back to simple average when gamesPlayed=0
+- Claude Haiku for Legacy Card blurbs: cheapest/fastest model; 200 max_tokens; blurb generation fires as background promise — never blocks departure
+- Legacy blurb in localStorage (legacy-blurb-{playerId}): keeps blurb out of Player record; no DB schema change needed
+- Single bulk query for LegendsPage: getPlayerSeasonsByDynasty once, partition in memory — avoids N+1 query loop
+- Tauri PNG export pattern: toPng (html-to-image) → base64 → Uint8Array → save() dialog → writeFile() — blob URLs blocked in WKWebView/WebView2
 
 ### Pending Todos
 
@@ -87,5 +91,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22 UTC
-Stopped at: Completed 03-02-PLAN.md (PlayerSeason service, career stats engine, LogPlayerSeasonModal, PlayerProfilePage, departure recording)
+Stopped at: Completed 03-03-PLAN.md (Legacy Cards, Claude AI blurb, PNG export via Tauri, Legends gallery)
 Resume file: None
