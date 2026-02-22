@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 5 of 9 (CFB Features) — In progress
-Plan: 1 of 4 in phase (1 complete)
+Plan: 2 of 4 in phase (2 complete)
 Status: In progress
-Last activity: 2026-02-22 — Completed 05-01-PLAN.md (DB schema v3 + recruiting module)
+Last activity: 2026-02-22 — Completed 05-02-PLAN.md (transfer portal War Room)
 
-Progress: [████████░░] 44% (16/36 plans complete)
+Progress: [████████░░] 47% (17/36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 16
+- Total plans completed: 17
 - Average duration: ~5.4 min
-- Total execution time: ~90 min
+- Total execution time: ~92 min
 
 **By Phase:**
 
@@ -31,7 +31,7 @@ Progress: [████████░░] 44% (16/36 plans complete)
 | 02-core-loop | 5/5 | ~36 min | ~7.2 min | ✓ Complete |
 | 03-player-tracking | 4/4 | ~14 min | ~3.5 min | ✓ Complete |
 | 04-narrative-engine | 2/2 | ~17 min | ~8.5 min | ✓ Complete |
-| 05-cfb-features | 1/4 | ~4 min | ~4 min | In progress |
+| 05-cfb-features | 2/4 | ~6 min | ~3 min | In progress |
 
 **Recent Trend:**
 - Last 5 plans: 3 min, 4 min, 4 min, ~15 min (04-02 checkpoint), 4 min
@@ -93,6 +93,9 @@ Recent decisions affecting current work:
 - CFB sport guard pattern: activeDynasty.sport !== 'cfb' check at top of CFB-only pages — reuse in 05-02/03/04
 - Structured AI response parsing (GRADE:/ANALYSIS: regex): consistent pattern for structured Claude API responses
 - claude-haiku-4-5-20251001 for recruiting class grading: consistent with legacy card blurb model; structured grading suits Haiku's capabilities
+- calculateNetImpact as pure function in service (not store): business logic decoupled from Zustand, no side effects, easily testable
+- Transfer portal season selector as local state: selectedSeason in component, not store — portal entries are season-scoped, season picker is UI concern only
+- War Room two-column layout: lg:grid-cols-2 on desktop, stacked on mobile — same responsive pattern available for 05-03/04
 
 ### Pending Todos
 
@@ -107,5 +110,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22 UTC
-Stopped at: Completed 05-01-PLAN.md (DB schema v3 + recruiting module)
+Stopped at: Completed 05-02-PLAN.md (transfer portal War Room)
 Resume file: None
