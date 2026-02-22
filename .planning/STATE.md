@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 6 of 9 (Social and Legacy)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-02-22 — Completed 06-01-PLAN.md (Rivalry Tracker module)
+Last activity: 2026-02-22 — Completed 06-02-PLAN.md (Program Timeline module)
 
-Progress: [█████████░] 56% (20/36 plans complete)
+Progress: [█████████░] 58% (21/36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 20
-- Average duration: ~5.1 min
-- Total execution time: ~101 min
+- Total plans completed: 21
+- Average duration: ~5.2 min
+- Total execution time: ~109 min
 
 **By Phase:**
 
@@ -32,7 +32,7 @@ Progress: [█████████░] 56% (20/36 plans complete)
 | 03-player-tracking | 4/4 | ~14 min | ~3.5 min | ✓ Complete |
 | 04-narrative-engine | 2/2 | ~17 min | ~8.5 min | ✓ Complete |
 | 05-cfb-features | 4/4 | ~12 min | ~3 min | ✓ Complete |
-| 06-social-and-legacy | 1/3 | ~3 min | ~3 min | In progress |
+| 06-social-and-legacy | 2/3 | ~11 min | ~5.5 min | In progress |
 
 **Recent Trend:**
 - Last 5 plans: 3 min, 4 min, 4 min, ~15 min (04-02 checkpoint), 4 min
@@ -106,6 +106,9 @@ Recent decisions affecting current work:
 - calculateRivalryIntensity pure function: min(10, ceil(totalGames/2)) — intensity earned over time, not configurable
 - scoutingNotes Table<Record<string,unknown>> placeholder: typed properly in 06-03, avoids blocking type error in 06-01
 - RivalryTrackerPage no sport guard: rivalries are sport-agnostic, unlike CFB-only prestige/recruiting features
+- window.print() for timeline PDF export: consistent with Tauri blob URL constraint; no extra dependencies needed
+- ProgramTimelinePage no sport guard: timeline is sport-agnostic — seasons exist for all sports
+- CSS @media print with no-print classNames: inline style element hides UI chrome during window.print(), page-break-inside: avoid per node
 
 ### Pending Todos
 
@@ -120,5 +123,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22 UTC
-Stopped at: Completed 06-01-PLAN.md (Rivalry Tracker module) — Phase 6 in progress (1/3)
+Stopped at: Completed 06-02-PLAN.md (Program Timeline module) — Phase 6 in progress (2/3)
 Resume file: None
