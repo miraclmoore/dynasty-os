@@ -19,7 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Monorepo scaffolding, Tauri setup, DB schema, sport config system, multi-dynasty management
 - [x] **Phase 2: Core Loop** - Dashboard, season game logging, auto-calculated records, manual entry UX
-- [ ] **Phase 3: Player Tracking and Records** - Roster management, per-season stats, career totals, Legacy Cards, all-time leaderboards
+- [x] **Phase 3: Player Tracking and Records** - Roster management, per-season stats, career totals, Legacy Cards, all-time leaderboards
 - [ ] **Phase 4: Narrative Engine** - Claude AI season recaps with tone presets, cached taglines, season wrap-up flow
 - [ ] **Phase 5: CFB Features** - Recruiting classes, transfer portal war room, NFL Draft tracker, program prestige tracker
 - [ ] **Phase 6: Social and Legacy** - Rivalries, program timeline, opponent scouting cards, achievements and trophy room
@@ -86,7 +86,7 @@ Plans:
 - [x] 03-01-PLAN.md — Roster foundation: player CRUD service/store, navigation system, Roster page with add/edit/delete/filter
 - [x] 03-02-PLAN.md — Season stats and career totals: PlayerSeason service/store, career aggregation engine, Player Profile page with departure recording
 - [x] 03-03-PLAN.md — Legacy Cards: AI blurb via Claude Haiku, PNG export via Tauri dialog+fs, Program Legends gallery with filters
-- [ ] 03-04-PLAN.md — Records and leaderboards: single-season top N, career top N, head-to-head opponent records with era filter
+- [x] 03-04-PLAN.md — Records and leaderboards: single-season top N, career top N, head-to-head opponent records with era filter
 
 ### Phase 4: Narrative Engine
 **Goal**: At the end of each season, coaches can generate an AI-written recap that captures what

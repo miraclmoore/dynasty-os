@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** Phase 3 — Player Tracking and Records
+**Current focus:** Phase 4 — next phase
 
 ## Current Position
 
-Phase: 3 of 9 (Player Tracking and Records)
-Plan: 3 of 4 in current phase
-Status: In progress
-Last activity: 2026-02-22 — Completed 03-03-PLAN.md (Legacy Cards, Claude AI blurb, PNG export, Legends gallery)
+Phase: 3 of 9 (Player Tracking and Records) — COMPLETE
+Plan: 4 of 4 in phase (all complete)
+Status: Phase complete
+Last activity: 2026-02-22 — Completed 03-04-PLAN.md (Records & Leaderboards page)
 
-Progress: [███████░░░] 33% (12/36 plans complete)
+Progress: [████████░░] 36% (13/36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
-- Average duration: ~6.3 min
-- Total execution time: ~68 min
+- Total plans completed: 13
+- Average duration: ~5.5 min
+- Total execution time: ~71 min
 
 **By Phase:**
 
@@ -29,11 +29,11 @@ Progress: [███████░░░] 33% (12/36 plans complete)
 |-------|-------|-------|----------|--------|
 | 01-foundation | 4/4 | ~35 min | ~8.8 min | ✓ Complete |
 | 02-core-loop | 5/5 | ~36 min | ~7.2 min | ✓ Complete |
-| 03-player-tracking | 3/4 | ~11 min | ~3.7 min | In progress |
+| 03-player-tracking | 4/4 | ~14 min | ~3.5 min | ✓ Complete |
 
 **Recent Trend:**
-- Last 5 plans: 15 min, 2 min, 3 min, 4 min, 4 min
-- Trend: Stable
+- Last 5 plans: 2 min, 3 min, 4 min, 4 min, 3 min
+- Trend: Stable (fast)
 
 *Updated after each plan completion*
 
@@ -77,6 +77,8 @@ Recent decisions affecting current work:
 - Legacy blurb in localStorage (legacy-blurb-{playerId}): keeps blurb out of Player record; no DB schema change needed
 - Single bulk query for LegendsPage: getPlayerSeasonsByDynasty once, partition in memory — avoids N+1 query loop
 - Tauri PNG export pattern: toPng (html-to-image) → base64 → Uint8Array → save() dialog → writeFile() — blob URLs blocked in WKWebView/WebView2
+- Records-service no-cache pattern: getSingleSeasonLeaders/getCareerLeaders/getHeadToHeadRecords compute fresh each call — data sets are small, freshness > optimization
+- H2H era filter by year range: coaching era filter is V1 out-of-scope (coaching history not tracked in data model)
 
 ### Pending Todos
 
@@ -91,5 +93,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22 UTC
-Stopped at: Completed 03-03-PLAN.md (Legacy Cards, Claude AI blurb, PNG export via Tauri, Legends gallery)
+Stopped at: Completed 03-04-PLAN.md (Records & Leaderboards — single-season, career, H2H tabs)
 Resume file: None
