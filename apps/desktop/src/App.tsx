@@ -11,6 +11,7 @@ import { SeasonRecapPage } from './pages/SeasonRecapPage';
 import { RecruitingPage } from './pages/RecruitingPage';
 import { TransferPortalPage } from './pages/TransferPortalPage';
 import { DraftTrackerPage } from './pages/DraftTrackerPage';
+import { PrestigeTrackerPage } from './pages/PrestigeTrackerPage';
 
 function App() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
@@ -35,6 +36,8 @@ function App() {
       return <TransferPortalPage />;
     case 'draft-tracker':
       return <DraftTrackerPage />;
+    case 'prestige-tracker':
+      return <PrestigeTrackerPage />;
     default:
       return <DashboardPage />;
   }
