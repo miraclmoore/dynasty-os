@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 
 ## Current Position
 
-Phase: 5 of 9 (CFB Features) — Phase complete
-Plan: 4 of 4 in phase (4 complete)
-Status: Phase complete
-Last activity: 2026-02-22 — Completed 05-04-PLAN.md (Prestige Tracker module)
+Phase: 6 of 9 (Social and Legacy)
+Plan: 1 of 3 in current phase
+Status: In progress
+Last activity: 2026-02-22 — Completed 06-01-PLAN.md (Rivalry Tracker module)
 
-Progress: [█████████░] 53% (19/36 plans complete)
+Progress: [█████████░] 56% (20/36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 19
-- Average duration: ~5.2 min
-- Total execution time: ~98 min
+- Total plans completed: 20
+- Average duration: ~5.1 min
+- Total execution time: ~101 min
 
 **By Phase:**
 
@@ -32,6 +32,7 @@ Progress: [█████████░] 53% (19/36 plans complete)
 | 03-player-tracking | 4/4 | ~14 min | ~3.5 min | ✓ Complete |
 | 04-narrative-engine | 2/2 | ~17 min | ~8.5 min | ✓ Complete |
 | 05-cfb-features | 4/4 | ~12 min | ~3 min | ✓ Complete |
+| 06-social-and-legacy | 1/3 | ~3 min | ~3 min | In progress |
 
 **Recent Trend:**
 - Last 5 plans: 3 min, 4 min, 4 min, ~15 min (04-02 checkpoint), 4 min
@@ -102,6 +103,9 @@ Recent decisions affecting current work:
 - calculatePrestigeTrend 5-point threshold: delta > 5 = up, delta < -5 = down, else stable — pure function in service layer
 - Pure SVG chart (no external library): polyline/circle/text elements, viewBox 0 0 700 300, recruiting rank Y-axis inverted (1=top, 150=bottom)
 - Pre-fill-on-year-match: PrestigeTrackerPage year input onChange checks store for existing record, pre-fills form fields if found — no separate edit mode state needed
+- calculateRivalryIntensity pure function: min(10, ceil(totalGames/2)) — intensity earned over time, not configurable
+- scoutingNotes Table<Record<string,unknown>> placeholder: typed properly in 06-03, avoids blocking type error in 06-01
+- RivalryTrackerPage no sport guard: rivalries are sport-agnostic, unlike CFB-only prestige/recruiting features
 
 ### Pending Todos
 
@@ -116,5 +120,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22 UTC
-Stopped at: Completed 05-04-PLAN.md (Prestige Tracker module) — Phase 5 complete
+Stopped at: Completed 06-01-PLAN.md (Rivalry Tracker module) — Phase 6 in progress (1/3)
 Resume file: None

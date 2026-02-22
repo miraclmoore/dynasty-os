@@ -138,7 +138,7 @@ history scrolls as a timeline, and scouting cards exist for upcoming opponents.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 06-01-PLAN.md — Rivalry tracker: DB v4 migration (rivals + scoutingNotes tables), Rival type, CRUD service with intensity calculation, Zustand store, RivalryTrackerPage with H2H record and streak pips
+- [x] 06-01-PLAN.md — Rivalry tracker: DB v4 migration (rivals + scoutingNotes tables), Rival type, CRUD service with intensity calculation, Zustand store, RivalryTrackerPage with H2H record and streak pips
 - [ ] 06-02-PLAN.md — Program timeline: timeline-service aggregating season nodes with localStorage taglines, ProgramTimelinePage with scrollable nodes and window.print() PDF export
 - [ ] 06-03-PLAN.md — Opponent scouting cards: ScoutingNote type (updates DB placeholder), upsert service, Zustand store, ScoutingCardPage with opponent search, H2H record, and tendency notes
 
@@ -203,7 +203,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 | 3. Player Tracking and Records | 4/4 | Complete | 2026-02-22 |
 | 4. Narrative Engine | 2/2 | Complete | 2026-02-22 |
 | 5. CFB Features | 4/4 | Complete | 2026-02-22 |
-| 6. Social and Legacy | 0/3 | Not started | - |
+| 6. Social and Legacy | 1/3 | In progress | - |
 | 7. Achievements | 0/2 | Not started | - |
 | 8. Screenshot Ingestion | 0/2 | Not started | - |
 | 9. Madden Sync | 0/3 | Not started | - |
