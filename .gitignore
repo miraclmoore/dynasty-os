@@ -7,3 +7,5 @@ target
 .env
 .env.local
 .env.*.local
+# Tauri generated files (schema, runtime artifacts)
+src-tauri/gen
