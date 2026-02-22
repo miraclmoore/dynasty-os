@@ -4,6 +4,7 @@ import { useNavigationStore } from './store/navigation-store';
 import { LauncherPage } from './pages/LauncherPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { RosterPage } from './pages/RosterPage';
+import { PlayerProfilePage } from './pages/PlayerProfilePage';
 
 function PlaceholderPage({ title }: { title: string }) {
   return (
@@ -30,7 +31,7 @@ function App() {
     case 'roster':
       return <RosterPage />;
     case 'player-profile':
-      return <PlaceholderPage title="Player Profile" />;
+      return <PlayerProfilePage />;
     case 'legends':
       return <PlaceholderPage title="Legends" />;
     default:

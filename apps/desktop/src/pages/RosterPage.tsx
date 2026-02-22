@@ -5,6 +5,7 @@ import { useNavigationStore } from '../store/navigation-store';
 import { DynastySwitcher } from '../components/DynastySwitcher';
 import { AddPlayerModal } from '../components/AddPlayerModal';
 import { EditPlayerModal } from '../components/EditPlayerModal';
+import { LogPlayerSeasonModal } from '../components/LogPlayerSeasonModal';
 import { getSportConfig } from '@dynasty-os/sport-configs';
 import type { Player, PlayerStatus } from '@dynasty-os/core-types';
 
@@ -45,6 +46,7 @@ export function RosterPage() {
 
   const [addOpen, setAddOpen] = useState(false);
   const [editPlayer, setEditPlayer] = useState<Player | null>(null);
+  const [logSeasonPlayer, setLogSeasonPlayer] = useState<Player | null>(null);
   const [positionFilter, setPositionFilter] = useState<string>('All');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('active');
 
@@ -87,6 +89,10 @@ export function RosterPage() {
     );
     if (!confirmed) return;
     await usePlayerStore.getState().deletePlayer(player.id);
+  }
+
+  function handleRowClick(player: Player) {
+    useNavigationStore.getState().goToPlayerProfile(player.id);
   }
 
   return (
@@ -237,7 +243,7 @@ export function RosterPage() {
                   <th className="text-left text-xs text-gray-500 font-medium uppercase tracking-wider px-4 py-3">Stars</th>
                   <th className="text-left text-xs text-gray-500 font-medium uppercase tracking-wider px-4 py-3">Hometown</th>
                   <th className="text-left text-xs text-gray-500 font-medium uppercase tracking-wider px-4 py-3">Status</th>
-                  <th className="px-4 py-3 w-16" />
+                  <th className="px-4 py-3" />
                 </tr>
               </thead>
               <tbody>
@@ -247,13 +253,13 @@ export function RosterPage() {
                     className={`border-b border-gray-700/50 hover:bg-gray-700/30 cursor-pointer transition-colors ${
                       idx === sortedPlayers.length - 1 ? 'border-b-0' : ''
                     }`}
-                    onClick={() => setEditPlayer(player)}
+                    onClick={() => handleRowClick(player)}
                   >
                     <td className="px-4 py-3 text-gray-400 font-mono">
                       {player.jerseyNumber !== undefined ? player.jerseyNumber : '—'}
                     </td>
                     <td className="px-4 py-3">
-                      <span className="text-white font-medium">
+                      <span className="text-white font-medium hover:text-blue-300 transition-colors">
                         {player.firstName} {player.lastName}
                       </span>
                     </td>
@@ -288,13 +294,31 @@ export function RosterPage() {
                       className="px-4 py-3 text-right"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <button
-                        onClick={() => handleDelete(player)}
-                        className="text-gray-600 hover:text-red-400 transition-colors text-xs"
-                        aria-label="Delete player"
-                      >
-                        Delete
-                      </button>
+                      <div className="flex items-center justify-end gap-2">
+                        {player.status === 'active' && (
+                          <button
+                            onClick={() => setLogSeasonPlayer(player)}
+                            className="text-blue-400 hover:text-blue-300 transition-colors text-xs"
+                            aria-label="Log season stats"
+                          >
+                            Log Season
+                          </button>
+                        )}
+                        <button
+                          onClick={() => setEditPlayer(player)}
+                          className="text-gray-400 hover:text-gray-200 transition-colors text-xs"
+                          aria-label="Edit player"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(player)}
+                          className="text-gray-600 hover:text-red-400 transition-colors text-xs"
+                          aria-label="Delete player"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -318,6 +342,15 @@ export function RosterPage() {
           onClose={() => setEditPlayer(null)}
           player={editPlayer}
           sport={activeDynasty.sport}
+        />
+      )}
+
+      {logSeasonPlayer && (
+        <LogPlayerSeasonModal
+          isOpen={logSeasonPlayer !== null}
+          onClose={() => setLogSeasonPlayer(null)}
+          player={logSeasonPlayer}
+          dynastyId={activeDynasty.id}
         />
       )}
     </div>
