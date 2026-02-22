@@ -5,3 +5,4 @@ export { useGameStore } from './game-store';
 export { usePlayerStore } from './player-store';
 export { useNavigationStore } from './navigation-store';
 export { usePlayerSeasonStore } from './player-season-store';
+export { useNarrativeStore } from './narrative-store';
