@@ -36,10 +36,6 @@ export function SeasonEndModal({
     setError('');
 
     const rankingNum = finalRanking ? parseInt(finalRanking, 10) : undefined;
-    if (finalRanking && (isNaN(rankingNum as number) || (rankingNum as number) < 1 || (rankingNum as number) > 25)) {
-      setError('Ranking must be between 1 and 25.');
-      return;
-    }
 
     try {
       await updateSeason(seasonId, {
@@ -83,17 +79,20 @@ export function SeasonEndModal({
           <div>
             <label className="block text-sm text-gray-400 mb-1">
               Final AP/CFP Ranking{' '}
-              <span className="text-gray-600 text-xs">(optional, 1–25)</span>
+              <span className="text-gray-600 text-xs">(optional)</span>
             </label>
-            <input
-              type="number"
-              min="1"
-              max="25"
+            <select
               className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
-              placeholder="e.g. 4"
               value={finalRanking}
               onChange={(e) => setFinalRanking(e.target.value)}
-            />
+            >
+              <option value="">Unranked</option>
+              {Array.from({ length: 25 }, (_, i) => i + 1).map((rank) => (
+                <option key={rank} value={String(rank)}>
+                  #{rank}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Bowl Game */}

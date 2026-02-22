@@ -55,6 +55,12 @@ export function LogGameModal({
   const gameLoading = useGameStore((s) => s.loading);
   const games = useGameStore((s) => s.games);
 
+  // Rankings already used by other games this season (prevents duplicates)
+  const usedRankings = useMemo(
+    () => new Set(games.map((g) => g.opponentRanking).filter((r): r is number => r != null)),
+    [games]
+  );
+
   // Next available week (max existing week + 1, or 1 if no games)
   const nextWeek = useMemo(() => {
     if (games.length === 0) return 1;
@@ -261,15 +267,20 @@ export function LogGameModal({
                 Opp. Ranking{' '}
                 <span className="text-gray-600 text-xs">(optional)</span>
               </label>
-              <input
-                type="number"
-                min="1"
-                max="25"
+              <select
                 className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
-                placeholder="#1–25"
                 value={opponentRanking}
                 onChange={(e) => setOpponentRanking(e.target.value)}
-              />
+              >
+                <option value="">Unranked</option>
+                {Array.from({ length: 25 }, (_, i) => i + 1)
+                  .filter((rank) => !usedRankings.has(rank))
+                  .map((rank) => (
+                    <option key={rank} value={String(rank)}>
+                      #{rank}
+                    </option>
+                  ))}
+              </select>
             </div>
             <div className="flex items-end pb-1">
               <label className="flex items-center gap-2 cursor-pointer">
