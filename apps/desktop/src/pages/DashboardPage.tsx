@@ -226,6 +226,12 @@ export function DashboardPage() {
                     >
                       Program Prestige
                     </button>
+                    <button
+                      onClick={() => useNavigationStore.getState().goToRivalryTracker()}
+                      className="w-full px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold rounded-lg transition-colors"
+                    >
+                      Rivalry Tracker
+                    </button>
                   </>
                 )}
               </div>

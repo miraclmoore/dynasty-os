@@ -10,7 +10,8 @@ type Page =
   | 'recruiting'
   | 'transfer-portal'
   | 'draft-tracker'
-  | 'prestige-tracker';
+  | 'prestige-tracker'
+  | 'rivalry-tracker';
 
 interface NavigationState {
   currentPage: Page;
@@ -29,6 +30,7 @@ interface NavigationActions {
   goToTransferPortal: () => void;
   goToDraftTracker: () => void;
   goToPrestigeTracker: () => void;
+  goToRivalryTracker: () => void;
 }
 
 type NavigationStore = NavigationState & NavigationActions;
@@ -79,5 +81,9 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
 
   goToPrestigeTracker: () => {
     set({ currentPage: 'prestige-tracker', pageParams: {} });
+  },
+
+  goToRivalryTracker: () => {
+    set({ currentPage: 'rivalry-tracker', pageParams: {} });
   },
 }));

@@ -12,6 +12,7 @@ import { RecruitingPage } from './pages/RecruitingPage';
 import { TransferPortalPage } from './pages/TransferPortalPage';
 import { DraftTrackerPage } from './pages/DraftTrackerPage';
 import { PrestigeTrackerPage } from './pages/PrestigeTrackerPage';
+import { RivalryTrackerPage } from './pages/RivalryTrackerPage';
 
 function App() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
@@ -38,6 +39,8 @@ function App() {
       return <DraftTrackerPage />;
     case 'prestige-tracker':
       return <PrestigeTrackerPage />;
+    case 'rivalry-tracker':
+      return <RivalryTrackerPage />;
     default:
       return <DashboardPage />;
   }
