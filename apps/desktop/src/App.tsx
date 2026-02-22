@@ -13,6 +13,7 @@ import { TransferPortalPage } from './pages/TransferPortalPage';
 import { DraftTrackerPage } from './pages/DraftTrackerPage';
 import { PrestigeTrackerPage } from './pages/PrestigeTrackerPage';
 import { RivalryTrackerPage } from './pages/RivalryTrackerPage';
+import { ProgramTimelinePage } from './pages/ProgramTimelinePage';
 
 function App() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
@@ -41,6 +42,8 @@ function App() {
       return <PrestigeTrackerPage />;
     case 'rivalry-tracker':
       return <RivalryTrackerPage />;
+    case 'program-timeline':
+      return <ProgramTimelinePage />;
     default:
       return <DashboardPage />;
   }
