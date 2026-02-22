@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** Phase 2 — Core Loop (gap closure complete)
+**Current focus:** Phase 3 — Player Tracking and Records
 
 ## Current Position
 
-Phase: 2 of 9 (Core Loop)
-Plan: 5 of 5 in current phase (gap closure)
-Status: Phase 2 fully complete — ready for Phase 3 (History)
-Last activity: 2026-02-22 — Completed 02-05-PLAN.md (teamRanking gap closure, ranking movement in WeeklySnapshot)
+Phase: 3 of 9 (Player Tracking and Records)
+Plan: 1 of 4 in current phase
+Status: In progress
+Last activity: 2026-02-22 — Completed 03-01-PLAN.md (player CRUD foundation, roster page, navigation store)
 
-Progress: [███████░░░] 25% (9/36 plans complete)
+Progress: [███████░░░] 28% (10/36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: ~7.1 min
-- Total execution time: ~57 min
+- Total plans completed: 10
+- Average duration: ~6.8 min
+- Total execution time: ~60 min
 
 **By Phase:**
 
@@ -29,9 +29,10 @@ Progress: [███████░░░] 25% (9/36 plans complete)
 |-------|-------|-------|----------|--------|
 | 01-foundation | 4/4 | ~35 min | ~8.8 min | ✓ Complete |
 | 02-core-loop | 5/5 | ~36 min | ~7.2 min | ✓ Complete |
+| 03-player-tracking | 1/4 | ~3 min | ~3 min | In progress |
 
 **Recent Trend:**
-- Last 5 plans: 15 min, 2 min, 15 min, 15 min, 2 min
+- Last 5 plans: 2 min, 15 min, 15 min, 2 min, 3 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -67,6 +68,8 @@ Recent decisions affecting current work:
 - teamRanking not filtered for uniqueness: team's own ranking CAN repeat across weeks (unlike opponentRanking); no usedRankings filter applied
 - Dexie multi-version migration: version(1).stores(SCHEMA) + version(N).stores(SCHEMA) required to register upgrade path from any prior version
 - Per-game ranking delta derivation: sort games with teamRanking by week desc, delta = previousRanking - currentRanking (positive = moved up in rankings)
+- Navigation store over router library: desktop app needs simple page state, not URL routing; useNavigationStore with currentPage/pageParams is sufficient
+- cascade-delete in player-service: deletePlayer removes playerSeasons before deleting player record to maintain referential integrity at service layer
 
 ### Pending Todos
 
@@ -81,5 +84,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22 UTC
-Stopped at: Completed 02-05-PLAN.md (teamRanking gap closure, ranking movement delta in WeeklySnapshot) — Phase 2 fully complete
+Stopped at: Completed 03-01-PLAN.md (player CRUD service, player store, navigation store, Roster page with add/edit/delete modals)
 Resume file: None
