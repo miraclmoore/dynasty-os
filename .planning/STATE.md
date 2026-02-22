@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** Phase 6 — Social and Legacy
+**Current focus:** Phase 6 — Social and Legacy (complete), ready for Phase 7
 
 ## Current Position
 
 Phase: 6 of 9 (Social and Legacy)
-Plan: 2 of 3 in current phase
-Status: In progress
-Last activity: 2026-02-22 — Completed 06-02-PLAN.md (Program Timeline module)
+Plan: 3 of 3 in current phase
+Status: Phase complete
+Last activity: 2026-02-21 — Completed 06-03-PLAN.md (Scouting Cards)
 
-Progress: [█████████░] 58% (21/36 plans complete)
+Progress: [██████████] 61% (22/36 plans complete)
 
 ## Performance Metrics
 
@@ -32,7 +32,7 @@ Progress: [█████████░] 58% (21/36 plans complete)
 | 03-player-tracking | 4/4 | ~14 min | ~3.5 min | ✓ Complete |
 | 04-narrative-engine | 2/2 | ~17 min | ~8.5 min | ✓ Complete |
 | 05-cfb-features | 4/4 | ~12 min | ~3 min | ✓ Complete |
-| 06-social-and-legacy | 2/3 | ~11 min | ~5.5 min | In progress |
+| 06-social-and-legacy | 3/3 | ~19 min | ~6.3 min | ✓ Complete |
 
 **Recent Trend:**
 - Last 5 plans: 3 min, 4 min, 4 min, ~15 min (04-02 checkpoint), 4 min
@@ -105,6 +105,8 @@ Recent decisions affecting current work:
 - Pre-fill-on-year-match: PrestigeTrackerPage year input onChange checks store for existing record, pre-fills form fields if found — no separate edit mode state needed
 - calculateRivalryIntensity pure function: min(10, ceil(totalGames/2)) — intensity earned over time, not configurable
 - scoutingNotes Table<Record<string,unknown>> placeholder: typed properly in 06-03, avoids blocking type error in 06-01
+- ScoutingNote upsert pattern: check-then-update-or-create via [dynastyId+opponent] compound index; one note per opponent per dynasty
+- ScoutingCardPage sport-agnostic: placed in general actions section (not CFB guard); uses getHeadToHeadRecords as opponent list source
 - RivalryTrackerPage no sport guard: rivalries are sport-agnostic, unlike CFB-only prestige/recruiting features
 - window.print() for timeline PDF export: consistent with Tauri blob URL constraint; no extra dependencies needed
 - ProgramTimelinePage no sport guard: timeline is sport-agnostic — seasons exist for all sports
@@ -122,6 +124,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-22 UTC
-Stopped at: Completed 06-02-PLAN.md (Program Timeline module) — Phase 6 in progress (2/3)
+Last session: 2026-02-21 UTC
+Stopped at: Completed 06-03-PLAN.md (Scouting Cards) — Phase 6 complete (3/3)
 Resume file: None

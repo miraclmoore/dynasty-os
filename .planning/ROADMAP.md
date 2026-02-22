@@ -22,7 +22,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Player Tracking and Records** - Roster management, per-season stats, career totals, Legacy Cards, all-time leaderboards
 - [x] **Phase 4: Narrative Engine** - Claude AI season recaps with tone presets, cached taglines, season wrap-up flow
 - [x] **Phase 5: CFB Features** - Recruiting classes, transfer portal war room, NFL Draft tracker, program prestige tracker
-- [ ] **Phase 6: Social and Legacy** - Rivalries, program timeline, opponent scouting cards, achievements and trophy room
+- [x] **Phase 6: Social and Legacy** - Rivalries, program timeline, opponent scouting cards, achievements and trophy room
 - [ ] **Phase 7: Achievements** - Achievement engine, trophy room, coaching resume
 - [ ] **Phase 8: Screenshot Ingestion** - Claude Vision API screenshot parsing for CFB screens
 - [ ] **Phase 9: Madden Sync** - madden-franchise save file adapter with confirmation diff and fallback
@@ -139,8 +139,8 @@ history scrolls as a timeline, and scouting cards exist for upcoming opponents.
 
 Plans:
 - [x] 06-01-PLAN.md — Rivalry tracker: DB v4 migration (rivals + scoutingNotes tables), Rival type, CRUD service with intensity calculation, Zustand store, RivalryTrackerPage with H2H record and streak pips
-- [ ] 06-02-PLAN.md — Program timeline: timeline-service aggregating season nodes with localStorage taglines, ProgramTimelinePage with scrollable nodes and window.print() PDF export
-- [ ] 06-03-PLAN.md — Opponent scouting cards: ScoutingNote type (updates DB placeholder), upsert service, Zustand store, ScoutingCardPage with opponent search, H2H record, and tendency notes
+- [x] 06-02-PLAN.md — Program timeline: timeline-service aggregating season nodes with localStorage taglines, ProgramTimelinePage with scrollable nodes and window.print() PDF export
+- [x] 06-03-PLAN.md — Opponent scouting cards: ScoutingNote type (updates DB placeholder), upsert service, Zustand store, ScoutingCardPage with opponent search, H2H record, and tendency notes
 
 ### Phase 7: Achievements
 **Goal**: The coach's legacy is quantified — milestones auto-unlock as data is saved, a trophy room
@@ -203,7 +203,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 | 3. Player Tracking and Records | 4/4 | Complete | 2026-02-22 |
 | 4. Narrative Engine | 2/2 | Complete | 2026-02-22 |
 | 5. CFB Features | 4/4 | Complete | 2026-02-22 |
-| 6. Social and Legacy | 1/3 | In progress | - |
+| 6. Social and Legacy | 3/3 | Complete | 2026-02-21 |
 | 7. Achievements | 0/2 | Not started | - |
 | 8. Screenshot Ingestion | 0/2 | Not started | - |
 | 9. Madden Sync | 0/3 | Not started | - |
