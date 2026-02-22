@@ -41,13 +41,13 @@ all in place.
   3. User can export a dynasty as a JSON file and re-import it cleanly
   4. App functions fully offline — no network required for any non-AI operation
   5. Monorepo builds cleanly: Tauri shell boots, React renders, Dexie DB initializes, sport config resolves for CFB and Madden
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 01-01: Monorepo setup — Turborepo + pnpm workspaces, shared packages scaffold (core-types, db, sport-configs, ui-components)
-- [ ] 01-02: Tauri 2.x shell — Rust backend, WebView wiring, Windows build pipeline, performance baselines (<80MB RAM, <3s cold start)
-- [ ] 01-03: DB schema and sport config — Dexie ORM schema for all entities, sport config pattern for CFB and Madden, multi-dynasty data model
-- [ ] 01-04: Dynasty management UI — create/switch/delete dynasties, JSON export/import, offline-first validation
+- [ ] 01-01-PLAN.md — Monorepo setup: Turborepo + pnpm workspaces, shared packages scaffold (core-types, db, sport-configs, ui-components), React + Vite + Tailwind desktop app
+- [ ] 01-02-PLAN.md — Tauri 2.x shell: Rust backend initialization, WebView wiring to Vite frontend, performance baselines (<80MB RAM, <3s cold start)
+- [ ] 01-03-PLAN.md — DB schema and sport config: Dexie ORM schema for all entities, sport config pattern with CFB and Madden configs, core TypeScript types
+- [ ] 01-04-PLAN.md — Dynasty management UI: create/switch/delete dynasties, Zustand store, JSON export/import, offline-first data persistence
 
 ### Phase 2: Core Loop
 **Goal**: The app is usable — a coach can log game results and see their season taking shape on a
@@ -196,7 +196,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/4 | Not started | - |
+| 1. Foundation | 0/4 | Planned | - |
 | 2. Core Loop | 0/3 | Not started | - |
 | 3. Player Tracking and Records | 0/4 | Not started | - |
 | 4. Narrative Engine | 0/2 | Not started | - |
