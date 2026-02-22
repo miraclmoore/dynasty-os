@@ -1,5 +1,16 @@
 import Dexie, { type Table } from 'dexie';
-import type { Dynasty, Season, Game, Player, PlayerSeason } from '@dynasty-os/core-types';
+import type {
+  Dynasty,
+  Season,
+  Game,
+  Player,
+  PlayerSeason,
+  RecruitingClass,
+  Recruit,
+  TransferPortalEntry,
+  DraftPick,
+  PrestigeRating,
+} from '@dynasty-os/core-types';
 import { SCHEMA, DB_NAME, DB_VERSION } from './schema';
 
 export class DynastyDB extends Dexie {
@@ -8,6 +19,11 @@ export class DynastyDB extends Dexie {
   games!: Table<Game, string>;
   players!: Table<Player, string>;
   playerSeasons!: Table<PlayerSeason, string>;
+  recruitingClasses!: Table<RecruitingClass, string>;
+  recruits!: Table<Recruit, string>;
+  transferPortalEntries!: Table<TransferPortalEntry, string>;
+  draftPicks!: Table<DraftPick, string>;
+  prestigeRatings!: Table<PrestigeRating, string>;
 
   constructor() {
     super(DB_NAME);
