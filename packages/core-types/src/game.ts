@@ -9,6 +9,7 @@ export interface Game {
   week: number;
   opponent: string;
   opponentRanking?: number;
+  teamRanking?: number;
   teamScore: number;
   opponentScore: number;
   result: GameResult;

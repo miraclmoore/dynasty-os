@@ -11,6 +11,7 @@ export class DynastyDB extends Dexie {
 
   constructor() {
     super(DB_NAME);
+    this.version(1).stores(SCHEMA);
     this.version(DB_VERSION).stores(SCHEMA);
   }
 }

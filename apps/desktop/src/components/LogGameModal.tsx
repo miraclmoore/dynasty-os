@@ -75,6 +75,7 @@ export function LogGameModal({
   const [teamScore, setTeamScore] = useState('');
   const [opponentScore, setOpponentScore] = useState('');
   const [opponentRanking, setOpponentRanking] = useState('');
+  const [teamRanking, setTeamRanking] = useState('');
   const [overtime, setOvertime] = useState(false);
   const [notes, setNotes] = useState('');
   const [error, setError] = useState('');
@@ -117,6 +118,7 @@ export function LogGameModal({
         gameType,
         overtime,
         opponentRanking: opponentRanking ? parseInt(opponentRanking, 10) : undefined,
+        teamRanking: teamRanking ? parseInt(teamRanking, 10) : undefined,
         notes: notes.trim() || undefined,
       });
 
@@ -292,6 +294,28 @@ export function LogGameModal({
                 />
                 <span className="text-sm text-gray-300">Overtime</span>
               </label>
+            </div>
+          </div>
+
+          {/* Your Ranking */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm text-gray-400 mb-1">
+                Your Ranking{' '}
+                <span className="text-gray-600 text-xs">(optional)</span>
+              </label>
+              <select
+                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+                value={teamRanking}
+                onChange={(e) => setTeamRanking(e.target.value)}
+              >
+                <option value="">Unranked</option>
+                {Array.from({ length: 25 }, (_, i) => i + 1).map((rank) => (
+                  <option key={rank} value={String(rank)}>
+                    #{rank}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
