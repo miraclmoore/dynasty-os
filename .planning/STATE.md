@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** Phase 4 — next phase
+**Current focus:** Phase 4 — Narrative Engine (2 of 4 plans complete)
 
 ## Current Position
 
 Phase: 4 of 9 (Narrative Engine) — In progress
-Plan: 2 of 4 in phase (2 auto tasks complete, paused at checkpoint)
-Status: In progress — awaiting human verification at checkpoint
-Last activity: 2026-02-22 — Completed 04-02 Tasks 1-2 (Season Recap Page UI), paused at checkpoint:human-verify
+Plan: 2 of 4 in phase complete
+Status: In progress — 04-02 complete, ready for 04-03
+Last activity: 2026-02-22 — Completed 04-02 (Season Recap Page UI); human-verify checkpoint approved
 
-Progress: [████████░░] 39% (14/36 plans complete — 04-02 in progress)
+Progress: [████████░░] 42% (15/36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 14
+- Total plans completed: 15
 - Average duration: ~5.5 min
-- Total execution time: ~71 min
+- Total execution time: ~86 min
 
 **By Phase:**
 
@@ -30,11 +30,11 @@ Progress: [████████░░] 39% (14/36 plans complete — 04-02 i
 | 01-foundation | 4/4 | ~35 min | ~8.8 min | ✓ Complete |
 | 02-core-loop | 5/5 | ~36 min | ~7.2 min | ✓ Complete |
 | 03-player-tracking | 4/4 | ~14 min | ~3.5 min | ✓ Complete |
-| 04-narrative-engine | 1/4 | ~2 min | ~2 min | In progress |
+| 04-narrative-engine | 2/4 | ~17 min | ~8.5 min | In progress |
 
 **Recent Trend:**
-- Last 5 plans: 2 min, 3 min, 4 min, 4 min, 3 min
-- Trend: Stable (fast)
+- Last 5 plans: 2 min, 3 min, 4 min, 4 min, ~15 min (04-02 included human-verify checkpoint)
+- Trend: Stable (human-verify checkpoints add wall-clock time, not execution time)
 
 *Updated after each plan completion*
 
@@ -83,6 +83,11 @@ Recent decisions affecting current work:
 - Claude Sonnet 4.6 for season narrative recap: longer-form content than blurbs; Haiku for short blurbs, Sonnet for 2-3 paragraph season stories
 - Narrative cache key dynasty-os-narrative-{seasonId}: matches existing localStorage naming pattern; cached by seasonId regardless of tone — forceRefresh=true to regenerate with different tone
 - Tagline-in-response pattern: TAGLINE: [three words] parsed from end of API response — no second API call needed
+- SeasonRecapPage getApiKey()/setApiKey() reuse: no new API key management code; same in-app prompt pattern as Legacy Card settings
+- loadCachedNarrative on mount: SeasonRecapPage displays cached narrative immediately on revisit without any API call
+- Tone selector defaults to espn, syncs to cached tone: ESPN is the default on first visit; on revisit, selector updates to match last-used tone
+- Tagline text-3xl font-bold text-amber-400: tagline is the emotional headline — larger than body text to feel like a broadcast headline
+- Amber accent (bg-amber-600) for AI/narrative features: visually distinct from blue/gray data-entry action buttons on Dashboard
 
 ### Pending Todos
 
@@ -97,5 +102,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22 UTC
-Stopped at: 04-02 Tasks 1-2 complete (95e4da2, b04c823); paused at checkpoint:human-verify
-Resume file: .planning/phases/04-narrative-engine/04-02-PLAN.md (Task 3 checkpoint)
+Stopped at: Completed 04-02-PLAN.md (Season Recap Page); human-verify checkpoint approved
+Resume file: None — ready to execute 04-03-PLAN.md
