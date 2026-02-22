@@ -9,7 +9,9 @@ export const SCHEMA = {
   transferPortalEntries: 'id, dynastyId, seasonId, year, [dynastyId+seasonId]',
   draftPicks: 'id, dynastyId, seasonId, year, playerId, [dynastyId+year]',
   prestigeRatings: 'id, dynastyId, year, [dynastyId+year]',
+  rivals: 'id, dynastyId, opponent, [dynastyId+opponent]',
+  scoutingNotes: 'id, dynastyId, opponent, [dynastyId+opponent]',
 } as const;
 
 export const DB_NAME = 'dynasty-os-db';
-export const DB_VERSION = 3;
+export const DB_VERSION = 4;

@@ -10,8 +10,9 @@ import type {
   TransferPortalEntry,
   DraftPick,
   PrestigeRating,
+  Rival,
 } from '@dynasty-os/core-types';
-import { SCHEMA, DB_NAME, DB_VERSION } from './schema';
+import { SCHEMA, DB_NAME } from './schema';
 
 export class DynastyDB extends Dexie {
   dynasties!: Table<Dynasty, string>;
@@ -24,11 +25,13 @@ export class DynastyDB extends Dexie {
   transferPortalEntries!: Table<TransferPortalEntry, string>;
   draftPicks!: Table<DraftPick, string>;
   prestigeRatings!: Table<PrestigeRating, string>;
+  rivals!: Table<Rival, string>;
+  scoutingNotes!: Table<Record<string, unknown>, string>;
 
   constructor() {
     super(DB_NAME);
     this.version(1).stores(SCHEMA);
-    this.version(DB_VERSION).stores(SCHEMA);
+    this.version(4).stores(SCHEMA);
   }
 }
 

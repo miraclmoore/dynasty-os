@@ -10,3 +10,4 @@ export { useRecruitingStore } from './recruiting-store';
 export { useTransferPortalStore } from './transfer-portal-store';
 export { useDraftStore } from './draft-store';
 export { usePrestigeStore } from './prestige-store';
+export { useRivalryStore } from './rivalry-store';
