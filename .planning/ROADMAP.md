@@ -80,13 +80,13 @@ that culminates in a Legacy Card, and program-wide leaderboards show who the all
   3. When a player departs (graduation, transfer, NFL Draft, injury), a Legacy Card auto-generates with career stats, awards, and an AI-written Hall of Fame blurb
   4. User can export any Legacy Card as a PNG image
   5. User can browse all Legacy Cards in a Program Legends gallery filtered by position, era, or award, and view single-season and all-time records leaderboards
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 03-01: Roster management — add/edit/remove players, position and attribute fields, season stat logging per stat category
-- [ ] 03-02: Career totals engine — auto-aggregate from all season stat records, player profile view with career arc
-- [ ] 03-03: Legacy Cards — departure trigger, AI blurb generation (Claude API), PNG export, Program Legends gallery with filters
-- [ ] 03-04: Records and leaderboards — single-season top N, career top N, head-to-head opponent records filterable by era/staff
+- [ ] 03-01-PLAN.md — Roster foundation: player CRUD service/store, navigation system, Roster page with add/edit/delete/filter
+- [ ] 03-02-PLAN.md — Season stats and career totals: PlayerSeason service/store, career aggregation engine, Player Profile page with departure recording
+- [ ] 03-03-PLAN.md — Legacy Cards: AI blurb via Claude Haiku, PNG export via Tauri dialog+fs, Program Legends gallery with filters
+- [ ] 03-04-PLAN.md — Records and leaderboards: single-season top N, career top N, head-to-head opponent records with era filter
 
 ### Phase 4: Narrative Engine
 **Goal**: At the end of each season, coaches can generate an AI-written recap that captures what
@@ -194,7 +194,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
