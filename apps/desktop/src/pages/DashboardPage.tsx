@@ -185,6 +185,12 @@ export function DashboardPage() {
                 >
                   Program Legends
                 </button>
+                <button
+                  onClick={() => useNavigationStore.getState().goToRecords()}
+                  className="w-full px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white text-sm font-semibold rounded-lg transition-colors"
+                >
+                  Records &amp; Leaderboards
+                </button>
               </div>
 
               {/* Modals */}

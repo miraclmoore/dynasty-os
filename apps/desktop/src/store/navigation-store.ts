@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-type Page = 'dashboard' | 'roster' | 'player-profile' | 'legends';
+type Page = 'dashboard' | 'roster' | 'player-profile' | 'legends' | 'records';
 
 interface NavigationState {
   currentPage: Page;
@@ -13,6 +13,7 @@ interface NavigationActions {
   goToRoster: () => void;
   goToPlayerProfile: (playerId: string) => void;
   goToLegends: () => void;
+  goToRecords: () => void;
 }
 
 type NavigationStore = NavigationState & NavigationActions;
@@ -39,5 +40,9 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
 
   goToLegends: () => {
     set({ currentPage: 'legends', pageParams: {} });
+  },
+
+  goToRecords: () => {
+    set({ currentPage: 'records', pageParams: {} });
   },
 }));
