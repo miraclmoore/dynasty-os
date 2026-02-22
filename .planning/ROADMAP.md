@@ -18,7 +18,7 @@ sync — which are isolated adapters that can be built last without blocking any
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Monorepo scaffolding, Tauri setup, DB schema, sport config system, multi-dynasty management
-- [ ] **Phase 2: Core Loop** - Dashboard, season game logging, auto-calculated records, manual entry UX
+- [x] **Phase 2: Core Loop** - Dashboard, season game logging, auto-calculated records, manual entry UX
 - [ ] **Phase 3: Player Tracking and Records** - Roster management, per-season stats, career totals, Legacy Cards, all-time leaderboards
 - [ ] **Phase 4: Narrative Engine** - Claude AI season recaps with tone presets, cached taglines, season wrap-up flow
 - [ ] **Phase 5: CFB Features** - Recruiting classes, transfer portal war room, NFL Draft tracker, program prestige tracker
@@ -67,7 +67,7 @@ Plans:
 - [x] 02-02-PLAN.md — Dashboard layout and widgets: season-at-a-glance, recent activity, weekly snapshot
 - [x] 02-03-PLAN.md — Game entry and season-end modals: LogGameModal with smart team dropdown, SeasonEndModal
 - [x] 02-04-PLAN.md — Stat highlights, game log table, and inline editing: calculated stats, full game table, click-to-edit cells
-- [ ] 02-05-PLAN.md — Gap closure: per-game teamRanking field, DB migration, ranking movement delta in WeeklySnapshot
+- [x] 02-05-PLAN.md — Gap closure: per-game teamRanking field, DB migration, ranking movement delta in WeeklySnapshot
 
 ### Phase 3: Player Tracking and Records
 **Goal**: Coaches can build and track their roster across seasons — every player has a career arc
@@ -199,7 +199,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete | - |
-| 2. Core Loop | 4/5 | Gap closure | - |
+| 2. Core Loop | 5/5 | Complete | - |
 | 3. Player Tracking and Records | 0/4 | Not started | - |
 | 4. Narrative Engine | 0/2 | Not started | - |
 | 5. CFB Features | 0/4 | Not started | - |

@@ -18,17 +18,17 @@ Requirements for initial release. Covers P0 (launch-critical) and P1 (launch-com
 
 ### Dashboard
 
-- [ ] **DASH-01**: User sees season-at-a-glance hub on launch: current record, latest ranking, recent activity feed
-- [ ] **DASH-02**: User sees quick entry access to log a game result from the dashboard
-- [ ] **DASH-03**: User sees stat highlights and upcoming opponent from the dashboard
+- [x] **DASH-01**: User sees season-at-a-glance hub on launch: current record, latest ranking, recent activity feed
+- [x] **DASH-02**: User sees quick entry access to log a game result from the dashboard
+- [x] **DASH-03**: User sees stat highlights and upcoming opponent from the dashboard
 
 ### Season Management
 
-- [ ] **SEAS-01**: User can log game results (opponent, score, home/away, game type, week)
-- [ ] **SEAS-02**: Season win/loss record auto-calculates from logged game results
-- [ ] **SEAS-03**: Conference win/loss record auto-calculates from conference game results
-- [ ] **SEAS-04**: User can record season-end data (final AP/CFP rank, bowl/playoff outcome)
-- [ ] **SEAS-05**: User sees weekly season snapshot: record, ranking movement, notable stats, upcoming opponent
+- [x] **SEAS-01**: User can log game results (opponent, score, home/away, game type, week)
+- [x] **SEAS-02**: Season win/loss record auto-calculates from logged game results
+- [x] **SEAS-03**: Conference win/loss record auto-calculates from conference game results
+- [x] **SEAS-04**: User can record season-end data (final AP/CFP rank, bowl/playoff outcome)
+- [x] **SEAS-05**: User sees weekly season snapshot: record, ranking movement, notable stats, upcoming opponent
 
 ### Player Tracking
 
@@ -101,9 +101,9 @@ Requirements for initial release. Covers P0 (launch-critical) and P1 (launch-com
 
 ### Data Ingestion — Manual Entry
 
-- [ ] **INGST-01**: Team selection auto-populates conference, logo, and stadium (no typing required)
-- [ ] **INGST-02**: Smart dropdowns for all team, player, position, and conference fields
-- [ ] **INGST-03**: Inline editing: clicking any stat cell opens it for edit without navigating away
+- [x] **INGST-01**: Team selection auto-populates conference, logo, and stadium (no typing required)
+- [x] **INGST-02**: Smart dropdowns for all team, player, position, and conference fields
+- [x] **INGST-03**: Inline editing: clicking any stat cell opens it for edit without navigating away
 
 ### Data Ingestion — Screenshot Import (CFB)
 
@@ -166,17 +166,17 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FOUND-04 | Phase 1 | Complete |
 | FOUND-05 | Phase 1 | Complete |
 | FOUND-06 | Phase 1 | Complete |
-| DASH-01 | Phase 2 | Pending |
-| DASH-02 | Phase 2 | Pending |
-| DASH-03 | Phase 2 | Pending |
-| SEAS-01 | Phase 2 | Pending |
-| SEAS-02 | Phase 2 | Pending |
-| SEAS-03 | Phase 2 | Pending |
-| SEAS-04 | Phase 2 | Pending |
-| SEAS-05 | Phase 2 | Pending |
-| INGST-01 | Phase 2 | Pending |
-| INGST-02 | Phase 2 | Pending |
-| INGST-03 | Phase 2 | Pending |
+| DASH-01 | Phase 2 | Complete |
+| DASH-02 | Phase 2 | Complete |
+| DASH-03 | Phase 2 | Complete |
+| SEAS-01 | Phase 2 | Complete |
+| SEAS-02 | Phase 2 | Complete |
+| SEAS-03 | Phase 2 | Complete |
+| SEAS-04 | Phase 2 | Complete |
+| SEAS-05 | Phase 2 | Complete |
+| INGST-01 | Phase 2 | Complete |
+| INGST-02 | Phase 2 | Complete |
+| INGST-03 | Phase 2 | Complete |
 | PLAY-01 | Phase 3 | Pending |
 | PLAY-02 | Phase 3 | Pending |
 | PLAY-03 | Phase 3 | Pending |
