@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 1 of 9 (Foundation)
-Plan: 1 of 4 in current phase
+Plan: 3 of 4 in current phase (01-01 complete, 01-03 complete; 01-02 and 01-04 pending)
 Status: In progress
-Last activity: 2026-02-21 — Completed 01-01-PLAN.md (monorepo foundation)
+Last activity: 2026-02-22 — Completed 01-03-PLAN.md (core types, Dexie DB, sport configs)
 
-Progress: [█░░░░░░░░░] 3% (1/36 plans complete)
+Progress: [██░░░░░░░░] 6% (2/36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: 7 min
-- Total execution time: 7 min
+- Total plans completed: 2
+- Average duration: 5.5 min
+- Total execution time: 11 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-foundation | 1/4 | 7 min | 7 min |
+| 01-foundation | 2/4 | 11 min | 5.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 7 min
-- Trend: -
+- Last 5 plans: 7 min, 4 min
+- Trend: Improving
 
 *Updated after each plan completion*
 
@@ -49,6 +49,9 @@ Recent decisions affecting current work:
 - Port 1420 for Vite dev server: Tauri convention; set now to avoid config churn in Plan 01-02
 - pnpm v10 onlyBuiltDependencies: esbuild must be explicitly allowed; add to root package.json pnpm.onlyBuiltDependencies
 - type: module in desktop packages: required to avoid ESM/CJS ambiguity warnings with Vite + postcss
+- SportType lowercase keys ('cfb' | 'madden'): matches getSportConfig() string lookup without case conversion
+- Dexie Table<T, string> over EntityTable: Dexie v4.3.0 does not export EntityTable
+- PlayerSeason.stats as Record<string, number>: flexible stat storage avoids schema migration per sport
 
 ### Pending Todos
 
@@ -61,6 +64,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-21 01:31 UTC
-Stopped at: Completed 01-01-PLAN.md — monorepo foundation with all shared packages and desktop app
+Last session: 2026-02-22 01:39 UTC
+Stopped at: Completed 01-03-PLAN.md — core types, Dexie ORM schema, CFB and Madden sport configs
 Resume file: None
