@@ -9,17 +9,17 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 
 ## Current Position
 
-Phase: 3 of 9 (Player Tracking and Records) — COMPLETE
-Plan: 4 of 4 in phase (all complete)
-Status: Phase complete
-Last activity: 2026-02-22 — Completed 03-04-PLAN.md (Records & Leaderboards page)
+Phase: 4 of 9 (Narrative Engine) — In progress
+Plan: 1 of 4 in phase (1 complete)
+Status: In progress
+Last activity: 2026-02-22 — Completed 04-01-PLAN.md (Narrative Engine Service Layer)
 
-Progress: [████████░░] 36% (13/36 plans complete)
+Progress: [████████░░] 39% (14/36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 13
+- Total plans completed: 14
 - Average duration: ~5.5 min
 - Total execution time: ~71 min
 
@@ -30,6 +30,7 @@ Progress: [████████░░] 36% (13/36 plans complete)
 | 01-foundation | 4/4 | ~35 min | ~8.8 min | ✓ Complete |
 | 02-core-loop | 5/5 | ~36 min | ~7.2 min | ✓ Complete |
 | 03-player-tracking | 4/4 | ~14 min | ~3.5 min | ✓ Complete |
+| 04-narrative-engine | 1/4 | ~2 min | ~2 min | In progress |
 
 **Recent Trend:**
 - Last 5 plans: 2 min, 3 min, 4 min, 4 min, 3 min
@@ -79,6 +80,9 @@ Recent decisions affecting current work:
 - Tauri PNG export pattern: toPng (html-to-image) → base64 → Uint8Array → save() dialog → writeFile() — blob URLs blocked in WKWebView/WebView2
 - Records-service no-cache pattern: getSingleSeasonLeaders/getCareerLeaders/getHeadToHeadRecords compute fresh each call — data sets are small, freshness > optimization
 - H2H era filter by year range: coaching era filter is V1 out-of-scope (coaching history not tracked in data model)
+- Claude Sonnet 4.6 for season narrative recap: longer-form content than blurbs; Haiku for short blurbs, Sonnet for 2-3 paragraph season stories
+- Narrative cache key dynasty-os-narrative-{seasonId}: matches existing localStorage naming pattern; cached by seasonId regardless of tone — forceRefresh=true to regenerate with different tone
+- Tagline-in-response pattern: TAGLINE: [three words] parsed from end of API response — no second API call needed
 
 ### Pending Todos
 
@@ -93,5 +97,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22 UTC
-Stopped at: Completed 03-04-PLAN.md (Records & Leaderboards — single-season, career, H2H tabs)
+Stopped at: Completed 04-01-PLAN.md (Narrative Engine Service Layer)
 Resume file: None
