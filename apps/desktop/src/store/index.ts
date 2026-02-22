@@ -6,3 +6,4 @@ export { usePlayerStore } from './player-store';
 export { useNavigationStore } from './navigation-store';
 export { usePlayerSeasonStore } from './player-season-store';
 export { useNarrativeStore } from './narrative-store';
+export { useRecruitingStore } from './recruiting-store';

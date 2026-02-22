@@ -1,6 +1,16 @@
 import { create } from 'zustand';
 
-type Page = 'dashboard' | 'roster' | 'player-profile' | 'legends' | 'records' | 'season-recap';
+type Page =
+  | 'dashboard'
+  | 'roster'
+  | 'player-profile'
+  | 'legends'
+  | 'records'
+  | 'season-recap'
+  | 'recruiting'
+  | 'transfer-portal'
+  | 'draft-tracker'
+  | 'prestige-tracker';
 
 interface NavigationState {
   currentPage: Page;
@@ -15,6 +25,10 @@ interface NavigationActions {
   goToLegends: () => void;
   goToRecords: () => void;
   goToSeasonRecap: (seasonId: string) => void;
+  goToRecruiting: () => void;
+  goToTransferPortal: () => void;
+  goToDraftTracker: () => void;
+  goToPrestigeTracker: () => void;
 }
 
 type NavigationStore = NavigationState & NavigationActions;
@@ -49,5 +63,21 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
 
   goToSeasonRecap: (seasonId: string) => {
     set({ currentPage: 'season-recap', pageParams: { seasonId } });
+  },
+
+  goToRecruiting: () => {
+    set({ currentPage: 'recruiting', pageParams: {} });
+  },
+
+  goToTransferPortal: () => {
+    set({ currentPage: 'transfer-portal', pageParams: {} });
+  },
+
+  goToDraftTracker: () => {
+    set({ currentPage: 'draft-tracker', pageParams: {} });
+  },
+
+  goToPrestigeTracker: () => {
+    set({ currentPage: 'prestige-tracker', pageParams: {} });
   },
 }));

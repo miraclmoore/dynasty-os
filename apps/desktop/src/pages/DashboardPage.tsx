@@ -197,6 +197,37 @@ export function DashboardPage() {
                 >
                   Records &amp; Leaderboards
                 </button>
+                {activeDynasty.sport === 'cfb' && (
+                  <>
+                    <div className="border-t border-gray-700 mt-2 pt-2">
+                      <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">CFB Program</h4>
+                    </div>
+                    <button
+                      onClick={() => useNavigationStore.getState().goToRecruiting()}
+                      className="w-full px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold rounded-lg transition-colors"
+                    >
+                      Recruiting
+                    </button>
+                    <button
+                      onClick={() => useNavigationStore.getState().goToTransferPortal()}
+                      className="w-full px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold rounded-lg transition-colors"
+                    >
+                      Transfer Portal
+                    </button>
+                    <button
+                      onClick={() => useNavigationStore.getState().goToDraftTracker()}
+                      className="w-full px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold rounded-lg transition-colors"
+                    >
+                      NFL Draft Tracker
+                    </button>
+                    <button
+                      onClick={() => useNavigationStore.getState().goToPrestigeTracker()}
+                      className="w-full px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold rounded-lg transition-colors"
+                    >
+                      Program Prestige
+                    </button>
+                  </>
+                )}
               </div>
 
               {/* Modals */}

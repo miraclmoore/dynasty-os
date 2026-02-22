@@ -8,6 +8,7 @@ import { PlayerProfilePage } from './pages/PlayerProfilePage';
 import { LegendsPage } from './pages/LegendsPage';
 import { RecordsPage } from './pages/RecordsPage';
 import { SeasonRecapPage } from './pages/SeasonRecapPage';
+import { RecruitingPage } from './pages/RecruitingPage';
 
 function App() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
@@ -26,6 +27,8 @@ function App() {
       return <RecordsPage />;
     case 'season-recap':
       return <SeasonRecapPage />;
+    case 'recruiting':
+      return <RecruitingPage />;
     default:
       return <DashboardPage />;
   }
