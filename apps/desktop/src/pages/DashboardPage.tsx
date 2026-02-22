@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDynastyStore } from '../store';
+import { useSeasonStore } from '../store/season-store';
+import { useGameStore } from '../store/game-store';
 import { DynastySwitcher } from '../components/DynastySwitcher';
+import { SeasonAtGlance } from '../components/SeasonAtGlance';
+import { RecentActivity } from '../components/RecentActivity';
+import { WeeklySnapshot } from '../components/WeeklySnapshot';
 
 const SPORT_BADGE: Record<string, { label: string; classes: string }> = {
   cfb: { label: 'CFB', classes: 'bg-orange-600 text-orange-100' },
@@ -9,6 +14,24 @@ const SPORT_BADGE: Record<string, { label: string; classes: string }> = {
 
 export function DashboardPage() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
+  const { seasons, activeSeason, loading: seasonLoading } = useSeasonStore();
+  const { games, loading: gameLoading } = useGameStore();
+
+  const [logGameOpen, setLogGameOpen] = useState(false);
+  const [seasonEndOpen, setSeasonEndOpen] = useState(false);
+
+  // Load seasons on mount / dynasty change
+  useEffect(() => {
+    if (!activeDynasty) return;
+
+    useSeasonStore.getState().loadSeasons(activeDynasty.id);
+  }, [activeDynasty?.id]);
+
+  // Load games when activeSeason is set
+  useEffect(() => {
+    if (!activeSeason) return;
+    useGameStore.getState().loadGames(activeSeason.id);
+  }, [activeSeason?.id]);
 
   if (!activeDynasty) {
     return null;
@@ -19,11 +42,18 @@ export function DashboardPage() {
     classes: 'bg-gray-600 text-gray-100',
   };
 
+  const handleCreateFirstSeason = async () => {
+    await useSeasonStore.getState().createSeason(activeDynasty.id, activeDynasty.currentYear);
+  };
+
+  // Last 5 games sorted by week descending for RecentActivity
+  const recentGames = [...games].sort((a, b) => b.week - a.week).slice(0, 5);
+
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Header */}
       <header className="border-b border-gray-800 px-6 py-4">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-bold tracking-tight truncate max-w-xs">
               {activeDynasty.name}
@@ -38,7 +68,7 @@ export function DashboardPage() {
 
       {/* Dynasty summary bar */}
       <div className="border-b border-gray-800 bg-gray-800/50">
-        <div className="max-w-5xl mx-auto px-6 py-3 flex gap-8 text-sm">
+        <div className="max-w-6xl mx-auto px-6 py-3 flex gap-8 text-sm">
           <div>
             <span className="text-gray-500">Team </span>
             <span className="text-gray-200">{activeDynasty.teamName}</span>
@@ -58,30 +88,108 @@ export function DashboardPage() {
         </div>
       </div>
 
-      {/* Placeholder content */}
-      <main className="max-w-5xl mx-auto px-6 py-12">
-        <div className="flex flex-col items-center justify-center py-16 text-center">
-          <div className="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center mb-4">
-            <svg
-              className="w-8 h-8 text-gray-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-              />
-            </svg>
+      {/* Main content */}
+      <main className="max-w-6xl mx-auto px-6 py-6">
+        {seasonLoading && !activeSeason && (
+          <div className="flex items-center justify-center py-16">
+            <span className="text-gray-500 text-sm">Loading season data...</span>
           </div>
-          <h2 className="text-gray-300 font-semibold text-lg mb-2">Dashboard coming in Phase 2</h2>
-          <p className="text-gray-500 text-sm max-w-sm">
-            Season tracking, game logs, player stats, and narrative generation will be built in
-            Phase 2 and beyond.
-          </p>
-        </div>
+        )}
+
+        {!seasonLoading && seasons.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center mb-4">
+              <svg
+                className="w-8 h-8 text-gray-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+            </div>
+            <h2 className="text-gray-300 font-semibold text-lg mb-2">Start Your First Season</h2>
+            <p className="text-gray-500 text-sm max-w-sm mb-6">
+              Track your {activeDynasty.currentYear} season — record every game, watch your
+              ranking move, and build your dynasty story.
+            </p>
+            <button
+              onClick={handleCreateFirstSeason}
+              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-lg transition-colors"
+            >
+              Start {activeDynasty.currentYear} Season
+            </button>
+          </div>
+        )}
+
+        {activeSeason && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Left column */}
+            <div className="lg:col-span-2 flex flex-col gap-6">
+              <SeasonAtGlance season={activeSeason} />
+              <RecentActivity games={recentGames} />
+            </div>
+
+            {/* Right column */}
+            <div className="lg:col-span-1 flex flex-col gap-6">
+              <WeeklySnapshot season={activeSeason} games={games} />
+
+              {/* Action buttons */}
+              <div className="bg-gray-800 rounded-lg p-5 flex flex-col gap-3">
+                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-1">
+                  Actions
+                </h3>
+                <button
+                  onClick={() => setLogGameOpen(true)}
+                  className="w-full px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-lg transition-colors"
+                >
+                  Log Game
+                </button>
+                <button
+                  onClick={() => setSeasonEndOpen(true)}
+                  className="w-full px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white text-sm font-semibold rounded-lg transition-colors"
+                >
+                  End Season
+                </button>
+              </div>
+
+              {/* Modal placeholders */}
+              {logGameOpen && (
+                <div className="bg-gray-800 rounded-lg p-5 border border-gray-700">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-semibold text-gray-300">Log Game</span>
+                    <button
+                      onClick={() => setLogGameOpen(false)}
+                      className="text-gray-500 hover:text-gray-300 text-xs"
+                    >
+                      Close
+                    </button>
+                  </div>
+                  <p className="text-gray-500 text-xs">Game entry modal coming next</p>
+                </div>
+              )}
+              {seasonEndOpen && (
+                <div className="bg-gray-800 rounded-lg p-5 border border-gray-700">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-semibold text-gray-300">End Season</span>
+                    <button
+                      onClick={() => setSeasonEndOpen(false)}
+                      className="text-gray-500 hover:text-gray-300 text-xs"
+                    >
+                      Close
+                    </button>
+                  </div>
+                  <p className="text-gray-500 text-xs">Game entry modal coming next</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
