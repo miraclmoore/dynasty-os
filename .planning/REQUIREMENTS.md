@@ -80,18 +80,18 @@ Requirements for initial release. Covers P0 (launch-critical) and P1 (launch-com
 
 ### Rivalries
 
-- [ ] **RIVL-01**: User can designate opponents as rivals with a custom rivalry label
-- [ ] **RIVL-02**: Head-to-head record vs rivals auto-calculates from game log
-- [ ] **RIVL-03**: Current rivalry streak (wins or losses) displays with intensity score
+- [x] **RIVL-01**: User can designate opponents as rivals with a custom rivalry label
+- [x] **RIVL-02**: Head-to-head record vs rivals auto-calculates from game log
+- [x] **RIVL-03**: Current rivalry streak (wins or losses) displays with intensity score
 
 ### Program Timeline
 
-- [ ] **TIME-01**: Program Timeline shows one node per season from dynasty start to present (record, rank, bowl result, tagline, key events)
-- [ ] **TIME-02**: User can export the Program Timeline as a formatted PDF
+- [x] **TIME-01**: Program Timeline shows one node per season from dynasty start to present (record, rank, bowl result, tagline, key events)
+- [x] **TIME-02**: User can export the Program Timeline as a formatted PDF
 
 ### Opponent Scouting
 
-- [ ] **SCOU-01**: User can view a pre-game opponent scouting card (historical record vs your program, their season stats, tendency notes)
+- [x] **SCOU-01**: User can view a pre-game opponent scouting card (historical record vs your program, their season stats, tendency notes)
 
 ### Achievements
 
@@ -204,12 +204,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PRES-01 | Phase 5 | Complete |
 | PRES-02 | Phase 5 | Complete |
 | PRES-03 | Phase 5 | Complete |
-| RIVL-01 | Phase 6 | Pending |
-| RIVL-02 | Phase 6 | Pending |
-| RIVL-03 | Phase 6 | Pending |
-| TIME-01 | Phase 6 | Pending |
-| TIME-02 | Phase 6 | Pending |
-| SCOU-01 | Phase 6 | Pending |
+| RIVL-01 | Phase 6 | Complete |
+| RIVL-02 | Phase 6 | Complete |
+| RIVL-03 | Phase 6 | Complete |
+| TIME-01 | Phase 6 | Complete |
+| TIME-02 | Phase 6 | Complete |
+| SCOU-01 | Phase 6 | Complete |
 | ACHV-01 | Phase 7 | Pending |
 | ACHV-02 | Phase 7 | Pending |
 | ACHV-03 | Phase 7 | Pending |

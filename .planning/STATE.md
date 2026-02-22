@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** Phase 6 — Social and Legacy (complete), ready for Phase 7
+**Current focus:** Phase 7 — Achievements
 
 ## Current Position
 
 Phase: 6 of 9 (Social and Legacy)
 Plan: 3 of 3 in current phase
 Status: Phase complete
-Last activity: 2026-02-21 — Completed 06-03-PLAN.md (Scouting Cards)
+Last activity: 2026-02-22 — Completed 06-03-PLAN.md (Scouting Cards) — Phase 6 complete
 
 Progress: [██████████] 61% (22/36 plans complete)
 
