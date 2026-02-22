@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 3 of 9 (Player Tracking and Records)
-Plan: 1 of 4 in current phase
+Plan: 2 of 4 in current phase
 Status: In progress
-Last activity: 2026-02-22 — Completed 03-01-PLAN.md (player CRUD foundation, roster page, navigation store)
+Last activity: 2026-02-22 — Completed 03-02-PLAN.md (PlayerSeason service, career stats engine, LogPlayerSeasonModal, PlayerProfilePage)
 
-Progress: [███████░░░] 28% (10/36 plans complete)
+Progress: [███████░░░] 30% (11/36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
-- Average duration: ~6.8 min
-- Total execution time: ~60 min
+- Total plans completed: 11
+- Average duration: ~6.5 min
+- Total execution time: ~64 min
 
 **By Phase:**
 
@@ -29,10 +29,10 @@ Progress: [███████░░░] 28% (10/36 plans complete)
 |-------|-------|-------|----------|--------|
 | 01-foundation | 4/4 | ~35 min | ~8.8 min | ✓ Complete |
 | 02-core-loop | 5/5 | ~36 min | ~7.2 min | ✓ Complete |
-| 03-player-tracking | 1/4 | ~3 min | ~3 min | In progress |
+| 03-player-tracking | 2/4 | ~7 min | ~3.5 min | In progress |
 
 **Recent Trend:**
-- Last 5 plans: 2 min, 15 min, 15 min, 2 min, 3 min
+- Last 5 plans: 15 min, 15 min, 2 min, 3 min, 4 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -70,6 +70,9 @@ Recent decisions affecting current work:
 - Per-game ranking delta derivation: sort games with teamRanking by week desc, delta = previousRanking - currentRanking (positive = moved up in rankings)
 - Navigation store over router library: desktop app needs simple page state, not URL routing; useNavigationStore with currentPage/pageParams is sufficient
 - cascade-delete in player-service: deletePlayer removes playerSeasons before deleting player record to maintain referential integrity at service layer
+- Sparse stats Record: PlayerSeason.stats only stores non-zero values; computeCareerStats treats missing keys as 0 — keeps records lean without information loss
+- Position-driven stat display: PlayerProfilePage uses POSITION_STAT_KEYS map to show position-relevant columns in season history table; pattern reusable for leaderboards
+- Weighted average for decimal career stats: passerRating/puntAverage/sacks averaged by gamesPlayed (weighted) not summed — falls back to simple average when gamesPlayed=0
 
 ### Pending Todos
 
@@ -84,5 +87,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22 UTC
-Stopped at: Completed 03-01-PLAN.md (player CRUD service, player store, navigation store, Roster page with add/edit/delete modals)
+Stopped at: Completed 03-02-PLAN.md (PlayerSeason service, career stats engine, LogPlayerSeasonModal, PlayerProfilePage, departure recording)
 Resume file: None
