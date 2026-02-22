@@ -20,7 +20,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation** - Monorepo scaffolding, Tauri setup, DB schema, sport config system, multi-dynasty management
 - [x] **Phase 2: Core Loop** - Dashboard, season game logging, auto-calculated records, manual entry UX
 - [x] **Phase 3: Player Tracking and Records** - Roster management, per-season stats, career totals, Legacy Cards, all-time leaderboards
-- [ ] **Phase 4: Narrative Engine** - Claude AI season recaps with tone presets, cached taglines, season wrap-up flow
+- [x] **Phase 4: Narrative Engine** - Claude AI season recaps with tone presets, cached taglines, season wrap-up flow
 - [ ] **Phase 5: CFB Features** - Recruiting classes, transfer portal war room, NFL Draft tracker, program prestige tracker
 - [ ] **Phase 6: Social and Legacy** - Rivalries, program timeline, opponent scouting cards, achievements and trophy room
 - [ ] **Phase 7: Achievements** - Achievement engine, trophy room, coaching resume
@@ -101,8 +101,8 @@ the season meant — not just what happened — with their choice of tone and a 
 **Plans**: 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Narrative service layer: Claude Sonnet API integration, three tone system prompts, season data aggregation, tagline parsing, localStorage caching, Zustand store
-- [ ] 04-02-PLAN.md — Season Recap page UI: tone selector, generate/refresh flow, cached recap display, tagline display, dashboard entry point
+- [x] 04-01-PLAN.md — Narrative service layer: Claude Sonnet API integration, three tone system prompts, season data aggregation, tagline parsing, localStorage caching, Zustand store
+- [x] 04-02-PLAN.md — Season Recap page UI: tone selector, generate/refresh flow, cached recap display, tagline display, dashboard entry point
 
 ### Phase 5: CFB Features
 **Goal**: CFB-specific program management is complete — recruiting classes are graded and analyzed,
@@ -201,7 +201,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 | 1. Foundation | 4/4 | Complete | - |
 | 2. Core Loop | 5/5 | Complete | - |
 | 3. Player Tracking and Records | 4/4 | Complete | 2026-02-22 |
-| 4. Narrative Engine | 0/2 | Planned | - |
+| 4. Narrative Engine | 2/2 | Complete | 2026-02-22 |
 | 5. CFB Features | 0/4 | Not started | - |
 | 6. Social and Legacy | 0/3 | Not started | - |
 | 7. Achievements | 0/2 | Not started | - |

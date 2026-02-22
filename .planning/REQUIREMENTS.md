@@ -48,10 +48,10 @@ Requirements for initial release. Covers P0 (launch-critical) and P1 (launch-com
 
 ### Narrative Engine
 
-- [ ] **NARR-01**: User can generate an AI season recap (2-3 paragraphs) at season end
-- [ ] **NARR-02**: User can select narrative tone: ESPN National Desk, Hometown Beat Reporter, or Dynasty Mode Legend
-- [ ] **NARR-03**: Season recap includes auto-generated 3-word season tagline
-- [ ] **NARR-04**: Generated narrative content is cached locally and not re-generated unless explicitly requested
+- [x] **NARR-01**: User can generate an AI season recap (2-3 paragraphs) at season end
+- [x] **NARR-02**: User can select narrative tone: ESPN National Desk, Hometown Beat Reporter, or Dynasty Mode Legend
+- [x] **NARR-03**: Season recap includes auto-generated 3-word season tagline
+- [x] **NARR-04**: Generated narrative content is cached locally and not re-generated unless explicitly requested
 
 ### Recruiting (CFB)
 
@@ -187,10 +187,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | REC-01 | Phase 3 | Complete |
 | REC-02 | Phase 3 | Complete |
 | REC-03 | Phase 3 | Complete |
-| NARR-01 | Phase 4 | Pending |
-| NARR-02 | Phase 4 | Pending |
-| NARR-03 | Phase 4 | Pending |
-| NARR-04 | Phase 4 | Pending |
+| NARR-01 | Phase 4 | Complete |
+| NARR-02 | Phase 4 | Complete |
+| NARR-03 | Phase 4 | Complete |
+| NARR-04 | Phase 4 | Complete |
 | RECR-01 | Phase 5 | Pending |
 | RECR-02 | Phase 5 | Pending |
 | RECR-03 | Phase 5 | Pending |
