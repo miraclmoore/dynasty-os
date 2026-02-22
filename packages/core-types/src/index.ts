@@ -1,3 +1,5 @@
+export const CORE_TYPES_VERSION = '1.0.0';
+
 export * from './dynasty';
 export * from './season';
 export * from './game';
