@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDynastyStore } from '../store';
 import { useSeasonStore } from '../store/season-store';
 import { useGameStore } from '../store/game-store';
+import { useNavigationStore } from '../store/navigation-store';
 import { DynastySwitcher } from '../components/DynastySwitcher';
 import { SeasonAtGlance } from '../components/SeasonAtGlance';
 import { RecentActivity } from '../components/RecentActivity';
@@ -171,6 +172,12 @@ export function DashboardPage() {
                   className="w-full px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white text-sm font-semibold rounded-lg transition-colors"
                 >
                   End Season
+                </button>
+                <button
+                  onClick={() => useNavigationStore.getState().goToRoster()}
+                  className="w-full px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white text-sm font-semibold rounded-lg transition-colors"
+                >
+                  Manage Roster
                 </button>
               </div>
 
