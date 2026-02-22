@@ -5,21 +5,7 @@ import { LauncherPage } from './pages/LauncherPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { RosterPage } from './pages/RosterPage';
 import { PlayerProfilePage } from './pages/PlayerProfilePage';
-
-function PlaceholderPage({ title }: { title: string }) {
-  return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center gap-4">
-      <h1 className="text-2xl font-bold text-gray-300">{title}</h1>
-      <p className="text-gray-500 text-sm">Coming soon</p>
-      <button
-        onClick={() => useNavigationStore.getState().goToDashboard()}
-        className="mt-4 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg transition-colors"
-      >
-        Back to Dashboard
-      </button>
-    </div>
-  );
-}
+import { LegendsPage } from './pages/LegendsPage';
 
 function App() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
@@ -33,7 +19,7 @@ function App() {
     case 'player-profile':
       return <PlayerProfilePage />;
     case 'legends':
-      return <PlaceholderPage title="Legends" />;
+      return <LegendsPage />;
     default:
       return <DashboardPage />;
   }

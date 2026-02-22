@@ -179,6 +179,12 @@ export function DashboardPage() {
                 >
                   Manage Roster
                 </button>
+                <button
+                  onClick={() => useNavigationStore.getState().goToLegends()}
+                  className="w-full px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white text-sm font-semibold rounded-lg transition-colors"
+                >
+                  Program Legends
+                </button>
               </div>
 
               {/* Modals */}

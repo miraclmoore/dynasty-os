@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import type { PlayerStatus, PlayerSeason } from '@dynasty-os/core-types';
 import { getSportConfig } from '@dynasty-os/sport-configs';
 import { useNavigationStore } from '../store/navigation-store';
@@ -8,6 +8,15 @@ import { useDynastyStore } from '../store';
 import { computeCareerStats, computeCareerAwards } from '../lib/career-stats';
 import { EditPlayerModal } from '../components/EditPlayerModal';
 import { LogPlayerSeasonModal } from '../components/LogPlayerSeasonModal';
+import { LegacyCard } from '../components/LegacyCard';
+import { LegacyCardExport } from '../components/LegacyCardExport';
+import {
+  buildLegacyCardData,
+  generateLegacyBlurb,
+  getApiKey,
+  setApiKey,
+  clearApiKey,
+} from '../lib/legacy-card-service';
 
 const STATUS_LABEL: Record<PlayerStatus, string> = {
   active: 'Active',
@@ -80,9 +89,22 @@ export function PlayerProfilePage() {
   const [departureReason, setDepartureReason] = useState('');
   const [departureError, setDepartureError] = useState('');
 
+  // Legacy Card state
+  const legacyCardRef = useRef<HTMLDivElement>(null);
+  const [legacyBlurb, setLegacyBlurb] = useState<string | undefined>(undefined);
+  const [blurbLoading, setBlurbLoading] = useState(false);
+
+  // API key settings state
+  const [apiKeyInput, setApiKeyInput] = useState('');
+  const [apiKeyStatus, setApiKeyStatus] = useState<'idle' | 'saved' | 'cleared'>('idle');
+  const currentApiKey = getApiKey();
+
   useEffect(() => {
     if (playerId) {
       usePlayerSeasonStore.getState().loadPlayerSeasons(playerId);
+      // Load persisted blurb from localStorage
+      const saved = localStorage.getItem(`legacy-blurb-${playerId}`);
+      setLegacyBlurb(saved ?? undefined);
     }
   }, [playerId]);
 
@@ -124,7 +146,7 @@ export function PlayerProfilePage() {
   async function handleDepartureSubmit(e: React.FormEvent) {
     e.preventDefault();
     setDepartureError('');
-    if (!player) return;
+    if (!player || !activeDynasty) return;
 
     try {
       await usePlayerStore.getState().updatePlayer(player.id, {
@@ -135,9 +157,45 @@ export function PlayerProfilePage() {
       setDepartureOpen(false);
       setDepartureReason('');
       setDepartureYear('');
+
+      // Auto-generate Legacy Card blurb in the background — never blocks departure
+      const cardData = buildLegacyCardData(player, playerSeasons);
+      generateLegacyBlurb(cardData, activeDynasty.teamName).then((blurb) => {
+        if (blurb) {
+          localStorage.setItem(`legacy-blurb-${player.id}`, blurb);
+          setLegacyBlurb(blurb);
+        }
+      });
     } catch (err) {
       setDepartureError(String(err));
     }
+  }
+
+  async function handleRegenerateBlurb() {
+    if (!player || !activeDynasty) return;
+    setBlurbLoading(true);
+    const cardData = buildLegacyCardData(player, playerSeasons);
+    const blurb = await generateLegacyBlurb(cardData, activeDynasty.teamName);
+    if (blurb) {
+      localStorage.setItem(`legacy-blurb-${player.id}`, blurb);
+      setLegacyBlurb(blurb);
+    }
+    setBlurbLoading(false);
+  }
+
+  function handleSaveApiKey() {
+    if (apiKeyInput.trim()) {
+      setApiKey(apiKeyInput.trim());
+      setApiKeyInput('');
+      setApiKeyStatus('saved');
+      setTimeout(() => setApiKeyStatus('idle'), 2000);
+    }
+  }
+
+  function handleClearApiKey() {
+    clearApiKey();
+    setApiKeyStatus('cleared');
+    setTimeout(() => setApiKeyStatus('idle'), 2000);
   }
 
   if (!activeDynasty) return null;
@@ -159,6 +217,13 @@ export function PlayerProfilePage() {
   }
 
   const isActive = player.status === 'active';
+
+  // Legacy Card data for departed players
+  const legacyCardData = useMemo(() => {
+    if (isActive) return null;
+    const cardData = buildLegacyCardData(player, playerSeasons);
+    return { ...cardData, blurb: legacyBlurb };
+  }, [isActive, player, playerSeasons, legacyBlurb]);
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -284,6 +349,65 @@ export function PlayerProfilePage() {
                   <p className="text-gray-300">{player.departureReason}</p>
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Legacy Card for departed players */}
+        {!isActive && legacyCardData && (
+          <div className="bg-gray-800 rounded-xl border border-gray-700 p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Legacy Card</h2>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleRegenerateBlurb}
+                  disabled={blurbLoading || !getApiKey()}
+                  className="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed text-gray-300 text-xs rounded-lg transition-colors"
+                  title={!getApiKey() ? 'Set an API key below to generate blurbs' : 'Regenerate AI blurb'}
+                >
+                  {blurbLoading ? 'Generating...' : 'Regenerate Blurb'}
+                </button>
+                <LegacyCardExport
+                  cardRef={legacyCardRef as React.RefObject<HTMLDivElement>}
+                  playerLastName={player.lastName}
+                />
+              </div>
+            </div>
+            <LegacyCard ref={legacyCardRef} cardData={legacyCardData} teamName={activeDynasty.teamName} />
+
+            {/* API Key Settings */}
+            <div className="mt-5 pt-4 border-t border-gray-700">
+              <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Claude API Key</p>
+              <p className="text-xs text-gray-500 mb-3">
+                {currentApiKey
+                  ? 'API key configured — AI blurbs are enabled.'
+                  : 'No API key set — blurbs will be skipped. Add your Anthropic key below.'}
+              </p>
+              <div className="flex items-center gap-2">
+                <input
+                  type="password"
+                  placeholder="sk-ant-..."
+                  value={apiKeyInput}
+                  onChange={(e) => setApiKeyInput(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSaveApiKey()}
+                  className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-1.5 text-white text-sm focus:outline-none focus:border-amber-500 max-w-xs"
+                />
+                <button
+                  onClick={handleSaveApiKey}
+                  disabled={!apiKeyInput.trim()}
+                  className="px-3 py-1.5 bg-amber-700 hover:bg-amber-600 disabled:opacity-50 text-white text-xs font-medium rounded-lg transition-colors"
+                >
+                  {apiKeyStatus === 'saved' ? 'Saved!' : 'Save Key'}
+                </button>
+                {currentApiKey && (
+                  <button
+                    onClick={handleClearApiKey}
+                    className="px-3 py-1.5 bg-gray-700 hover:bg-red-800 text-gray-300 text-xs rounded-lg transition-colors"
+                  >
+                    {apiKeyStatus === 'cleared' ? 'Cleared!' : 'Clear Key'}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         )}
