@@ -32,19 +32,19 @@ Requirements for initial release. Covers P0 (launch-critical) and P1 (launch-com
 
 ### Player Tracking
 
-- [ ] **PLAY-01**: User can add players to their roster (name, position, recruiting stars, home state)
-- [ ] **PLAY-02**: User can log season stats per player (passing, rushing, receiving, defense, kicking)
-- [ ] **PLAY-03**: Career stat totals auto-calculate from all logged season stats
-- [ ] **PLAY-04**: User can record player departure (graduation, transfer, NFL Draft, injury)
-- [ ] **PLAY-05**: Player Legacy Card auto-generates at departure: career stats, awards, AI-written blurb
-- [ ] **PLAY-06**: User can export a Player Legacy Card as a PNG image
-- [ ] **PLAY-07**: User can browse all Legacy Cards in a Program Legends gallery (filterable by position, era, award)
+- [x] **PLAY-01**: User can add players to their roster (name, position, recruiting stars, home state)
+- [x] **PLAY-02**: User can log season stats per player (passing, rushing, receiving, defense, kicking)
+- [x] **PLAY-03**: Career stat totals auto-calculate from all logged season stats
+- [x] **PLAY-04**: User can record player departure (graduation, transfer, NFL Draft, injury)
+- [x] **PLAY-05**: Player Legacy Card auto-generates at departure: career stats, awards, AI-written blurb
+- [x] **PLAY-06**: User can export a Player Legacy Card as a PNG image
+- [x] **PLAY-07**: User can browse all Legacy Cards in a Program Legends gallery (filterable by position, era, award)
 
 ### Records & Leaderboards
 
-- [ ] **REC-01**: Single-season records leaderboard shows top N per stat category for a given season
-- [ ] **REC-02**: Career records leaderboard shows all-time top N per stat category across all seasons
-- [ ] **REC-03**: Head-to-head all-time records against every opponent, filterable by era/coaching staff
+- [x] **REC-01**: Single-season records leaderboard shows top N per stat category for a given season
+- [x] **REC-02**: Career records leaderboard shows all-time top N per stat category across all seasons
+- [x] **REC-03**: Head-to-head all-time records against every opponent, filterable by era/coaching staff
 
 ### Narrative Engine
 
@@ -177,16 +177,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INGST-01 | Phase 2 | Complete |
 | INGST-02 | Phase 2 | Complete |
 | INGST-03 | Phase 2 | Complete |
-| PLAY-01 | Phase 3 | Pending |
-| PLAY-02 | Phase 3 | Pending |
-| PLAY-03 | Phase 3 | Pending |
-| PLAY-04 | Phase 3 | Pending |
-| PLAY-05 | Phase 3 | Pending |
-| PLAY-06 | Phase 3 | Pending |
-| PLAY-07 | Phase 3 | Pending |
-| REC-01 | Phase 3 | Pending |
-| REC-02 | Phase 3 | Pending |
-| REC-03 | Phase 3 | Pending |
+| PLAY-01 | Phase 3 | Complete |
+| PLAY-02 | Phase 3 | Complete |
+| PLAY-03 | Phase 3 | Complete |
+| PLAY-04 | Phase 3 | Complete |
+| PLAY-05 | Phase 3 | Complete |
+| PLAY-06 | Phase 3 | Complete |
+| PLAY-07 | Phase 3 | Complete |
+| REC-01 | Phase 3 | Complete |
+| REC-02 | Phase 3 | Complete |
+| REC-03 | Phase 3 | Complete |
 | NARR-01 | Phase 4 | Pending |
 | NARR-02 | Phase 4 | Pending |
 | NARR-03 | Phase 4 | Pending |
