@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** Phase 5 — next phase
+**Current focus:** Phase 5 — CFB Features
 
 ## Current Position
 
-Phase: 4 of 9 (Narrative Engine) — COMPLETE
-Plan: 2 of 2 in phase (all complete)
-Status: Phase complete
-Last activity: 2026-02-22 — Completed 04-02-PLAN.md (Season Recap Page UI); human-verify checkpoint approved
+Phase: 5 of 9 (CFB Features) — In progress
+Plan: 1 of 4 in phase (1 complete)
+Status: In progress
+Last activity: 2026-02-22 — Completed 05-01-PLAN.md (DB schema v3 + recruiting module)
 
-Progress: [████████░░] 42% (15/36 plans complete)
+Progress: [████████░░] 44% (16/36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 15
-- Average duration: ~5.5 min
-- Total execution time: ~86 min
+- Total plans completed: 16
+- Average duration: ~5.4 min
+- Total execution time: ~90 min
 
 **By Phase:**
 
@@ -31,10 +31,11 @@ Progress: [████████░░] 42% (15/36 plans complete)
 | 02-core-loop | 5/5 | ~36 min | ~7.2 min | ✓ Complete |
 | 03-player-tracking | 4/4 | ~14 min | ~3.5 min | ✓ Complete |
 | 04-narrative-engine | 2/2 | ~17 min | ~8.5 min | ✓ Complete |
+| 05-cfb-features | 1/4 | ~4 min | ~4 min | In progress |
 
 **Recent Trend:**
-- Last 5 plans: 2 min, 3 min, 4 min, 4 min, ~15 min (04-02 included human-verify checkpoint)
-- Trend: Stable (human-verify checkpoints add wall-clock time, not execution time)
+- Last 5 plans: 3 min, 4 min, 4 min, ~15 min (04-02 checkpoint), 4 min
+- Trend: Stable
 
 *Updated after each plan completion*
 
@@ -88,6 +89,10 @@ Recent decisions affecting current work:
 - Tone selector defaults to espn, syncs to cached tone: ESPN is the default on first visit; on revisit, selector updates to match last-used tone
 - Tagline text-3xl font-bold text-amber-400: tagline is the emotional headline — larger than body text to feel like a broadcast headline
 - Amber accent (bg-amber-600) for AI/narrative features: visually distinct from blue/gray data-entry action buttons on Dashboard
+- Single DB version bump (v2→v3) for all 5 Phase 5 tables: prevents migration conflicts across 05-02/03/04 plans
+- CFB sport guard pattern: activeDynasty.sport !== 'cfb' check at top of CFB-only pages — reuse in 05-02/03/04
+- Structured AI response parsing (GRADE:/ANALYSIS: regex): consistent pattern for structured Claude API responses
+- claude-haiku-4-5-20251001 for recruiting class grading: consistent with legacy card blurb model; structured grading suits Haiku's capabilities
 
 ### Pending Todos
 
@@ -102,5 +107,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22 UTC
-Stopped at: Completed 04-02-PLAN.md (Season Recap Page — all plans done, phase verified)
+Stopped at: Completed 05-01-PLAN.md (DB schema v3 + recruiting module)
 Resume file: None
