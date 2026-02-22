@@ -6,6 +6,8 @@ import { DynastySwitcher } from '../components/DynastySwitcher';
 import { SeasonAtGlance } from '../components/SeasonAtGlance';
 import { RecentActivity } from '../components/RecentActivity';
 import { WeeklySnapshot } from '../components/WeeklySnapshot';
+import { LogGameModal } from '../components/LogGameModal';
+import { SeasonEndModal } from '../components/SeasonEndModal';
 
 const SPORT_BADGE: Record<string, { label: string; classes: string }> = {
   cfb: { label: 'CFB', classes: 'bg-orange-600 text-orange-100' },
@@ -158,35 +160,32 @@ export function DashboardPage() {
                 </button>
               </div>
 
-              {/* Modal placeholders */}
-              {logGameOpen && (
-                <div className="bg-gray-800 rounded-lg p-5 border border-gray-700">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-semibold text-gray-300">Log Game</span>
-                    <button
-                      onClick={() => setLogGameOpen(false)}
-                      className="text-gray-500 hover:text-gray-300 text-xs"
-                    >
-                      Close
-                    </button>
-                  </div>
-                  <p className="text-gray-500 text-xs">Game entry modal coming next</p>
-                </div>
-              )}
-              {seasonEndOpen && (
-                <div className="bg-gray-800 rounded-lg p-5 border border-gray-700">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-semibold text-gray-300">End Season</span>
-                    <button
-                      onClick={() => setSeasonEndOpen(false)}
-                      className="text-gray-500 hover:text-gray-300 text-xs"
-                    >
-                      Close
-                    </button>
-                  </div>
-                  <p className="text-gray-500 text-xs">Game entry modal coming next</p>
-                </div>
-              )}
+              {/* Modals */}
+              <LogGameModal
+                isOpen={logGameOpen}
+                onClose={async () => {
+                  setLogGameOpen(false);
+                  if (activeDynasty && activeSeason) {
+                    await useSeasonStore.getState().loadSeasons(activeDynasty.id);
+                    await useGameStore.getState().loadGames(activeSeason.id);
+                  }
+                }}
+                dynastyId={activeDynasty.id}
+                seasonId={activeSeason.id}
+                sport={activeDynasty.sport}
+              />
+              <SeasonEndModal
+                isOpen={seasonEndOpen}
+                onClose={async () => {
+                  setSeasonEndOpen(false);
+                  if (activeDynasty) {
+                    await useSeasonStore.getState().loadSeasons(activeDynasty.id);
+                  }
+                }}
+                seasonId={activeSeason.id}
+                dynastyId={activeDynasty.id}
+                currentSeason={activeSeason}
+              />
             </div>
           </div>
         )}
