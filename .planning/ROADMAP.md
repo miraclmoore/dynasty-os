@@ -116,13 +116,13 @@ prestige trends are visible year over year.
   3. User can log transfer portal arrivals and departures and view the annual War Room with a net impact rating
   4. User can log NFL Draft picks and view historical draft class totals by position and era, with links back to player career records
   5. User can log annual prestige ratings and see a year-over-year trend chart with recruiting rank overlay showing prestige trajectory
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 05-01: Recruiting module — class entry, individual recruit log, signing day AI grade and analysis (Claude API), class history browser
-- [ ] 05-02: Transfer portal war room — arrival/departure log, net impact rating calculation, annual war room view
-- [ ] 05-03: NFL Draft tracker — draft class entry, historical totals by position/era, player record linking
-- [ ] 05-04: Program prestige tracker — annual rating log, trend calculation (vs prior 3 seasons), trajectory chart with recruiting rank overlay
+- [ ] 05-01-PLAN.md — DB schema migration (5 new tables) + Recruiting module: class entry, individual recruit log, signing day AI grade via Claude Haiku, class history browser, navigation and dashboard wiring
+- [ ] 05-02-PLAN.md — Transfer portal war room: arrival/departure service and store, War Room page with side-by-side tables and net impact rating
+- [ ] 05-03-PLAN.md — NFL Draft tracker: draft pick service and store, historical view by year, position breakdown, player record linking
+- [ ] 05-04-PLAN.md — Program prestige tracker: prestige rating service and store, trend calculation, SVG line chart with recruiting rank overlay
 
 ### Phase 6: Social and Legacy
 **Goal**: The program's story is visible — rivals have records and streaks, the entire dynasty
