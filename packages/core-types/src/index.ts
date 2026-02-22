@@ -10,3 +10,4 @@ export * from './transfer-portal';
 export * from './draft';
 export * from './prestige';
 export * from './rival';
+export * from './scouting-note';

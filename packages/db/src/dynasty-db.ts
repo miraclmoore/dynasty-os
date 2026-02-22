@@ -11,6 +11,7 @@ import type {
   DraftPick,
   PrestigeRating,
   Rival,
+  ScoutingNote,
 } from '@dynasty-os/core-types';
 import { SCHEMA, DB_NAME } from './schema';
 
@@ -26,7 +27,7 @@ export class DynastyDB extends Dexie {
   draftPicks!: Table<DraftPick, string>;
   prestigeRatings!: Table<PrestigeRating, string>;
   rivals!: Table<Rival, string>;
-  scoutingNotes!: Table<Record<string, unknown>, string>;
+  scoutingNotes!: Table<ScoutingNote, string>;
 
   constructor() {
     super(DB_NAME);
