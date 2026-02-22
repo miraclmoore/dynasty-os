@@ -98,11 +98,11 @@ the season meant — not just what happened — with their choice of tone and a 
   2. User can select from three tone presets — ESPN National Desk, Hometown Beat Reporter, or Dynasty Mode Legend — and the output reads distinctly differently
   3. Every generated recap includes an auto-generated 3-word season tagline
   4. Generated narrative content is cached locally and the app never re-generates it unless the user explicitly requests a refresh
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 04-01: Narrative engine package — Claude API integration, prompt templates per tone, season data aggregation into prompt context
-- [ ] 04-02: Narrative UI — tone selector, generate/refresh flow, cached recap display, tagline display, season wrap-up screen
+- [ ] 04-01-PLAN.md — Narrative service layer: Claude Sonnet API integration, three tone system prompts, season data aggregation, tagline parsing, localStorage caching, Zustand store
+- [ ] 04-02-PLAN.md — Season Recap page UI: tone selector, generate/refresh flow, cached recap display, tagline display, dashboard entry point
 
 ### Phase 5: CFB Features
 **Goal**: CFB-specific program management is complete — recruiting classes are graded and analyzed,
@@ -201,7 +201,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 | 1. Foundation | 4/4 | Complete | - |
 | 2. Core Loop | 5/5 | Complete | - |
 | 3. Player Tracking and Records | 4/4 | Complete | 2026-02-22 |
-| 4. Narrative Engine | 0/2 | Not started | - |
+| 4. Narrative Engine | 0/2 | Planned | - |
 | 5. CFB Features | 0/4 | Not started | - |
 | 6. Social and Legacy | 0/3 | Not started | - |
 | 7. Achievements | 0/2 | Not started | - |
