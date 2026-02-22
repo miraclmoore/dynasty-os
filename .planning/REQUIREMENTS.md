@@ -55,28 +55,28 @@ Requirements for initial release. Covers P0 (launch-critical) and P1 (launch-com
 
 ### Recruiting (CFB)
 
-- [ ] **RECR-01**: User can log a recruiting class (class rank, star distribution, position commits)
-- [ ] **RECR-02**: User can record individual recruit details (name, position, stars, state, national rank)
-- [ ] **RECR-03**: Recruiting class grade and AI analysis generates at signing day
-- [ ] **RECR-04**: Recruiting class history is browsable across all dynasty seasons
+- [x] **RECR-01**: User can log a recruiting class (class rank, star distribution, position commits)
+- [x] **RECR-02**: User can record individual recruit details (name, position, stars, state, national rank)
+- [x] **RECR-03**: Recruiting class grade and AI analysis generates at signing day
+- [x] **RECR-04**: Recruiting class history is browsable across all dynasty seasons
 
 ### Transfer Portal (CFB)
 
-- [ ] **PORT-01**: User can log transfer portal arrivals (player, position, stars, origin school)
-- [ ] **PORT-02**: User can log transfer portal departures (player, position, destination)
-- [ ] **PORT-03**: Annual transfer portal activity is viewable in a War Room with net impact rating
+- [x] **PORT-01**: User can log transfer portal arrivals (player, position, stars, origin school)
+- [x] **PORT-02**: User can log transfer portal departures (player, position, destination)
+- [x] **PORT-03**: Annual transfer portal activity is viewable in a War Room with net impact rating
 
 ### NFL Draft Tracker
 
-- [ ] **DRFT-01**: User can log NFL Draft class (player, position, round, team)
-- [ ] **DRFT-02**: Historical draft class totals are viewable by position and era
-- [ ] **DRFT-03**: Draft class links to Player records for career context
+- [x] **DRFT-01**: User can log NFL Draft class (player, position, round, team)
+- [x] **DRFT-02**: Historical draft class totals are viewable by position and era
+- [x] **DRFT-03**: Draft class links to Player records for career context
 
 ### Program Prestige (CFB)
 
-- [ ] **PRES-01**: User can log annual program prestige rating
-- [ ] **PRES-02**: Prestige trend (up/down/stable) auto-calculates vs prior 3 seasons
-- [ ] **PRES-03**: Prestige trajectory chart shows year-over-year trend with recruiting rank overlay
+- [x] **PRES-01**: User can log annual program prestige rating
+- [x] **PRES-02**: Prestige trend (up/down/stable) auto-calculates vs prior 3 seasons
+- [x] **PRES-03**: Prestige trajectory chart shows year-over-year trend with recruiting rank overlay
 
 ### Rivalries
 
@@ -191,19 +191,19 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NARR-02 | Phase 4 | Complete |
 | NARR-03 | Phase 4 | Complete |
 | NARR-04 | Phase 4 | Complete |
-| RECR-01 | Phase 5 | Pending |
-| RECR-02 | Phase 5 | Pending |
-| RECR-03 | Phase 5 | Pending |
-| RECR-04 | Phase 5 | Pending |
-| PORT-01 | Phase 5 | Pending |
-| PORT-02 | Phase 5 | Pending |
-| PORT-03 | Phase 5 | Pending |
-| DRFT-01 | Phase 5 | Pending |
-| DRFT-02 | Phase 5 | Pending |
-| DRFT-03 | Phase 5 | Pending |
-| PRES-01 | Phase 5 | Pending |
-| PRES-02 | Phase 5 | Pending |
-| PRES-03 | Phase 5 | Pending |
+| RECR-01 | Phase 5 | Complete |
+| RECR-02 | Phase 5 | Complete |
+| RECR-03 | Phase 5 | Complete |
+| RECR-04 | Phase 5 | Complete |
+| PORT-01 | Phase 5 | Complete |
+| PORT-02 | Phase 5 | Complete |
+| PORT-03 | Phase 5 | Complete |
+| DRFT-01 | Phase 5 | Complete |
+| DRFT-02 | Phase 5 | Complete |
+| DRFT-03 | Phase 5 | Complete |
+| PRES-01 | Phase 5 | Complete |
+| PRES-02 | Phase 5 | Complete |
+| PRES-03 | Phase 5 | Complete |
 | RIVL-01 | Phase 6 | Pending |
 | RIVL-02 | Phase 6 | Pending |
 | RIVL-03 | Phase 6 | Pending |

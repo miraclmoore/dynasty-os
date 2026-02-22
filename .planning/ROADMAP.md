@@ -21,7 +21,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Core Loop** - Dashboard, season game logging, auto-calculated records, manual entry UX
 - [x] **Phase 3: Player Tracking and Records** - Roster management, per-season stats, career totals, Legacy Cards, all-time leaderboards
 - [x] **Phase 4: Narrative Engine** - Claude AI season recaps with tone presets, cached taglines, season wrap-up flow
-- [ ] **Phase 5: CFB Features** - Recruiting classes, transfer portal war room, NFL Draft tracker, program prestige tracker
+- [x] **Phase 5: CFB Features** - Recruiting classes, transfer portal war room, NFL Draft tracker, program prestige tracker
 - [ ] **Phase 6: Social and Legacy** - Rivalries, program timeline, opponent scouting cards, achievements and trophy room
 - [ ] **Phase 7: Achievements** - Achievement engine, trophy room, coaching resume
 - [ ] **Phase 8: Screenshot Ingestion** - Claude Vision API screenshot parsing for CFB screens
@@ -119,10 +119,10 @@ prestige trends are visible year over year.
 **Plans**: 4 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — DB schema migration (5 new tables) + Recruiting module: class entry, individual recruit log, signing day AI grade via Claude Haiku, class history browser, navigation and dashboard wiring
-- [ ] 05-02-PLAN.md — Transfer portal war room: arrival/departure service and store, War Room page with side-by-side tables and net impact rating
-- [ ] 05-03-PLAN.md — NFL Draft tracker: draft pick service and store, historical view by year, position breakdown, player record linking
-- [ ] 05-04-PLAN.md — Program prestige tracker: prestige rating service and store, trend calculation, SVG line chart with recruiting rank overlay
+- [x] 05-01-PLAN.md — DB schema migration (5 new tables) + Recruiting module: class entry, individual recruit log, signing day AI grade via Claude Haiku, class history browser, navigation and dashboard wiring
+- [x] 05-02-PLAN.md — Transfer portal war room: arrival/departure service and store, War Room page with side-by-side tables and net impact rating
+- [x] 05-03-PLAN.md — NFL Draft tracker: draft pick service and store, historical view by year, position breakdown, player record linking
+- [x] 05-04-PLAN.md — Program prestige tracker: prestige rating service and store, trend calculation, SVG line chart with recruiting rank overlay
 
 ### Phase 6: Social and Legacy
 **Goal**: The program's story is visible — rivals have records and streaks, the entire dynasty
@@ -202,7 +202,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 | 2. Core Loop | 5/5 | Complete | - |
 | 3. Player Tracking and Records | 4/4 | Complete | 2026-02-22 |
 | 4. Narrative Engine | 2/2 | Complete | 2026-02-22 |
-| 5. CFB Features | 0/4 | Not started | - |
+| 5. CFB Features | 4/4 | Complete | 2026-02-22 |
 | 6. Social and Legacy | 0/3 | Not started | - |
 | 7. Achievements | 0/2 | Not started | - |
 | 8. Screenshot Ingestion | 0/2 | Not started | - |
