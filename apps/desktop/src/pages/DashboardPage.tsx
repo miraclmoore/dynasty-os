@@ -8,6 +8,9 @@ import { RecentActivity } from '../components/RecentActivity';
 import { WeeklySnapshot } from '../components/WeeklySnapshot';
 import { LogGameModal } from '../components/LogGameModal';
 import { SeasonEndModal } from '../components/SeasonEndModal';
+import { StatHighlights } from '../components/StatHighlights';
+import { GameLog } from '../components/GameLog';
+import type { GameResult } from '@dynasty-os/core-types';
 
 const SPORT_BADGE: Record<string, { label: string; classes: string }> = {
   cfb: { label: 'CFB', classes: 'bg-orange-600 text-orange-100' },
@@ -50,6 +53,15 @@ export function DashboardPage() {
 
   // Last 5 games sorted by week descending for RecentActivity
   const recentGames = [...games].sort((a, b) => b.week - a.week).slice(0, 5);
+
+  const handleGameUpdate = async (
+    id: string,
+    updates: { teamScore?: number; opponentScore?: number; result?: GameResult; notes?: string }
+  ) => {
+    await useGameStore.getState().updateGame(id, updates);
+    if (activeDynasty) await useSeasonStore.getState().loadSeasons(activeDynasty.id);
+    if (activeSeason) await useGameStore.getState().loadGames(activeSeason.id);
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -130,6 +142,7 @@ export function DashboardPage() {
         )}
 
         {activeSeason && (
+          <>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left column */}
             <div className="lg:col-span-2 flex flex-col gap-6">
@@ -140,6 +153,7 @@ export function DashboardPage() {
             {/* Right column */}
             <div className="lg:col-span-1 flex flex-col gap-6">
               <WeeklySnapshot season={activeSeason} games={games} />
+              <StatHighlights games={games} />
 
               {/* Action buttons */}
               <div className="bg-gray-800 rounded-lg p-5 flex flex-col gap-3">
@@ -188,6 +202,10 @@ export function DashboardPage() {
               />
             </div>
           </div>
+          <div className="mt-6">
+            <GameLog games={games} onUpdateGame={handleGameUpdate} />
+          </div>
+          </>
         )}
       </main>
     </div>
