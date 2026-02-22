@@ -135,12 +135,12 @@ history scrolls as a timeline, and scouting cards exist for upcoming opponents.
   3. Program Timeline shows one scrollable node per season (record, rank, bowl result, tagline, key events) from dynasty start to present
   4. User can export the Program Timeline as a formatted PDF
   5. User can view a pre-game scouting card for any opponent showing historical record vs the program, season stats, and tendency notes
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 06-01: Rivalry tracker — rival designation UI, auto-calculated H2H record and streak from game log, intensity score
-- [ ] 06-02: Program timeline — season node data aggregation, scrollable timeline UI, PDF export
-- [ ] 06-03: Opponent scouting cards — scouting card UI, historical record derivation, season stats and tendency note fields
+- [ ] 06-01-PLAN.md — Rivalry tracker: DB v4 migration (rivals + scoutingNotes tables), Rival type, CRUD service with intensity calculation, Zustand store, RivalryTrackerPage with H2H record and streak pips
+- [ ] 06-02-PLAN.md — Program timeline: timeline-service aggregating season nodes with localStorage taglines, ProgramTimelinePage with scrollable nodes and window.print() PDF export
+- [ ] 06-03-PLAN.md — Opponent scouting cards: ScoutingNote type (updates DB placeholder), upsert service, Zustand store, ScoutingCardPage with opponent search, H2H record, and tendency notes
 
 ### Phase 7: Achievements
 **Goal**: The coach's legacy is quantified — milestones auto-unlock as data is saved, a trophy room
