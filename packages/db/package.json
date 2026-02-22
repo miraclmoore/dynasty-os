@@ -9,6 +9,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@dynasty-os/core-types": "workspace:*",
     "dexie": "^4.0.10"
   },
   "devDependencies": {

@@ -1,11 +1,18 @@
 import React from 'react';
-import { CORE_TYPES_VERSION } from '@dynasty-os/core-types';
 import type { Dynasty } from '@dynasty-os/core-types';
 import './App.css';
 
 const exampleDynasty: Dynasty = {
   id: '1',
   name: 'My Dynasty',
+  sport: 'cfb',
+  teamName: 'Texas Longhorns',
+  coachName: 'My Coach',
+  startYear: 2024,
+  currentYear: 2024,
+  gameVersion: 'EA Sports CFB 26',
+  createdAt: Date.now(),
+  updatedAt: Date.now(),
 };
 
 function App() {
@@ -21,8 +28,8 @@ function App() {
         </h2>
         <dl className="space-y-2">
           <div className="flex justify-between">
-            <dt className="text-gray-500 text-sm">Package</dt>
-            <dd className="text-green-400 text-sm font-mono">{CORE_TYPES_VERSION}</dd>
+            <dt className="text-gray-500 text-sm">Sport</dt>
+            <dd className="text-green-400 text-sm font-mono">{exampleDynasty.sport}</dd>
           </div>
           <div className="flex justify-between">
             <dt className="text-gray-500 text-sm">Dynasty</dt>

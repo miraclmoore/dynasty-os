@@ -1,21 +1,21 @@
-export const SPORT_CONFIGS_VERSION = "@dynasty-os/sport-configs";
+import type { SportConfig, SportType } from '@dynasty-os/core-types';
+import { cfbConfig } from './cfb';
+import { maddenConfig } from './madden';
 
-export type SportType = "CFB" | "Madden";
+export const SPORT_CONFIGS_VERSION = '1.0.0';
 
-export interface SportConfig {
-  id: SportType;
-  name: string;
-  description: string;
+const configs: Record<SportType, SportConfig> = {
+  cfb: cfbConfig,
+  madden: maddenConfig,
+};
+
+export function getSportConfig(sport: SportType): SportConfig {
+  const config = configs[sport];
+  if (!config) {
+    throw new Error(`Unknown sport: ${sport}`);
+  }
+  return config;
 }
 
-export const CFB_CONFIG: SportConfig = {
-  id: "CFB",
-  name: "College Football",
-  description: "EA College Football dynasty mode",
-};
-
-export const MADDEN_CONFIG: SportConfig = {
-  id: "Madden",
-  name: "Madden NFL",
-  description: "Madden NFL franchise mode",
-};
+export { cfbConfig } from './cfb';
+export { maddenConfig } from './madden';
