@@ -10,27 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 2 of 9 (Core Loop)
-Plan: 0 of TBD in current phase
-Status: Phase 1 complete ✓ — ready to plan Phase 2
-Last activity: 2026-02-22 — Phase 1 complete, verified 10/10 must-haves
+Plan: 1 of 4 in current phase
+Status: In progress
+Last activity: 2026-02-22 — Completed 02-01-PLAN.md (season & game data layer)
 
-Progress: [████░░░░░░] 11% (4/36 plans complete)
+Progress: [█████░░░░░] 14% (5/36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: ~8 min
-- Total execution time: ~35 min
+- Total plans completed: 5
+- Average duration: ~7 min
+- Total execution time: ~37 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan | Status |
 |-------|-------|-------|----------|--------|
 | 01-foundation | 4/4 | ~35 min | ~8.8 min | ✓ Complete |
+| 02-core-loop | 1/4 | ~2 min | ~2 min | In progress |
 
 **Recent Trend:**
-- Last 5 plans: 7 min, 4 min, 9 min, 15 min (incl. export fix)
+- Last 5 plans: 7 min, 4 min, 9 min, 15 min, 2 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -56,6 +57,9 @@ Recent decisions affecting current work:
 - macOS RSS inflates Tauri memory: WKWebView shared frameworks counted in RSS; Windows Edge WebView2 target expected to read ~30-50MB
 - Blob URL downloads don't work in Tauri WebView: WKWebView and WebView2 block anchor.click() blob downloads; use tauri-plugin-dialog (save()) + tauri-plugin-fs (writeTextFile()) for all file export
 - Zustand store pattern: loadDynasties() called after every mutation (create/delete/import); activeDynasty cleared on delete if it matches
+- recalculateSeasonRecord pattern: called after every game write (create/update/delete); Season wins/losses/confWins/confLosses always reflect actual game data
+- Conference record isolation: confWins/confLosses count only gameType === 'conference' games; bowl/playoff/regular excluded
+- useSeasonStore.activeSeason: season with highest year (getSeasonsByDynasty returns descending); UI must also call loadSeasons after logGame to reflect updated W/L
 
 ### Pending Todos
 
@@ -70,5 +74,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22 UTC
-Stopped at: Phase 1 complete — all 4 plans executed and verified 10/10
+Stopped at: Completed 02-01-PLAN.md (season & game data layer — services and stores)
 Resume file: None
