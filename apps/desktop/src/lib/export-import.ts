@@ -1,6 +1,8 @@
 import { db } from '@dynasty-os/db';
 import type { Dynasty, Season, Game, Player, PlayerSeason } from '@dynasty-os/core-types';
 import { generateId } from './uuid';
+import { save } from '@tauri-apps/plugin-dialog';
+import { writeTextFile } from '@tauri-apps/plugin-fs';
 
 export interface DynastyExport {
   version: 1;
@@ -47,16 +49,14 @@ export async function exportDynasty(dynastyId: string): Promise<string> {
   return JSON.stringify(exportData, null, 2);
 }
 
-export function downloadJson(json: string, filename: string): void {
-  const blob = new Blob([json], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+export async function downloadJson(json: string, filename: string): Promise<void> {
+  const filePath = await save({
+    defaultPath: filename,
+    filters: [{ name: 'JSON', extensions: ['json'] }],
+  });
+  if (filePath) {
+    await writeTextFile(filePath, json);
+  }
 }
 
 export function readFileAsText(file: File): Promise<string> {

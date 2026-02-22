@@ -91,7 +91,7 @@ export const useDynastyStore = create<DynastyStore>((set, get) => ({
       const dynasty = dynasties.find((d) => d.id === id);
       const safeName = (dynasty?.name ?? 'dynasty').replace(/[^a-z0-9]/gi, '-').toLowerCase();
       const filename = `${safeName}-${Date.now()}.json`;
-      downloadJson(json, filename);
+      await downloadJson(json, filename);
     } catch (err) {
       set({ error: String(err) });
       throw err;
