@@ -10,6 +10,7 @@ import { RecordsPage } from './pages/RecordsPage';
 import { SeasonRecapPage } from './pages/SeasonRecapPage';
 import { RecruitingPage } from './pages/RecruitingPage';
 import { TransferPortalPage } from './pages/TransferPortalPage';
+import { DraftTrackerPage } from './pages/DraftTrackerPage';
 
 function App() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
@@ -32,6 +33,8 @@ function App() {
       return <RecruitingPage />;
     case 'transfer-portal':
       return <TransferPortalPage />;
+    case 'draft-tracker':
+      return <DraftTrackerPage />;
     default:
       return <DashboardPage />;
   }
