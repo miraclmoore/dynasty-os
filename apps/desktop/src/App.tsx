@@ -14,6 +14,7 @@ import { DraftTrackerPage } from './pages/DraftTrackerPage';
 import { PrestigeTrackerPage } from './pages/PrestigeTrackerPage';
 import { RivalryTrackerPage } from './pages/RivalryTrackerPage';
 import { ProgramTimelinePage } from './pages/ProgramTimelinePage';
+import { ScoutingCardPage } from './pages/ScoutingCardPage';
 
 function App() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
@@ -44,6 +45,8 @@ function App() {
       return <RivalryTrackerPage />;
     case 'program-timeline':
       return <ProgramTimelinePage />;
+    case 'scouting-card':
+      return <ScoutingCardPage />;
     default:
       return <DashboardPage />;
   }

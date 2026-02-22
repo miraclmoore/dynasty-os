@@ -197,6 +197,12 @@ export function DashboardPage() {
                 >
                   Records &amp; Leaderboards
                 </button>
+                <button
+                  onClick={() => useNavigationStore.getState().goToScoutingCard()}
+                  className="w-full px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold rounded-lg transition-colors"
+                >
+                  Scouting Cards
+                </button>
                 {activeDynasty.sport === 'cfb' && (
                   <>
                     <div className="border-t border-gray-700 mt-2 pt-2">

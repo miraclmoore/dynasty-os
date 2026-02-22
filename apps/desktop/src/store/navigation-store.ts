@@ -12,7 +12,8 @@ type Page =
   | 'draft-tracker'
   | 'prestige-tracker'
   | 'rivalry-tracker'
-  | 'program-timeline';
+  | 'program-timeline'
+  | 'scouting-card';
 
 interface NavigationState {
   currentPage: Page;
@@ -33,6 +34,7 @@ interface NavigationActions {
   goToPrestigeTracker: () => void;
   goToRivalryTracker: () => void;
   goToProgramTimeline: () => void;
+  goToScoutingCard: () => void;
 }
 
 type NavigationStore = NavigationState & NavigationActions;
@@ -91,5 +93,9 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
 
   goToProgramTimeline: () => {
     set({ currentPage: 'program-timeline', pageParams: {} });
+  },
+
+  goToScoutingCard: () => {
+    set({ currentPage: 'scouting-card', pageParams: {} });
   },
 }));
