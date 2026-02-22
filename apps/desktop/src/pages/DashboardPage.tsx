@@ -174,6 +174,12 @@ export function DashboardPage() {
                   End Season
                 </button>
                 <button
+                  onClick={() => useNavigationStore.getState().goToSeasonRecap(activeSeason.id)}
+                  className="w-full px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold rounded-lg transition-colors"
+                >
+                  Season Recap
+                </button>
+                <button
                   onClick={() => useNavigationStore.getState().goToRoster()}
                   className="w-full px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white text-sm font-semibold rounded-lg transition-colors"
                 >

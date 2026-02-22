@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-type Page = 'dashboard' | 'roster' | 'player-profile' | 'legends' | 'records';
+type Page = 'dashboard' | 'roster' | 'player-profile' | 'legends' | 'records' | 'season-recap';
 
 interface NavigationState {
   currentPage: Page;
@@ -14,6 +14,7 @@ interface NavigationActions {
   goToPlayerProfile: (playerId: string) => void;
   goToLegends: () => void;
   goToRecords: () => void;
+  goToSeasonRecap: (seasonId: string) => void;
 }
 
 type NavigationStore = NavigationState & NavigationActions;
@@ -44,5 +45,9 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
 
   goToRecords: () => {
     set({ currentPage: 'records', pageParams: {} });
+  },
+
+  goToSeasonRecap: (seasonId: string) => {
+    set({ currentPage: 'season-recap', pageParams: { seasonId } });
   },
 }));
