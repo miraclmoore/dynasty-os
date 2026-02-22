@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 2 of 9 (Core Loop)
-Plan: 1 of 4 in current phase
+Plan: 2 of 4 in current phase
 Status: In progress
-Last activity: 2026-02-22 — Completed 02-01-PLAN.md (season & game data layer)
+Last activity: 2026-02-22 — Completed 02-02-PLAN.md (dashboard widgets)
 
-Progress: [█████░░░░░] 14% (5/36 plans complete)
+Progress: [█████░░░░░] 17% (6/36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: ~7 min
-- Total execution time: ~37 min
+- Total plans completed: 6
+- Average duration: ~6.5 min
+- Total execution time: ~39 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan | Status |
 |-------|-------|-------|----------|--------|
 | 01-foundation | 4/4 | ~35 min | ~8.8 min | ✓ Complete |
-| 02-core-loop | 1/4 | ~2 min | ~2 min | In progress |
+| 02-core-loop | 2/4 | ~4 min | ~2 min | In progress |
 
 **Recent Trend:**
-- Last 5 plans: 7 min, 4 min, 9 min, 15 min, 2 min
+- Last 5 plans: 4 min, 9 min, 15 min, 2 min, 2 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -60,6 +60,8 @@ Recent decisions affecting current work:
 - recalculateSeasonRecord pattern: called after every game write (create/update/delete); Season wins/losses/confWins/confLosses always reflect actual game data
 - Conference record isolation: confWins/confLosses count only gameType === 'conference' games; bowl/playoff/regular excluded
 - useSeasonStore.activeSeason: season with highest year (getSeasonsByDynasty returns descending); UI must also call loadSeasons after logGame to reflect updated W/L
+- Dashboard single-subscriber pattern: DashboardPage subscribes to stores and passes props to widgets to avoid duplicate subscriptions and unnecessary re-renders
+- WeeklySnapshot currentWeek = max(game.week)+1: represents next week to play (forward-looking), not last week played
 
 ### Pending Todos
 
@@ -74,5 +76,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22 UTC
-Stopped at: Completed 02-01-PLAN.md (season & game data layer — services and stores)
+Stopped at: Completed 02-02-PLAN.md (dashboard widget grid — SeasonAtGlance, RecentActivity, WeeklySnapshot)
 Resume file: None
