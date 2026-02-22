@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 5 of 9 (CFB Features) — In progress
-Plan: 2 of 4 in phase (2 complete)
+Plan: 3 of 4 in phase (3 complete)
 Status: In progress
-Last activity: 2026-02-22 — Completed 05-02-PLAN.md (transfer portal War Room)
+Last activity: 2026-02-22 — Completed 05-03-PLAN.md (NFL Draft tracker module)
 
-Progress: [████████░░] 47% (17/36 plans complete)
+Progress: [████████░░] 50% (18/36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 17
-- Average duration: ~5.4 min
-- Total execution time: ~92 min
+- Total plans completed: 18
+- Average duration: ~5.3 min
+- Total execution time: ~95 min
 
 **By Phase:**
 
@@ -31,7 +31,7 @@ Progress: [████████░░] 47% (17/36 plans complete)
 | 02-core-loop | 5/5 | ~36 min | ~7.2 min | ✓ Complete |
 | 03-player-tracking | 4/4 | ~14 min | ~3.5 min | ✓ Complete |
 | 04-narrative-engine | 2/2 | ~17 min | ~8.5 min | ✓ Complete |
-| 05-cfb-features | 2/4 | ~6 min | ~3 min | In progress |
+| 05-cfb-features | 3/4 | ~9 min | ~3 min | In progress |
 
 **Recent Trend:**
 - Last 5 plans: 3 min, 4 min, 4 min, ~15 min (04-02 checkpoint), 4 min
@@ -96,6 +96,9 @@ Recent decisions affecting current work:
 - calculateNetImpact as pure function in service (not store): business logic decoupled from Zustand, no side effects, easily testable
 - Transfer portal season selector as local state: selectedSeason in component, not store — portal entries are season-scoped, season picker is UI concern only
 - War Room two-column layout: lg:grid-cols-2 on desktop, stacked on mobile — same responsive pattern available for 05-03/04
+- getPositionBreakdown: case-insensitive position matching (toUpperCase), only returns groups with count > 0
+- Draft pick player linking: optional playerId auto-fills playerName and position from player record; playerName always stored as plain string for display without DB lookup
+- Season pre-selection in draft form: defaults to seasons[0] (most recent) when seasons load — reduces friction for common case
 
 ### Pending Todos
 
@@ -110,5 +113,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-22 UTC
-Stopped at: Completed 05-02-PLAN.md (transfer portal War Room)
+Stopped at: Completed 05-03-PLAN.md (NFL Draft tracker module)
 Resume file: None
