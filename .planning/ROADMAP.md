@@ -151,11 +151,11 @@ displays earned achievements, and a coaching resume summarizes career statistics
   1. Achievement engine automatically evaluates milestone conditions on every data save event (win totals, championships, bowl wins)
   2. User can view earned achievements in a Trophy Room
   3. Coaching resume displays career statistics: overall record, bowl record, championships, win percentage
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 07-01: Achievement engine — milestone condition definitions, evaluation hooks on save events, achievement state persistence
-- [ ] 07-02: Trophy room and coaching resume — earned achievement display, resume stats aggregation view
+- [ ] 07-01-PLAN.md — Achievement engine: Achievement type, DB v5 migration (achievements table), milestone definitions (14 milestones across wins/bowl-wins/championships), evaluateAchievements() service, Zustand store
+- [ ] 07-02-PLAN.md — Save hooks + UI: evaluateAchievements wired into game-service and season-service, TrophyRoomPage with earned/locked milestone cards, CoachingResumePage with career stats aggregation, Dashboard wiring
 
 ### Phase 8: Screenshot Ingestion
 **Goal**: CFB coaches can photograph in-game screens and have Dynasty OS pre-populate forms
