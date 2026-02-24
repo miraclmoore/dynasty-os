@@ -166,11 +166,11 @@ automatically — reducing manual entry burden by 70-80%.
   1. User can submit a screenshot of an in-game screen (schedule, player stats, recruiting, depth chart) for parsing
   2. Claude Vision API parses the screenshot and pre-populates the corresponding form fields without user typing
   3. User reviews pre-populated data in a confirmation step and can edit any field before saving
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 08-01: Vision API integration — screenshot intake UI, Claude Vision API parsing, field mapping per screen type (schedule, stats, recruiting, depth chart)
-- [ ] 08-02: Confirmation and correction flow — diff view of parsed vs blank form, editable fields, save confirmation
+- [ ] 08-01-PLAN.md — Vision API service layer: Tauri dialog:allow-open capability, screenshot-service.ts with Claude Haiku Vision API integration, four screen type prompts (schedule, player-stats, recruiting, depth-chart), ParsedScreenData typed union
+- [ ] 08-02-PLAN.md — ScreenshotIngestionPage UI: screen type picker, OS file dialog, image preview, spinner, amber-highlighted pre-populated confirmation form, save/discard, Dashboard "Parse Screenshot" button, navigation + App.tsx wiring
 
 ### Phase 9: Madden Sync
 **Goal**: Madden coaches can sync their franchise save file directly — game results, player stats,
