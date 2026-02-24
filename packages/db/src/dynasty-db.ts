@@ -12,6 +12,7 @@ import type {
   PrestigeRating,
   Rival,
   ScoutingNote,
+  Achievement,
 } from '@dynasty-os/core-types';
 import { SCHEMA, DB_NAME } from './schema';
 
@@ -28,11 +29,13 @@ export class DynastyDB extends Dexie {
   prestigeRatings!: Table<PrestigeRating, string>;
   rivals!: Table<Rival, string>;
   scoutingNotes!: Table<ScoutingNote, string>;
+  achievements!: Table<Achievement, string>;
 
   constructor() {
     super(DB_NAME);
     this.version(1).stores(SCHEMA);
     this.version(4).stores(SCHEMA);
+    this.version(5).stores(SCHEMA);
   }
 }
 

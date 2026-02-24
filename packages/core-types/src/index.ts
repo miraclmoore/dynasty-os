@@ -11,3 +11,4 @@ export * from './draft';
 export * from './prestige';
 export * from './rival';
 export * from './scouting-note';
+export * from './achievement';

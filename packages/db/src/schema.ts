@@ -11,7 +11,8 @@ export const SCHEMA = {
   prestigeRatings: 'id, dynastyId, year, [dynastyId+year]',
   rivals: 'id, dynastyId, opponent, [dynastyId+opponent]',
   scoutingNotes: 'id, dynastyId, opponent, [dynastyId+opponent]',
+  achievements: 'id, dynastyId, achievementId, [dynastyId+achievementId]',
 } as const;
 
 export const DB_NAME = 'dynasty-os-db';
-export const DB_VERSION = 4;
+export const DB_VERSION = 5;
