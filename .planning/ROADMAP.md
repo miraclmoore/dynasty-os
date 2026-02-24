@@ -23,7 +23,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Narrative Engine** - Claude AI season recaps with tone presets, cached taglines, season wrap-up flow
 - [x] **Phase 5: CFB Features** - Recruiting classes, transfer portal war room, NFL Draft tracker, program prestige tracker
 - [x] **Phase 6: Social and Legacy** - Rivalries, program timeline, opponent scouting cards, achievements and trophy room
-- [ ] **Phase 7: Achievements** - Achievement engine, trophy room, coaching resume
+- [x] **Phase 7: Achievements** - Achievement engine, trophy room, coaching resume (completed 2026-02-24)
 - [ ] **Phase 8: Screenshot Ingestion** - Claude Vision API screenshot parsing for CFB screens
 - [ ] **Phase 9: Madden Sync** - madden-franchise save file adapter with confirmation diff and fallback
 
@@ -204,6 +204,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 | 4. Narrative Engine | 2/2 | Complete | 2026-02-22 |
 | 5. CFB Features | 4/4 | Complete | 2026-02-22 |
 | 6. Social and Legacy | 3/3 | Complete | 2026-02-22 |
-| 7. Achievements | 1/2 | In Progress|  |
+| 7. Achievements | 2/2 | Complete   | 2026-02-24 |
 | 8. Screenshot Ingestion | 0/2 | Not started | - |
 | 9. Madden Sync | 0/3 | Not started | - |
