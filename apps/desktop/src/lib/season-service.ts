@@ -1,6 +1,7 @@
 import { db } from '@dynasty-os/db';
 import type { Season } from '@dynasty-os/core-types';
 import { generateId } from './uuid';
+import { evaluateAchievements } from './achievement-service';
 
 export async function createSeason(input: { dynastyId: string; year: number }): Promise<Season> {
   const now = Date.now();
@@ -41,4 +42,10 @@ export async function updateSeason(
   updates: Partial<Omit<Season, 'id' | 'dynastyId' | 'createdAt'>>
 ): Promise<void> {
   await db.seasons.update(id, { ...updates, updatedAt: Date.now() });
+  // Evaluate achievements after season data changes (bowl results, playoff results)
+  // Need dynastyId — fetch from the stored season record
+  const updated = await db.seasons.get(id);
+  if (updated) {
+    evaluateAchievements(updated.dynastyId).catch(() => {});
+  }
 }

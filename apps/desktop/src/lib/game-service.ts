@@ -2,6 +2,7 @@ import { db } from '@dynasty-os/db';
 import type { Game } from '@dynasty-os/core-types';
 import { generateId } from './uuid';
 import { updateSeason } from './season-service';
+import { evaluateAchievements } from './achievement-service';
 
 export async function createGame(input: Omit<Game, 'id' | 'createdAt' | 'updatedAt'>): Promise<Game> {
   const now = Date.now();
@@ -14,6 +15,8 @@ export async function createGame(input: Omit<Game, 'id' | 'createdAt' | 'updated
 
   await db.games.add(game);
   await recalculateSeasonRecord(input.seasonId);
+  // Fire achievement evaluation as a background task — never blocks game creation
+  evaluateAchievements(input.dynastyId).catch(() => {});
   return game;
 }
 
