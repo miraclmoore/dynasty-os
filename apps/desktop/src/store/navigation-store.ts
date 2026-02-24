@@ -15,7 +15,8 @@ type Page =
   | 'program-timeline'
   | 'scouting-card'
   | 'trophy-room'
-  | 'coaching-resume';
+  | 'coaching-resume'
+  | 'screenshot-ingestion';
 
 interface NavigationState {
   currentPage: Page;
@@ -39,6 +40,7 @@ interface NavigationActions {
   goToScoutingCard: () => void;
   goToTrophyRoom: () => void;
   goToCoachingResume: () => void;
+  goToScreenshotIngestion: () => void;
 }
 
 type NavigationStore = NavigationState & NavigationActions;
@@ -109,5 +111,9 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
 
   goToCoachingResume: () => {
     set({ currentPage: 'coaching-resume', pageParams: {} });
+  },
+
+  goToScreenshotIngestion: () => {
+    set({ currentPage: 'screenshot-ingestion', pageParams: {} });
   },
 }));

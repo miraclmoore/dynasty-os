@@ -17,6 +17,7 @@ import { ProgramTimelinePage } from './pages/ProgramTimelinePage';
 import { ScoutingCardPage } from './pages/ScoutingCardPage';
 import { TrophyRoomPage } from './pages/TrophyRoomPage';
 import { CoachingResumePage } from './pages/CoachingResumePage';
+import { ScreenshotIngestionPage } from './pages/ScreenshotIngestionPage';
 
 function App() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
@@ -53,6 +54,8 @@ function App() {
       return <TrophyRoomPage />;
     case 'coaching-resume':
       return <CoachingResumePage />;
+    case 'screenshot-ingestion':
+      return <ScreenshotIngestionPage />;
     default:
       return <DashboardPage />;
   }
