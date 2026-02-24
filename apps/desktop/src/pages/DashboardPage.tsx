@@ -256,6 +256,12 @@ export function DashboardPage() {
                     >
                       Program Timeline
                     </button>
+                    <button
+                      onClick={() => useNavigationStore.getState().goToScreenshotIngestion()}
+                      className="w-full px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold rounded-lg transition-colors"
+                    >
+                      Parse Screenshot
+                    </button>
                   </>
                 )}
               </div>
