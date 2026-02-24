@@ -9,17 +9,17 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 
 ## Current Position
 
-Phase: 6 of 9 (Social and Legacy)
-Plan: 3 of 3 in current phase
-Status: Phase complete
-Last activity: 2026-02-22 — Completed 06-03-PLAN.md (Scouting Cards) — Phase 6 complete
+Phase: 7 of 9 (Achievements)
+Plan: 1 of 2 in current phase
+Status: In progress
+Last activity: 2026-02-24 — Completed 07-01-PLAN.md (Achievement Engine Data Layer)
 
-Progress: [██████████] 61% (22/36 plans complete)
+Progress: [██████████] 64% (23/36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 21
+- Total plans completed: 22
 - Average duration: ~5.2 min
 - Total execution time: ~109 min
 
@@ -33,6 +33,7 @@ Progress: [██████████] 61% (22/36 plans complete)
 | 04-narrative-engine | 2/2 | ~17 min | ~8.5 min | ✓ Complete |
 | 05-cfb-features | 4/4 | ~12 min | ~3 min | ✓ Complete |
 | 06-social-and-legacy | 3/3 | ~19 min | ~6.3 min | ✓ Complete |
+| 07-achievements | 1/2 | ~2 min | ~2 min | In progress |
 
 **Recent Trend:**
 - Last 5 plans: 3 min, 4 min, 4 min, ~15 min (04-02 checkpoint), 4 min
@@ -111,6 +112,8 @@ Recent decisions affecting current work:
 - window.print() for timeline PDF export: consistent with Tauri blob URL constraint; no extra dependencies needed
 - ProgramTimelinePage no sport guard: timeline is sport-agnostic — seasons exist for all sports
 - CSS @media print with no-print classNames: inline style element hides UI chrome during window.print(), page-break-inside: avoid per node
+- playoffResult championship detection uses case-insensitive includes('champion'): Season.playoffResult is free-text string — strict equality to 'champion' would never match user entries like "CFP Champion"
+- Achievement id compound key is dynastyId+achievementId string: enables db.achievements.put() upsert idempotency without separate exists check
 
 ### Pending Todos
 
@@ -124,6 +127,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-21 UTC
-Stopped at: Completed 06-03-PLAN.md (Scouting Cards) — Phase 6 complete (3/3)
+Last session: 2026-02-24 UTC
+Stopped at: Completed 07-01-PLAN.md (Achievement Engine Data Layer) — Phase 7 in progress (1/2)
 Resume file: None

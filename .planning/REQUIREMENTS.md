@@ -95,7 +95,7 @@ Requirements for initial release. Covers P0 (launch-critical) and P1 (launch-com
 
 ### Achievements
 
-- [ ] **ACHV-01**: Achievement engine evaluates milestone conditions on data save events
+- [x] **ACHV-01**: Achievement engine evaluates milestone conditions on data save events
 - [ ] **ACHV-02**: User can view earned achievements in a Trophy Room (win totals, championships, bowl wins)
 - [ ] **ACHV-03**: Coaching resume displays career statistics (overall record, bowl record, championships, win %)
 
@@ -210,7 +210,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TIME-01 | Phase 6 | Complete |
 | TIME-02 | Phase 6 | Complete |
 | SCOU-01 | Phase 6 | Complete |
-| ACHV-01 | Phase 7 | Pending |
+| ACHV-01 | Phase 7 | Complete |
 | ACHV-02 | Phase 7 | Pending |
 | ACHV-03 | Phase 7 | Pending |
 | INGST-04 | Phase 8 | Pending |
