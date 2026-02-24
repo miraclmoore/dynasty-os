@@ -15,6 +15,8 @@ import { PrestigeTrackerPage } from './pages/PrestigeTrackerPage';
 import { RivalryTrackerPage } from './pages/RivalryTrackerPage';
 import { ProgramTimelinePage } from './pages/ProgramTimelinePage';
 import { ScoutingCardPage } from './pages/ScoutingCardPage';
+import { TrophyRoomPage } from './pages/TrophyRoomPage';
+import { CoachingResumePage } from './pages/CoachingResumePage';
 
 function App() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
@@ -47,6 +49,10 @@ function App() {
       return <ProgramTimelinePage />;
     case 'scouting-card':
       return <ScoutingCardPage />;
+    case 'trophy-room':
+      return <TrophyRoomPage />;
+    case 'coaching-resume':
+      return <CoachingResumePage />;
     default:
       return <DashboardPage />;
   }

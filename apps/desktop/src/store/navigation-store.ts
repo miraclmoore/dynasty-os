@@ -13,7 +13,9 @@ type Page =
   | 'prestige-tracker'
   | 'rivalry-tracker'
   | 'program-timeline'
-  | 'scouting-card';
+  | 'scouting-card'
+  | 'trophy-room'
+  | 'coaching-resume';
 
 interface NavigationState {
   currentPage: Page;
@@ -35,6 +37,8 @@ interface NavigationActions {
   goToRivalryTracker: () => void;
   goToProgramTimeline: () => void;
   goToScoutingCard: () => void;
+  goToTrophyRoom: () => void;
+  goToCoachingResume: () => void;
 }
 
 type NavigationStore = NavigationState & NavigationActions;
@@ -97,5 +101,13 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
 
   goToScoutingCard: () => {
     set({ currentPage: 'scouting-card', pageParams: {} });
+  },
+
+  goToTrophyRoom: () => {
+    set({ currentPage: 'trophy-room', pageParams: {} });
+  },
+
+  goToCoachingResume: () => {
+    set({ currentPage: 'coaching-resume', pageParams: {} });
   },
 }));

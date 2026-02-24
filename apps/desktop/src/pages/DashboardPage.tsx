@@ -180,6 +180,18 @@ export function DashboardPage() {
                   Season Recap
                 </button>
                 <button
+                  onClick={() => useNavigationStore.getState().goToTrophyRoom()}
+                  className="w-full px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold rounded-lg transition-colors"
+                >
+                  Trophy Room
+                </button>
+                <button
+                  onClick={() => useNavigationStore.getState().goToCoachingResume()}
+                  className="w-full px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold rounded-lg transition-colors"
+                >
+                  Coaching Resume
+                </button>
+                <button
                   onClick={() => useNavigationStore.getState().goToRoster()}
                   className="w-full px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white text-sm font-semibold rounded-lg transition-colors"
                 >
