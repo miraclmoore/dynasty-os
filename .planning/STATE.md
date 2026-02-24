@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** Phase 7 — Achievements (complete), Phase 8 next
+**Current focus:** Phase 8 — Screenshot Ingestion (in progress)
 
 ## Current Position
 
-Phase: 7 of 9 (Achievements)
-Plan: 2 of 2 in current phase
-Status: Phase 7 complete
-Last activity: 2026-02-24 — Completed 07-02-PLAN.md (Achievement UI and Save Hooks)
+Phase: 8 of 9 (Screenshot Ingestion)
+Plan: 1 of 2 in current phase
+Status: 08-01 complete — Vision API service layer shipped
+Last activity: 2026-02-24 — Completed 08-01-PLAN.md (Screenshot Service and Tauri Capabilities)
 
-Progress: [██████████] 67% (24/36 plans complete)
+Progress: [███████████] 69% (25/36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 22
-- Average duration: ~5.2 min
-- Total execution time: ~109 min
+- Total plans completed: 25
+- Average duration: ~4.8 min
+- Total execution time: ~111 min
 
 **By Phase:**
 
@@ -34,9 +34,10 @@ Progress: [██████████] 67% (24/36 plans complete)
 | 05-cfb-features | 4/4 | ~12 min | ~3 min | ✓ Complete |
 | 06-social-and-legacy | 3/3 | ~19 min | ~6.3 min | ✓ Complete |
 | 07-achievements | 2/2 | ~5 min | ~2.5 min | ✓ Complete |
+| 08-screenshot-ingestion | 1/2 | ~2 min | ~2 min | In progress |
 
 **Recent Trend:**
-- Last 5 plans: 3 min, 4 min, 2 min, 3 min, 3 min
+- Last 5 plans: 4 min, 2 min, 3 min, 3 min, 2 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -116,6 +117,10 @@ Recent decisions affecting current work:
 - Achievement id compound key is dynastyId+achievementId string: enables db.achievements.put() upsert idempotency without separate exists check
 - [Phase 07-achievements]: evaluateAchievements fires as fire-and-forget (.catch(()=>{})): failure must never block game logging or season update — same pattern as Claude Haiku Legacy Card blurbs
 - [Phase 07-achievements]: CoachingResumePage uses direct db queries (no service layer): career stats are page-specific aggregations — matches records-service no-cache pattern
+- [Phase 08-screenshot-ingestion]: claude-haiku-4-5-20251001 for Vision parsing: structured JSON extraction suits Haiku; same model as legacy card blurbs and recruiting grading
+- [Phase 08-screenshot-ingestion]: System prompt carries screen instructions, user content = image + 'Parse this screenshot.' — clean separation of instructions from content
+- [Phase 08-screenshot-ingestion]: Strip markdown code fences from model response before JSON.parse — model may wrap JSON in triple-backtick blocks
+- [Phase 08-screenshot-ingestion]: anthropic-dangerous-direct-browser-access header required for Tauri WebView direct API calls
 
 ### Pending Todos
 
@@ -130,5 +135,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24 UTC
-Stopped at: Completed 07-02-PLAN.md (Achievement UI and Save Hooks) — Phase 7 complete (2/2)
+Stopped at: Completed 08-01-PLAN.md (Screenshot Service and Tauri Capabilities) — Phase 8 in progress (1/2)
 Resume file: None

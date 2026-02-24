@@ -107,8 +107,8 @@ Requirements for initial release. Covers P0 (launch-critical) and P1 (launch-com
 
 ### Data Ingestion — Screenshot Import (CFB)
 
-- [ ] **INGST-04**: User can submit a screenshot of in-game screens (schedule, player stats, recruiting, depth chart)
-- [ ] **INGST-05**: Claude Vision API parses screenshot and pre-populates the corresponding form fields
+- [x] **INGST-04**: User can submit a screenshot of in-game screens (schedule, player stats, recruiting, depth chart)
+- [x] **INGST-05**: Claude Vision API parses screenshot and pre-populates the corresponding form fields
 - [ ] **INGST-06**: User reviews and confirms pre-populated data before saving
 
 ### Data Ingestion — Madden Save File Sync
@@ -213,8 +213,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ACHV-01 | Phase 7 | Complete |
 | ACHV-02 | Phase 7 | Complete |
 | ACHV-03 | Phase 7 | Complete |
-| INGST-04 | Phase 8 | Pending |
-| INGST-05 | Phase 8 | Pending |
+| INGST-04 | Phase 8 | Complete |
+| INGST-05 | Phase 8 | Complete |
 | INGST-06 | Phase 8 | Pending |
 | SYNC-01 | Phase 9 | Pending |
 | SYNC-02 | Phase 9 | Pending |
