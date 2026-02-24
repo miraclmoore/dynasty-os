@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 8 of 9 (Screenshot Ingestion)
-Plan: 1 of 2 in current phase
-Status: 08-01 complete — Vision API service layer shipped
-Last activity: 2026-02-24 — Completed 08-01-PLAN.md (Screenshot Service and Tauri Capabilities)
+Plan: 2 of 2 in current phase
+Status: 08-02 Tasks 1-2 complete — awaiting Task 3 human verification checkpoint
+Last activity: 2026-02-24 — Tasks 1-2 of 08-02-PLAN.md (Screenshot Ingestion UI) complete; checkpoint at Task 3
 
 Progress: [███████████] 69% (25/36 plans complete)
 
@@ -121,6 +121,8 @@ Recent decisions affecting current work:
 - [Phase 08-screenshot-ingestion]: System prompt carries screen instructions, user content = image + 'Parse this screenshot.' — clean separation of instructions from content
 - [Phase 08-screenshot-ingestion]: Strip markdown code fences from model response before JSON.parse — model may wrap JSON in triple-backtick blocks
 - [Phase 08-screenshot-ingestion]: anthropic-dangerous-direct-browser-access header required for Tauri WebView direct API calls
+- [Phase 08-screenshot-ingestion]: AMBER_INPUT const for amber field classes: single source of truth prevents class drift across 4 form types
+- [Phase 08-screenshot-ingestion]: Screenshot ingestion UX pattern: screen type selection -> Tauri file dialog -> preview -> Vision API spinner -> amber confirmation form -> save/discard
 
 ### Pending Todos
 
@@ -135,5 +137,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24 UTC
-Stopped at: Completed 08-01-PLAN.md (Screenshot Service and Tauri Capabilities) — Phase 8 in progress (1/2)
+Stopped at: Task 3 checkpoint in 08-02-PLAN.md — awaiting human verification of ScreenshotIngestionPage UX
 Resume file: None
