@@ -8,30 +8,69 @@ Dynasty OS is a desktop companion platform for sports game dynasty and franchise
 
 The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
 
+## Current Milestone: v2.0 The Living Dynasty
+
+**Goal:** Elevate Dynasty OS from a data tracker into an intelligent, living dynasty companion — 33 new capabilities across UX polish, community-requested features, and a novel AI intelligence layer.
+
+**Target features:**
+- QOL Wins (10): Toast notifications, season checklist, persistent filters, auto-suggest season year, CSV export, recent opponents in Log Game, inline player notes, last-action undo, Cmd+K command palette, season timeline scrubber
+- Community Features (10): Coaching staff lifecycle tracker, CFB-to-Madden player continuity, playoff scenario simulator, NIL budget ledger, future schedule builder + bowl projection, trade value calculator, recruiting class grade comparison, auto-sync/live data export, historical season record book, rivalry dashboard with full series context
+- AI Intelligence Layer (12): Living Chronicle, Hot Seat/Pressure Meter, Opponent Intelligence Dossiers, Generational Player Arcs, Rival Prophecy, The Obituary Room, The Journalist, Cross-Dynasty Intelligence, Momentum Heat Map, What If Engine, Broadcast Booth/Audio Mode, DNA Report
+
 ## Requirements
 
 ### Validated
 
-(None yet — ship to validate)
+<!-- v1 — All shipped (Phases 1–9, completed 2026-02-24) -->
+- ✓ Foundation (FOUND-01–06) — Multi-dynasty management, JSON import/export, offline-first — Phase 1
+- ✓ Dashboard & Season Management (DASH-01–03, SEAS-01–05) — Core game logging loop — Phase 2
+- ✓ Player Tracking & Records (PLAY-01–07, REC-01–03) — Roster, career stats, Legacy Cards, leaderboards — Phase 3
+- ✓ Narrative Engine (NARR-01–04) — Claude AI season recaps, tone presets, taglines — Phase 4
+- ✓ CFB Features (RECR-01–04, PORT-01–03, DRFT-01–03, PRES-01–03) — Recruiting, portal, draft, prestige — Phase 5
+- ✓ Social & Legacy (RIVL-01–03, TIME-01–02, SCOU-01) — Rivalries, timeline, scouting cards — Phase 6
+- ✓ Achievements (ACHV-01–03) — Trophy room, achievement engine, coaching resume — Phase 7
+- ✓ Screenshot Ingestion (INGST-04–06) — Claude Vision API screenshot parsing — Phase 8
+- ✓ Madden Sync (SYNC-01–07) — Tauri sidecar save file adapter, diff confirm, file watcher — Phase 9
 
 ### Active
 
-<!-- P0 — Launch critical -->
-- [ ] Dashboard / Command Center — season-at-a-glance hub with standings, recent activity, quick entry access, stat highlights
-- [ ] Dynasty Narrative Engine — Claude AI-generated season recaps with ESPN, Hometown, and Legend tone presets; auto-generated season tagline
-- [ ] Program Prestige Tracker — year-over-year prestige rating trends, recruiting ranking history, AP/CFP rank trajectory charts
-- [ ] Rivalry Record Tracker — head-to-head records vs tracked rivals, streak indicators, rivalry intensity scoring
-- [ ] NFL Draft Tracker — annual draft class tracking by player, position, round, team; historical totals
-- [ ] Recruiting Class Grades & Analysis — per-class rankings, star distribution, position needs grade, Claude AI class analysis
-- [ ] Player Legacy Cards — auto-generated at player departure: career stats, awards, AI Hall of Fame blurb, exportable PNG
-<!-- P1 — Launch complete -->
-- [ ] Season Snapshot / This Week — weekly recap widget: record, ranking movement, notable stats, upcoming opponent
-- [ ] Coach Milestone & Achievement System — trophy room for win totals, championships, bowl wins, coaching tree
-- [ ] Multi-Dynasty Support — manage multiple simultaneous dynasties across sports from unified launcher
-- [ ] Opponent Scouting Cards — pre-game profile: historical record vs your program, their season stats, tendency notes
-- [ ] Transfer Portal War Room — annual portal log: arrivals/departures, position needs analysis, net impact rating
-- [ ] Program Timeline / Dynasty Bible — single scrollable page one node per season; exportable as PDF
-- [ ] Head-to-Head Records — all-time records against every opponent, filterable by era/coaching staff
+<!-- v2.0 QOL Wins -->
+- [ ] Toast notification system — app-wide feedback for all write operations
+- [ ] Season checklist — per-season task checklist surfaced on dashboard
+- [ ] Persistent filters — all list/table filters survive navigation
+- [ ] Auto-suggest season year — new season year defaults to last + 1
+- [ ] CSV export — export any data table to CSV
+- [ ] Recent opponents in Log Game — quick-select last N opponents in game entry modal
+- [ ] Inline player notes — free-text note field per player record
+- [ ] Last-action undo — single-level undo for game log, player, and stat edits
+- [ ] Cmd+K command palette — keyboard-driven navigation and quick actions
+- [ ] Season timeline scrubber — horizontal scrubber to jump between seasons
+
+<!-- v2.0 Community Features -->
+- [ ] Coaching staff lifecycle tracker — hire/fire/promote staff with tenure and scheme history
+- [ ] CFB-to-Madden player continuity — link CFB player records to their NFL/Madden counterparts
+- [ ] Playoff scenario simulator — interactive bracket simulator for current season
+- [ ] NIL budget ledger — track NIL spend by player, class, and position (CFB)
+- [ ] Future schedule builder + bowl projection — build future season schedules, simulate bowl matchups
+- [ ] Trade value calculator — Madden trade evaluation using player ratings and contract data
+- [ ] Recruiting class grade comparison — side-by-side class comparison across seasons or rivals
+- [ ] Auto-sync/live data export — background JSON/CSV export on every save
+- [ ] Historical season record book — full year-by-year records, stats, and awards in one view
+- [ ] Rivalry dashboard with full series context — expanded rivalry: series history, momentum, key moments
+
+<!-- v2.0 AI Intelligence Layer -->
+- [ ] Living Chronicle — real-time AI narrative that updates as season data is logged
+- [ ] Hot Seat/Pressure Meter — AI-derived pressure index based on results vs expectations
+- [ ] Opponent Intelligence Dossiers — AI-generated pre-game scouting reports
+- [ ] Generational Player Arcs — AI narrative tracing a player's full career journey
+- [ ] Rival Prophecy — AI prediction of rivalry trajectory based on current momentum
+- [ ] The Obituary Room — AI eulogies for departed program legends
+- [ ] The Journalist — AI reporter writing breaking news blurbs triggered by game events
+- [ ] Cross-Dynasty Intelligence — AI insights comparing patterns across multiple dynasties
+- [ ] Momentum Heat Map — visual AI heat map of momentum shifts across a season
+- [ ] What If Engine — AI counterfactual simulator for alternate dynasty history
+- [ ] Broadcast Booth/Audio Mode — AI text-to-speech play-by-play fragments for game recaps
+- [ ] DNA Report — AI analysis of program identity: style, recruiting philosophy, coaching signature
 
 ### Out of Scope
 
@@ -81,4 +120,4 @@ The memory layer, narrative engine, and legacy vault that sports games never bui
 | Sport Config pattern | Isolates sport differences in config objects; shared components stay sport-agnostic; clean multi-sport extensibility | — Pending |
 
 ---
-*Last updated: 2026-02-21 after initialization*
+*Last updated: 2026-02-24 after Milestone v2.0 start*

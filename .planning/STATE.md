@@ -2,19 +2,17 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-21)
+See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** All phases complete — Milestone 1 done
+**Current focus:** Milestone v2.0 — The Living Dynasty (defining requirements)
 
 ## Current Position
 
-Phase: 9 of 9 (Madden Sync) — COMPLETE
-Plan: 3 of 3 in current phase
-Status: All plans complete
-Last activity: 2026-02-24 — Phase 9 (Madden Sync) all 3 plans complete
-
-Progress: [████████████] 100% (36/36 plans complete)
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-02-24 — Milestone v2.0 started
 
 ## Performance Metrics
 
