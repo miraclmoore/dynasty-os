@@ -2,17 +2,17 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-24)
+See: .planning/PROJECT.md (updated 2026-02-25)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** Milestone v2.0 — The Living Dynasty (Phase 11: QOL Wins)
+**Current focus:** Milestone v2.0 — The Living Dynasty (Phase 12: Community Features — next to plan)
 
 ## Current Position
 
-Phase: 11 — QOL Wins
-Plan: 06 complete (6/6)
-Status: Complete
-Last activity: 2026-02-25 — Completed 11-06: Human verification of all 10 QOL features approved
+Phase: 12 — Community Features (next to execute)
+Plan: 00 (not started)
+Status: Planning
+Last activity: 2026-02-25 — Archived v1.0 milestone (Phases 1–9, 26 plans); v2.0 Phases 10–11 complete
 
 ## Performance Metrics
 
