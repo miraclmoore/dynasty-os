@@ -9,10 +9,10 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 
 ## Current Position
 
-Phase: 10 — Infrastructure Foundation
-Plan: 04 complete (4/4)
-Status: Complete
-Last activity: 2026-02-25 — Completed 10-04: Global Zustand stores scaffolded + App.tsx wired
+Phase: 11 — QOL Wins
+Plan: 03 complete (3/TBD)
+Status: In Progress
+Last activity: 2026-02-25 — Completed 11-03: CommandPalette component + App.tsx Cmd+K wired
 
 ## Performance Metrics
 
@@ -35,7 +35,7 @@ Last activity: 2026-02-25 — Completed 10-04: Global Zustand stores scaffolded 
 | 08-screenshot-ingestion | 2/2 | ~4 min | ~2 min | ✓ Complete |
 | 09-madden-sync | 3/3 | ~8 min | ~2.7 min | ✓ Complete |
 | 10-infrastructure-foundation | 4/4 | ~8 min | ~2 min | ✓ Complete |
-| 11-qol-wins | 0/TBD | — | — | Not started |
+| 11-qol-wins | 3/TBD | — | — | In Progress |
 | 12-community-features | 0/TBD | — | — | Not started |
 | 13-ai-intelligence-layer | 0/TBD | — | — | Not started |
 
@@ -151,6 +151,9 @@ Recent decisions affecting current work:
 - [Phase 10-04]: ai-queue-store uses generateId() (crypto.randomUUID via lib/uuid.ts) not uuid npm package — consistent with project pattern
 - [Phase 10-04]: Toaster mounted unconditionally outside PageContent so toast() calls on LauncherPage render correctly
 - [Phase 10-04]: Cmd+K listener stub registered in App.tsx useEffect — actual command palette implementation deferred to Phase 11 QOL-04
+- [Phase 11-03]: CommandPalette uses useNavigationStore.getState() not hook — nav actions are fire-and-forget; avoids re-render coupling in palette component
+- [Phase 11-03]: inputRef imperative focus with 50ms timeout — Tauri WKWebView/WebView2 swallows immediate focus call; 50ms allows Radix Dialog portal to mount
+- [Phase 11-03]: Command.Item value IDs prefixed nav- — cmdk fuzzy-filters on value prop; prefixed IDs prevent accidental cross-group matches
 
 ### v2.0 Infrastructure Decisions (to be expanded in Phase 10 planning)
 
@@ -180,6 +183,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-25 UTC
-Stopped at: Completed 10-04-PLAN.md — Global Zustand stores (toast/filter/undo/AI-queue) + App.tsx wired
+Stopped at: Completed 11-03-PLAN.md — CommandPalette component with cmdk + App.tsx Cmd+K wired
 Resume file: None
-Next action: Execute Phase 11 plans
+Next action: Execute Phase 11 remaining plans
