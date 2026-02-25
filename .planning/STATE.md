@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-25)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** Milestone v2.0 — The Living Dynasty (Phase 12: Community Features — in progress)
+**Current focus:** Milestone v2.0 — The Living Dynasty (Phase 12 plans 01-06 complete; 12-07 verification pending; out-of-plan AI recap + team logo work committed; TickerBar + RosterHub in progress)
 
 ## Current Position
 
-Phase: 12 — Community Features (in progress)
-Plan: 06 (complete) — ready for 12-07
-Status: Executing
-Last activity: 2026-02-25 — Completed 12-06 (Auto-Export + Rivalry Dashboard Expansion — COMM-08, COMM-10)
+Phase: 12 — Community Features (6/7 plans complete)
+Plan: 07 — verification checkpoint (PLAN exists, no SUMMARY)
+Status: In Progress — out-of-plan work committed + additional features in working tree
+Last activity: 2026-02-25 — AI recap overhaul + per-game recaps + team logos (ea77417); Madden version-check UI uncommitted; TickerBar + RosterHub untracked
 
 ## Performance Metrics
 
@@ -169,6 +169,12 @@ Recent decisions affecting current work:
 - [Phase 12]: [Phase 12-06]: fs:scope-app-data added to Tauri capabilities alongside fs:allow-mkdir — both required to write to appDataDir
 - [Phase 12]: [Phase 12-06]: calculateSeriesMomentum result cast guard: HeadToHeadRecord.games.result is string; cast to 'W'|'L'|'T' at call site rather than changing records-service type
 - [Phase 12]: [Phase 12-06]: Key moments inline form uses momentForms Record<rivalId, MomentFormState> — no modal needed, consistent with inline edit pattern
+- [ea77417]: buildSystemPrompt() data-constraint block prevents AI from inventing facts not present in the data payload — grounded prompts only
+- [ea77417]: Sport-split ESPN tone: Chris Fowler voice for CFB, Scott Van Pelt voice for NFL — same 'espn' tone key, different personas per sport
+- [ea77417]: Tone-keyed narrative cache: cache key includes tone suffix to prevent stale cross-tone results on tone switch
+- [ea77417]: generateGameNarrative() — 400 token limit, cached per gameId+tone in aiCache; newspaper icon in GameLog opens inline recap section
+- [ea77417]: team-logo-service.ts getTeamLogoUrl() maps to ESPN CDN (NFL: abbreviation-based, CFB: numeric ID-based); returns null for unrecognized names — no broken images for custom teams
+- [ea77417]: cfb-espn-ids.ts — 120-team ESPN numeric ID lookup; NFL uses 3-letter abbreviation; onError fallback on <img> for clean degradation
 
 ### Phase 12 Decisions
 
@@ -219,13 +225,34 @@ Recent decisions affecting current work:
 
 ### Blockers/Concerns
 
-- Madden 26 schema support in madden-franchise library not yet released — fallback UI is live
+- Madden 26 schema support in madden-franchise library not yet released — fallback UI is live; in-app version-check + update UI in progress (working tree)
 - Sidecar production binary not yet compiled — dev mode uses shell wrapper (requires Node.js on dev machine)
 - Windows production memory (<80MB target) not yet validated
 
 ## Session Continuity
 
 Last session: 2026-02-25 UTC
-Stopped at: Completed 12-06-PLAN.md — Auto-Export + Rivalry Dashboard Expansion (COMM-08, COMM-10)
+Stopped at: Multiple out-of-plan features built after 12-06
 Resume file: None
-Next action: Execute Phase 12 Plan 07
+
+### Work done since 12-06 (not tracked in any plan)
+
+**COMMITTED (ea77417) — "AI recap overhaul, per-game recaps, and team logos":**
+- narrative-service.ts: strict data-constraint system prompt, sport-split ESPN tones (CFB=Fowler / NFL=Van Pelt), tone-keyed cache
+- generateGameNarrative(): 1-paragraph per-game recap, 400 token limit, cached per gameId+tone
+- GameLog.tsx: newspaper icon on completed rows opens inline recap with spinner + tagline
+- team-logo-service.ts + cfb-espn-ids.ts: ESPN CDN logo mapping (120 CFB + NFL abbreviations)
+- DynastyCard, DashboardPage, SeasonRecapPage: team logos with onError fallback
+- core-types: 'game-narrative' added to AiContentType union
+- LauncherPage.tsx: skeleton loading cards + improved empty state
+
+**UNCOMMITTED (working tree):**
+- MaddenSyncPage.tsx + madden-sync-service.ts: checkMaddenPackageVersion() + updateMaddenPackage() — version check on mount, in-app update button
+- madden-reader.cjs: 'version' command handler forwarding to npm view
+- index.css: minor style additions
+
+**UNTRACKED (new files, not committed):**
+- TickerBar.tsx + ticker-service.ts + ticker-store.ts: live ESPN score/news ticker (60s polling, 20s during live games, NFL+CFB)
+- RosterHubPage.tsx + roster-hub-data.ts: community roster hub linking to Operation Sports, curated by Madden year
+
+Next action: Decide what to tackle — commit working tree, run 12-07 verification, continue building

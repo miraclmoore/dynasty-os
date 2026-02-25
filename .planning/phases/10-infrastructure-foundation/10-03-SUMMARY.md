@@ -140,3 +140,16 @@ None — Dexie aiCache table was created in Phase 10-01.
 ---
 *Phase: 10-infrastructure-foundation*
 *Completed: 2026-02-25*
+
+## Self-Check: PASSED
+
+All created files confirmed present on disk:
+- `FOUND: apps/desktop/src/lib/ai-cache-service.ts`
+- `FOUND: apps/desktop/src/lib/narrative-service.ts`
+- `FOUND: apps/desktop/src/lib/legacy-card-service.ts`
+- `FOUND: .planning/phases/10-infrastructure-foundation/10-03-SUMMARY.md`
+
+All task commits verified in git history:
+- `82f29d0` — feat(10-03): create ai-cache-service.ts with LRU eviction
+- `5cfb400` — feat(10-03): migrate narrative and legacy blurb caching from localStorage to aiCache
+- `03b79e8` — docs(10-03): complete aiCache service layer and localStorage migration plan

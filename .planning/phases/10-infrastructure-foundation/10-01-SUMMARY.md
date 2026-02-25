@@ -122,3 +122,10 @@ None - no external service configuration required.
 ---
 *Phase: 10-infrastructure-foundation*
 *Completed: 2026-02-25*
+
+## Self-Check: PASSED
+
+All created files confirmed present on disk. All task commits verified in git history:
+- `8b8b712` — feat(10-01): add 5 new core types and Player.birthYear for v2.0 features
+- `11d86ed` — feat(10-01): bump Dexie schema to v6 with 5 new tables
+- `4bd5d44` — docs(10-01): complete plan metadata
