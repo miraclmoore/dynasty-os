@@ -31,7 +31,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 8: Screenshot Ingestion** - Claude Vision API screenshot parsing for CFB screens (completed 2026-02-24)
 - [x] **Phase 9: Madden Sync** - Tauri sidecar + madden-franchise save file adapter with confirmation diff, auto-confirm timer, and file watcher (completed 2026-02-24)
 - [x] **Phase 10: Infrastructure Foundation** - Dexie v6 schema (5 new tables), async AI job queue, localStorage→aiCache migration, core-types additions, 4 npm packages, global store scaffolding (completed 2026-02-25)
-- [ ] **Phase 11: QOL Wins** - Toast notifications, undo, persistent filters, command palette, CSV export, season checklist, auto-suggest year, recent opponents, inline notes, timeline scrubber
+- [x] **Phase 11: QOL Wins** - Toast notifications, undo, persistent filters, command palette, CSV export, season checklist, auto-suggest year, recent opponents, inline notes, timeline scrubber (completed 2026-02-25)
 - [ ] **Phase 12: Community Features** - Coaching staff tracker, CFB-Madden player continuity, playoff simulator, NIL ledger, schedule builder, trade calculator, class grade comparison, auto-sync, record book, rivalry dashboard expansion
 - [ ] **Phase 13: AI Intelligence Layer** - Living Chronicle, Hot Seat, Opponent Dossiers, Generational Arcs, Rival Prophecy, Obituary Room, The Journalist, Cross-Dynasty Intelligence, Momentum Heat Map, What If Engine, Broadcast Booth, DNA Report
 
@@ -282,6 +282,6 @@ v1 phases execute 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13.
 | 8. Screenshot Ingestion | 2/2 | Complete | 2026-02-24 |
 | 9. Madden Sync | 3/3 | Complete | 2026-02-24 |
 | 10. Infrastructure Foundation | 4/4 | Complete    | 2026-02-25 |
-| 11. QOL Wins | 5/6 | In Progress|  |
+| 11. QOL Wins | 6/6 | Complete   | 2026-02-25 |
 | 12. Community Features | 0/TBD | Not started | - |
 | 13. AI Intelligence Layer | 0/TBD | Not started | - |
