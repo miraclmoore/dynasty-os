@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Toaster } from 'sonner';
 import { useDynastyStore } from './store';
 import { useNavigationStore } from './store/navigation-store';
@@ -22,6 +22,7 @@ import { ScreenshotIngestionPage } from './pages/ScreenshotIngestionPage';
 import { MaddenSyncPage } from './pages/MaddenSyncPage';
 import { RosterHubPage } from './pages/RosterHubPage';
 import { TickerBar } from './components/TickerBar';
+import { CommandPalette } from './components/CommandPalette';
 
 function PageContent() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
@@ -71,6 +72,7 @@ function PageContent() {
 
 function App() {
   const hiddenInputRef = useRef<HTMLInputElement>(null);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
 
   useEffect(() => {
     // Tauri WebView cold-launch fix: force focus into document body
@@ -81,12 +83,11 @@ function App() {
       hiddenInputRef.current.blur();
     }
 
-    // Cmd+K / Ctrl+K listener stub — opens command palette (Phase 11 QOL-04)
+    // Cmd+K / Ctrl+K listener — opens command palette (Phase 11 QOL-04)
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        // Command palette toggle — wired in Phase 11
-        // console.log('Command palette trigger registered');
+        setCommandPaletteOpen((prev) => !prev);
       }
     };
     document.addEventListener('keydown', handleKeyDown);
@@ -104,6 +105,7 @@ function App() {
         aria-hidden="true"
       />
       <PageContent />
+      <CommandPalette open={commandPaletteOpen} onOpenChange={setCommandPaletteOpen} />
       <TickerBar />
       <Toaster richColors position="bottom-right" />
     </div>
