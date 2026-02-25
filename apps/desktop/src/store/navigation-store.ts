@@ -23,7 +23,9 @@ type Page =
   | 'nil-ledger'
   | 'future-schedule'
   | 'playoff-simulator'
-  | 'trade-calculator';
+  | 'trade-calculator'
+  | 'recruiting-comparison'
+  | 'record-book';
 
 interface NavigationState {
   currentPage: Page;
@@ -55,6 +57,8 @@ interface NavigationActions {
   goToFutureSchedule: () => void;
   goToPlayoffSimulator: () => void;
   goToTradeCalculator: () => void;
+  goToRecruitingComparison: () => void;
+  goToRecordBook: () => void;
 }
 
 type NavigationStore = NavigationState & NavigationActions;
@@ -157,5 +161,13 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
 
   goToTradeCalculator: () => {
     set({ currentPage: 'trade-calculator', pageParams: {} });
+  },
+
+  goToRecruitingComparison: () => {
+    set({ currentPage: 'recruiting-comparison', pageParams: {} });
+  },
+
+  goToRecordBook: () => {
+    set({ currentPage: 'record-book', pageParams: {} });
   },
 }));

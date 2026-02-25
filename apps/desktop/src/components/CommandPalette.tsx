@@ -61,6 +61,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               <PaletteItem value="nav-scouting-card" onSelect={() => select(() => nav.goToScoutingCard())}>Scouting Cards</PaletteItem>
               <PaletteItem value="nav-coaching-staff" onSelect={() => select(() => nav.goToCoachingStaff())}>Coaching Staff</PaletteItem>
               <PaletteItem value="nav-future-schedule" onSelect={() => select(() => nav.goToFutureSchedule())}>Future Schedule</PaletteItem>
+              <PaletteItem value="nav-record-book" onSelect={() => select(() => nav.goToRecordBook())}>Record Book</PaletteItem>
               <PaletteItem value="nav-screenshot-ingestion" onSelect={() => select(() => nav.goToScreenshotIngestion())}>Parse Screenshot</PaletteItem>
               {activeDynasty?.sport === 'madden' && (
                 <PaletteItem value="nav-madden-sync" onSelect={() => select(() => nav.goToMaddenSync())}>Sync Franchise Save</PaletteItem>
@@ -87,6 +88,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                 <PaletteItem value="nav-program-timeline" onSelect={() => select(() => nav.goToProgramTimeline())}>Program Timeline</PaletteItem>
                 <PaletteItem value="nav-nil-ledger" onSelect={() => select(() => nav.goToNilLedger())}>NIL Ledger</PaletteItem>
                 <PaletteItem value="nav-playoff-simulator" onSelect={() => select(() => nav.goToPlayoffSimulator())}>Playoff Simulator</PaletteItem>
+                <PaletteItem value="nav-recruiting-comparison" onSelect={() => select(() => nav.goToRecruitingComparison())}>Recruiting Comparison</PaletteItem>
               </Command.Group>
             )}
           </Command.List>

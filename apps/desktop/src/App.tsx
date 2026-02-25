@@ -26,6 +26,8 @@ import { NilLedgerPage } from './pages/NilLedgerPage';
 import { FutureSchedulePage } from './pages/FutureSchedulePage';
 import { PlayoffSimulatorPage } from './pages/PlayoffSimulatorPage';
 import { TradeCalculatorPage } from './pages/TradeCalculatorPage';
+import { RecruitingComparisonPage } from './pages/RecruitingComparisonPage';
+import { RecordBookPage } from './pages/RecordBookPage';
 import { TickerBar } from './components/TickerBar';
 import { CommandPalette } from './components/CommandPalette';
 
@@ -80,6 +82,10 @@ function PageContent() {
       return <PlayoffSimulatorPage />;
     case 'trade-calculator':
       return <TradeCalculatorPage />;
+    case 'recruiting-comparison':
+      return <RecruitingComparisonPage />;
+    case 'record-book':
+      return <RecordBookPage />;
     default:
       return <DashboardPage />;
   }
