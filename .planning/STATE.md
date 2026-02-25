@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 ## Current Position
 
 Phase: 10 — Infrastructure Foundation
-Plan: 01 complete (1/4)
+Plan: 02 complete (2/4)
 Status: In progress
-Last activity: 2026-02-25 — Completed 10-01: Dexie v6 schema migration and core types
+Last activity: 2026-02-25 — Completed 10-02: npm package installation (cmdk, sonner, zundo, papaparse)
 
 ## Performance Metrics
 
@@ -34,7 +34,7 @@ Last activity: 2026-02-25 — Completed 10-01: Dexie v6 schema migration and cor
 | 07-achievements | 2/2 | ~5 min | ~2.5 min | ✓ Complete |
 | 08-screenshot-ingestion | 2/2 | ~4 min | ~2 min | ✓ Complete |
 | 09-madden-sync | 3/3 | ~8 min | ~2.7 min | ✓ Complete |
-| 10-infrastructure-foundation | 1/4 | ~1 min | ~1 min | In progress |
+| 10-infrastructure-foundation | 2/4 | ~2 min | ~1 min | In progress |
 | 11-qol-wins | 0/TBD | — | — | Not started |
 | 12-community-features | 0/TBD | — | — | Not started |
 | 13-ai-intelligence-layer | 0/TBD | — | — | Not started |
@@ -45,6 +45,7 @@ Last activity: 2026-02-25 — Completed 10-01: Dexie v6 schema migration and cor
 
 *Updated after each plan completion*
 | Phase 10 P01 | 1 | 2 tasks | 9 files |
+| Phase 10 P02 | 1 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -137,6 +138,8 @@ Recent decisions affecting current work:
 - [Phase 10-01]: SCHEMA_V6 uses spread over SCHEMA: guarantees all 13 existing tables preserved; version(6).stores(SCHEMA_V6) not SCHEMA — critical distinction prevents silent table drop
 - [Phase 10-01]: AiContentType union defines all 12 Phase 13 content types upfront — avoids future schema/type changes when adding AI features
 - [Phase 10-01]: Player.birthYear unindexed optional field — no migration needed; stored as plain object property for trade value calculator age multiplier
+- [Phase 10-02]: All 4 npm packages (cmdk, sonner, zundo, papaparse) installed at exact pinned versions in apps/desktop (not workspace root) — frontend runtime deps only
+- [Phase 10-02]: pnpm --filter @dynasty-os/desktop routes to correct workspace package for isolated dep installs
 
 ### v2.0 Infrastructure Decisions (to be expanded in Phase 10 planning)
 
@@ -166,6 +169,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-25 UTC
-Stopped at: Completed 10-01-PLAN.md — Dexie v6 schema migration and core types
+Stopped at: Completed 10-02-PLAN.md — npm package installation (cmdk, sonner, zundo, papaparse)
 Resume file: None
-Next action: Execute 10-02-PLAN.md
+Next action: Execute 10-03-PLAN.md
