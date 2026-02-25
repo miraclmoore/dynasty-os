@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 ## Current Position
 
 Phase: 10 — Infrastructure Foundation
-Plan: —
-Status: Ready to plan
-Last activity: 2026-02-24 — Milestone v2.0 roadmap created (Phases 10–13)
+Plan: 01 complete (1/4)
+Status: In progress
+Last activity: 2026-02-25 — Completed 10-01: Dexie v6 schema migration and core types
 
 ## Performance Metrics
 
@@ -34,7 +34,7 @@ Last activity: 2026-02-24 — Milestone v2.0 roadmap created (Phases 10–13)
 | 07-achievements | 2/2 | ~5 min | ~2.5 min | ✓ Complete |
 | 08-screenshot-ingestion | 2/2 | ~4 min | ~2 min | ✓ Complete |
 | 09-madden-sync | 3/3 | ~8 min | ~2.7 min | ✓ Complete |
-| 10-infrastructure-foundation | 0/TBD | — | — | Not started |
+| 10-infrastructure-foundation | 1/4 | ~1 min | ~1 min | In progress |
 | 11-qol-wins | 0/TBD | — | — | Not started |
 | 12-community-features | 0/TBD | — | — | Not started |
 | 13-ai-intelligence-layer | 0/TBD | — | — | Not started |
@@ -44,6 +44,7 @@ Last activity: 2026-02-24 — Milestone v2.0 roadmap created (Phases 10–13)
 - Trend: Stable
 
 *Updated after each plan completion*
+| Phase 10 P01 | 1 | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -131,6 +132,12 @@ Recent decisions affecting current work:
 - [Phase 08-screenshot-ingestion]: AMBER_INPUT const for amber field classes: single source of truth prevents class drift across 4 form types
 - [Phase 08-screenshot-ingestion]: Screenshot ingestion UX pattern: screen type selection -> Tauri file dialog -> preview -> Vision API spinner -> amber confirmation form -> save/discard
 
+### Phase 10 Decisions
+
+- [Phase 10-01]: SCHEMA_V6 uses spread over SCHEMA: guarantees all 13 existing tables preserved; version(6).stores(SCHEMA_V6) not SCHEMA — critical distinction prevents silent table drop
+- [Phase 10-01]: AiContentType union defines all 12 Phase 13 content types upfront — avoids future schema/type changes when adding AI features
+- [Phase 10-01]: Player.birthYear unindexed optional field — no migration needed; stored as plain object property for trade value calculator age multiplier
+
 ### v2.0 Infrastructure Decisions (to be expanded in Phase 10 planning)
 
 - [v2.0-research]: Dexie v6 adds 5 tables: coachingStaff, nilEntries, futureGames, playerLinks, aiCache — document version roadmap before any code to prevent VersionError for existing users
@@ -158,7 +165,7 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-24 UTC
-Stopped at: Milestone v2.0 roadmap created — Phases 10–13 defined. Ready to plan Phase 10.
+Last session: 2026-02-25 UTC
+Stopped at: Completed 10-01-PLAN.md — Dexie v6 schema migration and core types
 Resume file: None
-Next action: `/gsd:plan-phase 10`
+Next action: Execute 10-02-PLAN.md
