@@ -21,6 +21,7 @@ import { CoachingResumePage } from './pages/CoachingResumePage';
 import { ScreenshotIngestionPage } from './pages/ScreenshotIngestionPage';
 import { MaddenSyncPage } from './pages/MaddenSyncPage';
 import { RosterHubPage } from './pages/RosterHubPage';
+import { CoachingStaffPage } from './pages/CoachingStaffPage';
 import { TickerBar } from './components/TickerBar';
 import { CommandPalette } from './components/CommandPalette';
 
@@ -65,6 +66,8 @@ function PageContent() {
       return <MaddenSyncPage />;
     case 'roster-hub':
       return <RosterHubPage />;
+    case 'coaching-staff':
+      return <CoachingStaffPage />;
     default:
       return <DashboardPage />;
   }

@@ -59,6 +59,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               <PaletteItem value="nav-trophy-room" onSelect={() => select(() => nav.goToTrophyRoom())}>Trophy Room</PaletteItem>
               <PaletteItem value="nav-coaching-resume" onSelect={() => select(() => nav.goToCoachingResume())}>Coaching Resume</PaletteItem>
               <PaletteItem value="nav-scouting-card" onSelect={() => select(() => nav.goToScoutingCard())}>Scouting Cards</PaletteItem>
+              <PaletteItem value="nav-coaching-staff" onSelect={() => select(() => nav.goToCoachingStaff())}>Coaching Staff</PaletteItem>
               <PaletteItem value="nav-screenshot-ingestion" onSelect={() => select(() => nav.goToScreenshotIngestion())}>Parse Screenshot</PaletteItem>
               {activeDynasty?.sport === 'madden' && (
                 <PaletteItem value="nav-madden-sync" onSelect={() => select(() => nav.goToMaddenSync())}>Sync Franchise Save</PaletteItem>

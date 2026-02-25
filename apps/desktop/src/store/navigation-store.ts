@@ -17,7 +17,9 @@ type Page =
   | 'trophy-room'
   | 'coaching-resume'
   | 'screenshot-ingestion'
-  | 'madden-sync';
+  | 'madden-sync'
+  | 'roster-hub'
+  | 'coaching-staff';
 
 interface NavigationState {
   currentPage: Page;
@@ -43,6 +45,8 @@ interface NavigationActions {
   goToCoachingResume: () => void;
   goToScreenshotIngestion: () => void;
   goToMaddenSync: () => void;
+  goToRosterHub: () => void;
+  goToCoachingStaff: () => void;
 }
 
 type NavigationStore = NavigationState & NavigationActions;
@@ -121,5 +125,13 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
 
   goToMaddenSync: () => {
     set({ currentPage: 'madden-sync', pageParams: {} });
+  },
+
+  goToRosterHub: () => {
+    set({ currentPage: 'roster-hub', pageParams: {} });
+  },
+
+  goToCoachingStaff: () => {
+    set({ currentPage: 'coaching-staff', pageParams: {} });
   },
 }));
