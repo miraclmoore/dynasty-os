@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 ## Current Position
 
 Phase: 10 — Infrastructure Foundation
-Plan: 03 complete (3/4)
-Status: In progress
-Last activity: 2026-02-25 — Completed 10-03: aiCache service layer + localStorage AI content migration
+Plan: 04 complete (4/4)
+Status: Complete
+Last activity: 2026-02-25 — Completed 10-04: Global Zustand stores scaffolded + App.tsx wired
 
 ## Performance Metrics
 
@@ -34,7 +34,7 @@ Last activity: 2026-02-25 — Completed 10-03: aiCache service layer + localStor
 | 07-achievements | 2/2 | ~5 min | ~2.5 min | ✓ Complete |
 | 08-screenshot-ingestion | 2/2 | ~4 min | ~2 min | ✓ Complete |
 | 09-madden-sync | 3/3 | ~8 min | ~2.7 min | ✓ Complete |
-| 10-infrastructure-foundation | 3/4 | ~6 min | ~2 min | In progress |
+| 10-infrastructure-foundation | 4/4 | ~8 min | ~2 min | ✓ Complete |
 | 11-qol-wins | 0/TBD | — | — | Not started |
 | 12-community-features | 0/TBD | — | — | Not started |
 | 13-ai-intelligence-layer | 0/TBD | — | — | Not started |
@@ -47,6 +47,7 @@ Last activity: 2026-02-25 — Completed 10-03: aiCache service layer + localStor
 | Phase 10 P01 | 1 | 2 tasks | 9 files |
 | Phase 10 P02 | 1 | 2 tasks | 2 files |
 | Phase 10 P03 | 4 | 2 tasks | 8 files |
+| Phase 10 P04 | 2 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -145,6 +146,11 @@ Recent decisions affecting current work:
 - [Phase 10-03]: LRU eviction on insert path only — update path (existing cacheKey) skips eviction to avoid extra sortBy query overhead
 - [Phase 10-03]: getCachedBlurb/setCachedBlurb added to legacy-card-service.ts — pages call these helpers instead of importing ai-cache-service directly
 - [Phase 10-03]: loadCachedNarrative in NarrativeStore made async with (dynastyId, seasonId) signature — Dexie reads are async
+- [Phase 10-04]: useToastStore wraps sonner toast() calls — no direct toast() imports needed in feature components
+- [Phase 10-04]: UndoStore uses DB-level UndoableOperation descriptor pattern — zundo installed but not used; DB-level restore prevents DB/store inconsistency
+- [Phase 10-04]: ai-queue-store uses generateId() (crypto.randomUUID via lib/uuid.ts) not uuid npm package — consistent with project pattern
+- [Phase 10-04]: Toaster mounted unconditionally outside PageContent so toast() calls on LauncherPage render correctly
+- [Phase 10-04]: Cmd+K listener stub registered in App.tsx useEffect — actual command palette implementation deferred to Phase 11 QOL-04
 
 ### v2.0 Infrastructure Decisions (to be expanded in Phase 10 planning)
 
@@ -174,6 +180,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-25 UTC
-Stopped at: Completed 10-03-PLAN.md — aiCache service layer and localStorage AI content migration
+Stopped at: Completed 10-04-PLAN.md — Global Zustand stores (toast/filter/undo/AI-queue) + App.tsx wired
 Resume file: None
-Next action: Execute 10-04-PLAN.md
+Next action: Execute Phase 11 plans
