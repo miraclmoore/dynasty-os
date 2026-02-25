@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 ## Current Position
 
 Phase: 10 — Infrastructure Foundation
-Plan: 02 complete (2/4)
+Plan: 03 complete (3/4)
 Status: In progress
-Last activity: 2026-02-25 — Completed 10-02: npm package installation (cmdk, sonner, zundo, papaparse)
+Last activity: 2026-02-25 — Completed 10-03: aiCache service layer + localStorage AI content migration
 
 ## Performance Metrics
 
@@ -34,7 +34,7 @@ Last activity: 2026-02-25 — Completed 10-02: npm package installation (cmdk, s
 | 07-achievements | 2/2 | ~5 min | ~2.5 min | ✓ Complete |
 | 08-screenshot-ingestion | 2/2 | ~4 min | ~2 min | ✓ Complete |
 | 09-madden-sync | 3/3 | ~8 min | ~2.7 min | ✓ Complete |
-| 10-infrastructure-foundation | 2/4 | ~2 min | ~1 min | In progress |
+| 10-infrastructure-foundation | 3/4 | ~6 min | ~2 min | In progress |
 | 11-qol-wins | 0/TBD | — | — | Not started |
 | 12-community-features | 0/TBD | — | — | Not started |
 | 13-ai-intelligence-layer | 0/TBD | — | — | Not started |
@@ -46,6 +46,7 @@ Last activity: 2026-02-25 — Completed 10-02: npm package installation (cmdk, s
 *Updated after each plan completion*
 | Phase 10 P01 | 1 | 2 tasks | 9 files |
 | Phase 10 P02 | 1 | 2 tasks | 2 files |
+| Phase 10 P03 | 4 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -140,6 +141,10 @@ Recent decisions affecting current work:
 - [Phase 10-01]: Player.birthYear unindexed optional field — no migration needed; stored as plain object property for trade value calculator age multiplier
 - [Phase 10-02]: All 4 npm packages (cmdk, sonner, zundo, papaparse) installed at exact pinned versions in apps/desktop (not workspace root) — frontend runtime deps only
 - [Phase 10-02]: pnpm --filter @dynasty-os/desktop routes to correct workspace package for isolated dep installs
+- [Phase 10-03]: ai-cache-service.ts is the single Dexie aiCache wrapper — no direct db.aiCache calls outside this file; all AI content access via getAiCache/setAiCache/deleteAiCache
+- [Phase 10-03]: LRU eviction on insert path only — update path (existing cacheKey) skips eviction to avoid extra sortBy query overhead
+- [Phase 10-03]: getCachedBlurb/setCachedBlurb added to legacy-card-service.ts — pages call these helpers instead of importing ai-cache-service directly
+- [Phase 10-03]: loadCachedNarrative in NarrativeStore made async with (dynastyId, seasonId) signature — Dexie reads are async
 
 ### v2.0 Infrastructure Decisions (to be expanded in Phase 10 planning)
 
@@ -169,6 +174,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-25 UTC
-Stopped at: Completed 10-02-PLAN.md — npm package installation (cmdk, sonner, zundo, papaparse)
+Stopped at: Completed 10-03-PLAN.md — aiCache service layer and localStorage AI content migration
 Resume file: None
-Next action: Execute 10-03-PLAN.md
+Next action: Execute 10-04-PLAN.md
