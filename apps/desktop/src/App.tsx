@@ -23,6 +23,7 @@ import { MaddenSyncPage } from './pages/MaddenSyncPage';
 import { RosterHubPage } from './pages/RosterHubPage';
 import { CoachingStaffPage } from './pages/CoachingStaffPage';
 import { NilLedgerPage } from './pages/NilLedgerPage';
+import { FutureSchedulePage } from './pages/FutureSchedulePage';
 import { TickerBar } from './components/TickerBar';
 import { CommandPalette } from './components/CommandPalette';
 
@@ -71,6 +72,8 @@ function PageContent() {
       return <CoachingStaffPage />;
     case 'nil-ledger':
       return <NilLedgerPage />;
+    case 'future-schedule':
+      return <FutureSchedulePage />;
     default:
       return <DashboardPage />;
   }

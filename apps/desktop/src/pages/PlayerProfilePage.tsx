@@ -19,6 +19,7 @@ import {
   setApiKey,
   clearApiKey,
 } from '../lib/legacy-card-service';
+import { usePlayerLinkStore } from '../store/player-link-store';
 
 const STATUS_LABEL: Record<PlayerStatus, string> = {
   active: 'Active',
@@ -101,6 +102,13 @@ export function PlayerProfilePage() {
   const [apiKeyStatus, setApiKeyStatus] = useState<'idle' | 'saved' | 'cleared'>('idle');
   const currentApiKey = getApiKey();
 
+  // Player link state
+  const { link: playerLink, loadLink, setLink, removeLink } = usePlayerLinkStore();
+  const [linkDynastyId, setLinkDynastyId] = useState('');
+  const [linkPlayerId, setLinkPlayerId] = useState('');
+  const [linkNotes, setLinkNotes] = useState('');
+  const [linkError, setLinkError] = useState('');
+
   useEffect(() => {
     if (playerId && activeDynasty) {
       usePlayerSeasonStore.getState().loadPlayerSeasons(playerId);
@@ -108,6 +116,8 @@ export function PlayerProfilePage() {
       getCachedBlurb(activeDynasty.id, playerId).then((saved) => {
         setLegacyBlurb(saved ?? undefined);
       });
+      // Load player link (CFB-only, but load unconditionally — guard in render)
+      loadLink(activeDynasty.id, playerId);
     }
   }, [playerId, activeDynasty?.id]);
 
@@ -629,6 +639,116 @@ export function PlayerProfilePage() {
                     Confirm Departure
                   </button>
                 </div>
+              </form>
+            )}
+          </div>
+        )}
+
+        {/* NFL/Madden Career Link — CFB dynasties only */}
+        {activeDynasty?.sport === 'cfb' && (
+          <div className="bg-gray-800 rounded-xl border border-gray-700 p-5">
+            <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
+              NFL / Madden Career Link
+            </h2>
+
+            {playerLink ? (
+              <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <p className="text-xs text-gray-500 mb-1">Madden Dynasty ID</p>
+                    <p className="text-white text-sm font-mono">{playerLink.linkedDynastyId}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 mb-1">Madden Player ID</p>
+                    <p className="text-white text-sm font-mono">{playerLink.linkedPlayerId}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 mb-1">Link Type</p>
+                    <p className="text-white text-sm capitalize">{playerLink.linkType.replace(/-/g, ' ')}</p>
+                  </div>
+                  {playerLink.notes && (
+                    <div className="col-span-2">
+                      <p className="text-xs text-gray-500 mb-1">Notes</p>
+                      <p className="text-gray-300 text-sm">{playerLink.notes}</p>
+                    </div>
+                  )}
+                </div>
+                <button
+                  onClick={() => activeDynasty && removeLink(activeDynasty.id, player.id)}
+                  className="px-3 py-1.5 bg-gray-700 hover:bg-red-800 text-gray-300 text-xs rounded-lg transition-colors"
+                >
+                  Remove Link
+                </button>
+              </div>
+            ) : (
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  setLinkError('');
+                  if (!linkDynastyId.trim() || !linkPlayerId.trim()) {
+                    setLinkError('Madden Dynasty ID and Player ID are required.');
+                    return;
+                  }
+                  if (!activeDynasty) return;
+                  await setLink(
+                    {
+                      dynastyId: activeDynasty.id,
+                      playerId: player.id,
+                      linkedDynastyId: linkDynastyId.trim(),
+                      linkedPlayerId: linkPlayerId.trim(),
+                      linkType: 'cfb-to-nfl',
+                      notes: linkNotes.trim() || undefined,
+                    },
+                    activeDynasty.id,
+                    player.id
+                  );
+                  setLinkDynastyId('');
+                  setLinkPlayerId('');
+                  setLinkNotes('');
+                }}
+                className="space-y-3 max-w-sm"
+              >
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">Madden Dynasty ID</label>
+                  <input
+                    type="text"
+                    value={linkDynastyId}
+                    onChange={(e) => setLinkDynastyId(e.target.value)}
+                    placeholder="ID of linked Madden dynasty"
+                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">Madden Player ID</label>
+                  <input
+                    type="text"
+                    value={linkPlayerId}
+                    onChange={(e) => setLinkPlayerId(e.target.value)}
+                    placeholder="ID of player in Madden dynasty"
+                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">
+                    Notes <span className="text-gray-600 text-xs">(optional)</span>
+                  </label>
+                  <textarea
+                    value={linkNotes}
+                    onChange={(e) => setLinkNotes(e.target.value)}
+                    placeholder="e.g. 3rd round pick, Cowboys — same player tracked across dynasties"
+                    rows={2}
+                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500 resize-none"
+                  />
+                </div>
+                {linkError && (
+                  <p className="text-red-400 text-sm">{linkError}</p>
+                )}
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition-colors"
+                >
+                  Link to NFL/Madden Career
+                </button>
               </form>
             )}
           </div>

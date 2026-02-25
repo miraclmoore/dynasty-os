@@ -20,7 +20,8 @@ type Page =
   | 'madden-sync'
   | 'roster-hub'
   | 'coaching-staff'
-  | 'nil-ledger';
+  | 'nil-ledger'
+  | 'future-schedule';
 
 interface NavigationState {
   currentPage: Page;
@@ -49,6 +50,7 @@ interface NavigationActions {
   goToRosterHub: () => void;
   goToCoachingStaff: () => void;
   goToNilLedger: () => void;
+  goToFutureSchedule: () => void;
 }
 
 type NavigationStore = NavigationState & NavigationActions;
@@ -139,5 +141,9 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
 
   goToNilLedger: () => {
     set({ currentPage: 'nil-ledger', pageParams: {} });
+  },
+
+  goToFutureSchedule: () => {
+    set({ currentPage: 'future-schedule', pageParams: {} });
   },
 }));
