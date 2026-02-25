@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** Milestone v2.0 — The Living Dynasty (defining requirements)
+**Current focus:** Milestone v2.0 — The Living Dynasty (Phase 10: Infrastructure Foundation)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 10 — Infrastructure Foundation
 Plan: —
-Status: Defining requirements
-Last activity: 2026-02-24 — Milestone v2.0 started
+Status: Ready to plan
+Last activity: 2026-02-24 — Milestone v2.0 roadmap created (Phases 10–13)
 
 ## Performance Metrics
 
@@ -34,6 +34,10 @@ Last activity: 2026-02-24 — Milestone v2.0 started
 | 07-achievements | 2/2 | ~5 min | ~2.5 min | ✓ Complete |
 | 08-screenshot-ingestion | 2/2 | ~4 min | ~2 min | ✓ Complete |
 | 09-madden-sync | 3/3 | ~8 min | ~2.7 min | ✓ Complete |
+| 10-infrastructure-foundation | 0/TBD | — | — | Not started |
+| 11-qol-wins | 0/TBD | — | — | Not started |
+| 12-community-features | 0/TBD | — | — | Not started |
+| 13-ai-intelligence-layer | 0/TBD | — | — | Not started |
 
 **Recent Trend:**
 - Last 5 plans: 4 min, 2 min, 3 min, 3 min, 2 min
@@ -127,19 +131,34 @@ Recent decisions affecting current work:
 - [Phase 08-screenshot-ingestion]: AMBER_INPUT const for amber field classes: single source of truth prevents class drift across 4 form types
 - [Phase 08-screenshot-ingestion]: Screenshot ingestion UX pattern: screen type selection -> Tauri file dialog -> preview -> Vision API spinner -> amber confirmation form -> save/discard
 
+### v2.0 Infrastructure Decisions (to be expanded in Phase 10 planning)
+
+- [v2.0-research]: Dexie v6 adds 5 tables: coachingStaff, nilEntries, futureGames, playerLinks, aiCache — document version roadmap before any code to prevent VersionError for existing users
+- [v2.0-research]: aiCache table replaces localStorage for ALL AI content — LRU eviction at 100 entries per dynasty; StorageManager.estimate() check at startup
+- [v2.0-research]: Async AI job queue (pendingAiJobs: Job[] in Zustand) — saves resolve <200ms; AI populates asynchronously via fire-and-forget pattern
+- [v2.0-research]: db.on('versionchange') handler closes DB and reloads — prevents multi-tab deadlock on schema upgrade
+- [v2.0-research]: 4 new npm packages: cmdk@1.1.1, sonner@2.0.7, zundo@2.3.0, papaparse@5.5.3 — single install in Phase 10
+- [v2.0-research]: Undo uses DB-level operation descriptor ({table, operation, id}), not Zustand snapshot — prevents DB/store inconsistency from side effects
+- [v2.0-research]: Ctrl+K autofocus fix: autofocus document.body via hidden input on App.tsx mount — prevents cold-launch swallow by WebView2
+- [v2.0-research]: Player.birthYear added in Phase 10 core-types — nullable/optional; required by Trade Value Calculator age multiplier
+- [v2.0-research]: Phase 13 AI sub-sequence: Haiku features first (AINT-02, AINT-06, AINT-07, AINT-05, AINT-03) → Sonnet features (AINT-01, AINT-04, AINT-09, AINT-10) → complex synthesis (AINT-08, AINT-12, AINT-11)
+- [v2.0-research]: Recharts decision deferred — add recharts@^3.7.0 only if 3+ chart uses confirmed in v2.0 scope (NIL Ledger, Recruiting Comparison, Rivalry Dashboard are candidates)
+
 ### Pending Todos
 
-None. All 9 phases complete.
+- Madden sidecar production binary: compile with `npx pkg` for Windows x86_64 before v2.0 release
+- Windows production memory validation: measure actual <80MB target on packaged Windows build
+- sidecar/package.json: `npm install` in src-tauri/sidecar/ required before first use on new machines
 
 ### Blockers/Concerns
 
 - Madden 26 schema support in madden-franchise library not yet released — fallback UI is live
-- Sidecar production binary not yet compiled — dev mode uses shell wrapper (requires Node.js on dev machine); production needs `npx pkg` step
-- Windows production memory (<80MB target) not yet validated — needs measurement on actual Windows build
-- sidecar/package.json madden-franchise dep needs `npm install` in src-tauri/sidecar/ before first use
+- Sidecar production binary not yet compiled — dev mode uses shell wrapper (requires Node.js on dev machine)
+- Windows production memory (<80MB target) not yet validated
 
 ## Session Continuity
 
 Last session: 2026-02-24 UTC
-Stopped at: Phase 9 Madden Sync complete — all 9 phases done. Milestone 1 complete.
+Stopped at: Milestone v2.0 roadmap created — Phases 10–13 defined. Ready to plan Phase 10.
 Resume file: None
+Next action: `/gsd:plan-phase 10`

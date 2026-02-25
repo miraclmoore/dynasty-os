@@ -1,7 +1,7 @@
 # Requirements: Dynasty OS
 
 **Defined:** 2026-02-21
-**Updated:** 2026-02-24 — Milestone v2.0 requirements added
+**Updated:** 2026-02-24 — Milestone v2.0 requirements added; v2.0 traceability assigned (Phases 10–13)
 **Core Value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
 
 ## v2.0 Requirements — The Living Dynasty
@@ -281,44 +281,44 @@ Which phases cover which v2.0 requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| QOL-01 | Phase TBD | Pending |
-| QOL-02 | Phase TBD | Pending |
-| QOL-03 | Phase TBD | Pending |
-| QOL-04 | Phase TBD | Pending |
-| QOL-05 | Phase TBD | Pending |
-| QOL-06 | Phase TBD | Pending |
-| QOL-07 | Phase TBD | Pending |
-| QOL-08 | Phase TBD | Pending |
-| QOL-09 | Phase TBD | Pending |
-| QOL-10 | Phase TBD | Pending |
-| COMM-01 | Phase TBD | Pending |
-| COMM-02 | Phase TBD | Pending |
-| COMM-03 | Phase TBD | Pending |
-| COMM-04 | Phase TBD | Pending |
-| COMM-05 | Phase TBD | Pending |
-| COMM-06 | Phase TBD | Pending |
-| COMM-07 | Phase TBD | Pending |
-| COMM-08 | Phase TBD | Pending |
-| COMM-09 | Phase TBD | Pending |
-| COMM-10 | Phase TBD | Pending |
-| AINT-01 | Phase TBD | Pending |
-| AINT-02 | Phase TBD | Pending |
-| AINT-03 | Phase TBD | Pending |
-| AINT-04 | Phase TBD | Pending |
-| AINT-05 | Phase TBD | Pending |
-| AINT-06 | Phase TBD | Pending |
-| AINT-07 | Phase TBD | Pending |
-| AINT-08 | Phase TBD | Pending |
-| AINT-09 | Phase TBD | Pending |
-| AINT-10 | Phase TBD | Pending |
-| AINT-11 | Phase TBD | Pending |
-| AINT-12 | Phase TBD | Pending |
+| QOL-01 | Phase 11 | Pending |
+| QOL-02 | Phase 11 | Pending |
+| QOL-03 | Phase 11 | Pending |
+| QOL-04 | Phase 11 | Pending |
+| QOL-05 | Phase 11 | Pending |
+| QOL-06 | Phase 11 | Pending |
+| QOL-07 | Phase 11 | Pending |
+| QOL-08 | Phase 11 | Pending |
+| QOL-09 | Phase 11 | Pending |
+| QOL-10 | Phase 11 | Pending |
+| COMM-01 | Phase 12 | Pending |
+| COMM-02 | Phase 12 | Pending |
+| COMM-03 | Phase 12 | Pending |
+| COMM-04 | Phase 12 | Pending |
+| COMM-05 | Phase 12 | Pending |
+| COMM-06 | Phase 12 | Pending |
+| COMM-07 | Phase 12 | Pending |
+| COMM-08 | Phase 12 | Pending |
+| COMM-09 | Phase 12 | Pending |
+| COMM-10 | Phase 12 | Pending |
+| AINT-01 | Phase 13 | Pending |
+| AINT-02 | Phase 13 | Pending |
+| AINT-03 | Phase 13 | Pending |
+| AINT-04 | Phase 13 | Pending |
+| AINT-05 | Phase 13 | Pending |
+| AINT-06 | Phase 13 | Pending |
+| AINT-07 | Phase 13 | Pending |
+| AINT-08 | Phase 13 | Pending |
+| AINT-09 | Phase 13 | Pending |
+| AINT-10 | Phase 13 | Pending |
+| AINT-11 | Phase 13 | Pending |
+| AINT-12 | Phase 13 | Pending |
 
 **v2.0 Coverage:**
 - v2.0 requirements: 32 total
-- Mapped to phases: 0 (TBD — roadmapper will assign)
-- Unmapped: 32 ⚠️
+- Mapped to phases: 32
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-02-21*
-*Last updated: 2026-02-24 after Milestone v2.0 requirements defined*
+*Last updated: 2026-02-24 — v2.0 traceability assigned to Phases 10–13*
