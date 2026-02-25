@@ -11,6 +11,7 @@ import { LogGameModal } from '../components/LogGameModal';
 import { SeasonEndModal } from '../components/SeasonEndModal';
 import { StatHighlights } from '../components/StatHighlights';
 import { GameLog } from '../components/GameLog';
+import { isAutoExportEnabled, setAutoExportEnabled } from '../lib/auto-export-service';
 import type { GameResult } from '@dynasty-os/core-types';
 
 const CHECKLIST_TASKS = [
@@ -60,6 +61,9 @@ export function DashboardPage() {
 
   const [logGameOpen, setLogGameOpen] = useState(false);
   const [seasonEndOpen, setSeasonEndOpen] = useState(false);
+  const [autoExport, setAutoExport] = useState(() =>
+    activeDynasty ? isAutoExportEnabled(activeDynasty.id) : false
+  );
   const [checklist, setChecklist] = useState<Record<string, boolean>>(() => {
     if (!activeSeason) return {};
     try {
@@ -73,6 +77,7 @@ export function DashboardPage() {
   useEffect(() => {
     if (!activeDynasty) return;
     useSeasonStore.getState().loadSeasons(activeDynasty.id);
+    setAutoExport(isAutoExportEnabled(activeDynasty.id));
   }, [activeDynasty?.id]);
 
   useEffect(() => {
@@ -211,6 +216,25 @@ export function DashboardPage() {
             </NavSection>
           )}
         </nav>
+
+        {/* Auto-export toggle */}
+        <div className="px-3 py-2 border-t border-gray-800">
+          <label className="flex items-center gap-2 cursor-pointer group">
+            <input
+              type="checkbox"
+              checked={autoExport}
+              onChange={(e) => {
+                if (!activeDynasty) return;
+                setAutoExportEnabled(activeDynasty.id, e.target.checked);
+                setAutoExport(e.target.checked);
+              }}
+              className="w-3.5 h-3.5 rounded border-gray-600 bg-gray-700 text-amber-500 focus:ring-amber-500 focus:ring-offset-gray-900 cursor-pointer flex-shrink-0"
+            />
+            <span className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors leading-tight">
+              Auto-export on save
+            </span>
+          </label>
+        </div>
 
         {/* Dynasty switcher at bottom */}
         <div className="px-3 py-3 border-t border-gray-800">

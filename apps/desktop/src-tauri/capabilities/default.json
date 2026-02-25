@@ -14,6 +14,8 @@
     "fs:scope-download",
     "shell:allow-execute",
     "shell:allow-open",
-    "fs:allow-watch"
+    "fs:allow-watch",
+    "fs:allow-mkdir",
+    "fs:scope-app-data"
   ]
 }

@@ -12,6 +12,7 @@ import {
   downloadJson,
   readFileAsText,
 } from '../lib/export-import';
+import { autoExportIfEnabled } from '../lib/auto-export-service';
 import { useFilterStore } from './filter-store';
 
 interface DynastyState {
@@ -56,6 +57,7 @@ export const useDynastyStore = create<DynastyStore>((set, get) => ({
       const dynasty = await svcCreate(input);
       const dynasties = await getDynasties();
       set({ dynasties, loading: false });
+      autoExportIfEnabled(dynasty.id, dynasty.name); // fire-and-forget
       return dynasty;
     } catch (err) {
       set({ error: String(err), loading: false });
@@ -105,9 +107,10 @@ export const useDynastyStore = create<DynastyStore>((set, get) => ({
     set({ loading: true, error: null });
     try {
       const json = await readFileAsText(file);
-      await importDynasty(json);
+      const importedDynasty = await importDynasty(json);
       const dynasties = await getDynasties();
       set({ dynasties, loading: false });
+      autoExportIfEnabled(importedDynasty.id, importedDynasty.name); // fire-and-forget
     } catch (err) {
       set({ error: String(err), loading: false });
       throw err;
