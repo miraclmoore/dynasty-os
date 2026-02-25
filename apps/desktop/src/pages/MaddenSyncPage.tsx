@@ -13,9 +13,12 @@ import {
   clearSavePath,
   isWatcherEnabled,
   setWatcherEnabled,
+  checkMaddenPackageVersion,
+  updateMaddenPackage,
   type ValidateResult,
   type ExtractResult,
   type SyncDiff,
+  type PackageVersionInfo,
 } from '../lib/madden-sync-service';
 import { startWatching, stopWatching } from '../lib/madden-watcher';
 
@@ -92,6 +95,10 @@ export function MaddenSyncPage() {
     playersAdded: number;
     draftPicksAdded: number;
   } | null>(null);
+  const [versionInfo, setVersionInfo] = useState<PackageVersionInfo | null>(null);
+  const [versionChecking, setVersionChecking] = useState(false);
+  const [updating, setUpdating] = useState(false);
+  const [updateMsg, setUpdateMsg] = useState<string | null>(null);
 
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -135,6 +142,16 @@ export function MaddenSyncPage() {
       if (countdownRef.current) clearInterval(countdownRef.current);
     };
   }, [syncState]);
+
+  // Check madden-franchise library version on mount
+  useEffect(() => {
+    if (!activeDynasty || activeDynasty.sport !== 'madden') return;
+    setVersionChecking(true);
+    checkMaddenPackageVersion().then((info) => {
+      setVersionInfo(info);
+      setVersionChecking(false);
+    });
+  }, [activeDynasty?.id]);
 
   if (!activeDynasty) return null;
 
@@ -227,6 +244,21 @@ export function MaddenSyncPage() {
     clearSavePath();
     setSavePath(null);
     handleReset();
+  };
+
+  const handleUpdate = async () => {
+    setUpdating(true);
+    setUpdateMsg(null);
+    const result = await updateMaddenPackage();
+    if (result.success) {
+      setUpdateMsg(`Updated to v${result.version}`);
+      // Refresh version info
+      const info = await checkMaddenPackageVersion();
+      setVersionInfo(info);
+    } else {
+      setUpdateMsg(result.error ?? 'Update failed');
+    }
+    setUpdating(false);
   };
 
   // ── Render ─────────────────────────────────────────────────────────────────
@@ -661,6 +693,46 @@ export function MaddenSyncPage() {
                 {watcherOn && !savePath && (
                   <p className="text-amber-600 text-xs">Select a save file above to enable watching.</p>
                 )}
+
+                {/* Library version */}
+                <div className="border-t border-gray-700 pt-3 flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-300">madden-franchise Library</p>
+                      <p className="text-xs text-gray-600 mt-0.5">
+                        {versionChecking
+                          ? 'Checking version…'
+                          : versionInfo?.installed
+                          ? `Installed: v${versionInfo.installed}${versionInfo.latest ? ` · Latest: v${versionInfo.latest}` : ''}`
+                          : 'Version unknown'}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {versionInfo && !versionInfo.updateAvailable && versionInfo.installed && (
+                        <span className="text-xs text-green-500 font-medium">Up to date</span>
+                      )}
+                      {versionInfo?.updateAvailable && (
+                        <span className="text-xs font-semibold px-2 py-0.5 rounded bg-amber-900 text-amber-300">
+                          Update available
+                        </span>
+                      )}
+                      {versionInfo?.updateAvailable && (
+                        <button
+                          onClick={handleUpdate}
+                          disabled={updating}
+                          className="px-3 py-1 bg-amber-700 hover:bg-amber-600 disabled:opacity-50 text-white text-xs font-semibold rounded-lg transition-colors"
+                        >
+                          {updating ? 'Updating…' : 'Update'}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  {updateMsg && (
+                    <p className={`text-xs ${updating || updateMsg.startsWith('Updated') ? 'text-green-500' : 'text-red-400'}`}>
+                      {updateMsg}
+                    </p>
+                  )}
+                </div>
               </section>
             )}
           </>

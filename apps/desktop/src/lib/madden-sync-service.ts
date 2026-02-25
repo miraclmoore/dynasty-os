@@ -67,6 +67,19 @@ export interface MappedGame {
   gameType: GameType;
 }
 
+export interface PackageVersionInfo {
+  installed: string | null;
+  latest: string | null;
+  updateAvailable: boolean;
+  error?: string;
+}
+
+export interface UpdateResult {
+  success: boolean;
+  version?: string;
+  error?: string;
+}
+
 /** Confirmation diff shown before committing */
 export interface SyncDiff {
   gamesToAdd: MappedGame[];
@@ -182,6 +195,48 @@ export async function extractSaveData(filePath: string): Promise<ExtractResult> 
       error: 'parse_error',
       message: 'Could not parse extraction output.',
     };
+  }
+}
+
+// ── Package version check ─────────────────────────────────────────────────────
+
+/**
+ * Returns the installed and latest npm versions of madden-franchise.
+ * Never throws.
+ */
+export async function checkMaddenPackageVersion(): Promise<PackageVersionInfo> {
+  try {
+    const raw = await runSidecar(['version']);
+    const parsed = JSON.parse(raw.trim());
+    if (parsed.error) {
+      return { installed: null, latest: null, updateAvailable: false, error: parsed.message };
+    }
+    const installed = parsed.version as string;
+
+    const res = await fetch('https://registry.npmjs.org/madden-franchise/latest');
+    if (!res.ok) {
+      return { installed, latest: null, updateAvailable: false };
+    }
+    const data = await res.json() as { version: string };
+    const latest = data.version;
+    return { installed, latest, updateAvailable: installed !== latest };
+  } catch {
+    return { installed: null, latest: null, updateAvailable: false, error: 'Version check failed' };
+  }
+}
+
+/**
+ * Runs `npm install madden-franchise@latest` inside the sidecar directory.
+ * Never throws.
+ */
+export async function updateMaddenPackage(): Promise<UpdateResult> {
+  try {
+    const raw = await runSidecar(['update']);
+    const parsed = JSON.parse(raw.trim());
+    if (parsed.error) return { success: false, error: parsed.message };
+    return { success: true, version: parsed.version };
+  } catch (e) {
+    return { success: false, error: String(e) };
   }
 }
 

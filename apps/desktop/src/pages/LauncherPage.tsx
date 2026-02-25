@@ -65,27 +65,62 @@ export function LauncherPage() {
         </div>
 
         {loading && dynasties.length === 0 ? (
-          <div className="flex items-center justify-center py-24">
-            <p className="text-gray-500">Loading dynasties...</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-gray-800 border border-l-4 border-gray-700 rounded-lg p-5 animate-pulse">
+                <div className="flex items-start justify-between gap-3 mb-3">
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-gray-700 rounded w-3/4" />
+                    <div className="h-3 bg-gray-700 rounded w-1/2" />
+                  </div>
+                  <div className="h-6 w-12 bg-gray-700 rounded shrink-0" />
+                </div>
+                <div className="space-y-2 mb-4">
+                  <div className="h-3 bg-gray-700 rounded" />
+                  <div className="h-3 bg-gray-700 rounded" />
+                  <div className="h-3 bg-gray-700 rounded" />
+                </div>
+                <div className="flex gap-2">
+                  <div className="flex-1 h-8 bg-gray-700 rounded-lg" />
+                  <div className="flex-1 h-8 bg-gray-700 rounded-lg" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : dynasties.length === 0 ? (
           /* Empty state */
           <div className="flex flex-col items-center justify-center py-24 text-center">
-            <div className="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center mb-4">
-              <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
+            <div className="w-20 h-20 rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center mb-6 shadow-inner">
+              <svg className="w-10 h-10 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
               </svg>
             </div>
-            <h3 className="text-gray-300 font-medium mb-2">No dynasties yet</h3>
-            <p className="text-gray-500 text-sm mb-6 max-w-xs">
-              Create your first dynasty to start tracking your legacy.
+            <h3 className="text-white font-semibold text-xl mb-2">Start Your Dynasty</h3>
+            <p className="text-gray-500 text-sm mb-8 max-w-sm leading-relaxed">
+              Create your first dynasty to track every game, recruit, draft pick, and season milestone. Your legacy starts here.
             </p>
-            <button
-              className="px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium transition-colors"
-              onClick={() => setShowCreate(true)}
-            >
-              Create New Dynasty
-            </button>
+            <div className="flex gap-3">
+              <button
+                className="px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-colors shadow-lg"
+                onClick={() => setShowCreate(true)}
+              >
+                Create New Dynasty
+              </button>
+            </div>
+            <div className="flex items-center gap-6 mt-10 text-gray-700">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-orange-700" />
+                <span className="text-xs">College Football</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-green-700" />
+                <span className="text-xs">Madden NFL</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-purple-700" />
+                <span className="text-xs">NFL 2K</span>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

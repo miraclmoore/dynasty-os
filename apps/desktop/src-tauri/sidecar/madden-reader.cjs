@@ -194,6 +194,32 @@ async function extractData(filePath) {
   }
 }
 
+// ── Version subcommand ────────────────────────────────────────────────────────
+
+function getInstalledVersion() {
+  try {
+    const pkgPath = path.join(__dirname, 'node_modules', 'madden-franchise', 'package.json');
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+    respond({ version: pkg.version });
+  } catch (err) {
+    fail('version_error', `Failed to read madden-franchise version: ${err.message}`);
+  }
+}
+
+// ── Update subcommand ─────────────────────────────────────────────────────────
+
+function updatePackage() {
+  try {
+    const { execSync } = require('child_process');
+    execSync('npm install madden-franchise@latest', { cwd: __dirname, stdio: 'pipe' });
+    const pkgPath = path.join(__dirname, 'node_modules', 'madden-franchise', 'package.json');
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+    respond({ success: true, version: pkg.version });
+  } catch (err) {
+    fail('update_error', `Failed to update madden-franchise: ${err.message}`);
+  }
+}
+
 // ── Entry point ───────────────────────────────────────────────────────────────
 
 const subcommand = getArg(2);
@@ -206,6 +232,12 @@ switch (subcommand) {
   case 'extract':
     extractData(filePath).catch((err) => fail('unexpected_error', err.message));
     break;
+  case 'version':
+    getInstalledVersion();
+    break;
+  case 'update':
+    updatePackage();
+    break;
   default:
-    fail('unknown_command', `Unknown subcommand: "${subcommand}". Use validate or extract.`);
+    fail('unknown_command', `Unknown subcommand: "${subcommand}". Use validate, extract, version, or update.`);
 }
