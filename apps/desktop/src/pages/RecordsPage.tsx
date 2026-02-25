@@ -12,6 +12,7 @@ import {
   type HeadToHeadRecord,
 } from '../lib/records-service';
 import { RecordsLeaderboard } from '../components/RecordsLeaderboard';
+import { exportTableToCsv } from '../lib/csv-export';
 import { HeadToHeadRecords } from '../components/HeadToHeadRecords';
 
 type Tab = 'single-season' | 'career' | 'h2h';
@@ -162,6 +163,27 @@ export function RecordsPage() {
         : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800'
     }`;
 
+  async function handleExportSingleSeason() {
+    const rows = singleSeasonEntries.map((e, i) => ({
+      rank: i + 1,
+      playerName: e.playerName,
+      position: e.position,
+      [selectedStatKey]: e.value,
+      season: e.year ?? '',
+    }));
+    await exportTableToCsv(rows, `records-${selectedStatKey}.csv`);
+  }
+
+  async function handleExportCareer() {
+    const rows = careerEntries.map((e, i) => ({
+      rank: i + 1,
+      playerName: e.playerName,
+      position: e.position,
+      [careerStatKey]: e.value,
+    }));
+    await exportTableToCsv(rows, `records-career-${careerStatKey}.csv`);
+  }
+
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Header */}
@@ -236,12 +258,21 @@ export function RecordsPage() {
               </div>
             </div>
 
-            <h2 className="text-base font-semibold text-gray-200 mb-4">
-              Top 10 — {selectedStatLabel}
-              {selectedSeasonId
-                ? ` (${allSeasons.find((s) => s.id === selectedSeasonId)?.year ?? ''})`
-                : ' (All Seasons)'}
-            </h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-base font-semibold text-gray-200">
+                Top 10 — {selectedStatLabel}
+                {selectedSeasonId
+                  ? ` (${allSeasons.find((s) => s.id === selectedSeasonId)?.year ?? ''})`
+                  : ' (All Seasons)'}
+              </h2>
+              <button
+                onClick={handleExportSingleSeason}
+                disabled={singleSeasonEntries.length === 0}
+                className="px-3 py-1.5 border border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white text-xs font-semibold rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Export CSV
+              </button>
+            </div>
 
             {loading ? (
               <div className="flex items-center justify-center py-12">
@@ -278,9 +309,18 @@ export function RecordsPage() {
               </div>
             </div>
 
-            <h2 className="text-base font-semibold text-gray-200 mb-4">
-              Career Top 10 — {careerStatLabel}
-            </h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-base font-semibold text-gray-200">
+                Career Top 10 — {careerStatLabel}
+              </h2>
+              <button
+                onClick={handleExportCareer}
+                disabled={careerEntries.length === 0}
+                className="px-3 py-1.5 border border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white text-xs font-semibold rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Export CSV
+              </button>
+            </div>
 
             {loading ? (
               <div className="flex items-center justify-center py-12">
