@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useDynastyStore } from '../store';
 import { useRivalryStore } from '../store/rivalry-store';
 import { useNavigationStore } from '../store/navigation-store';
-import { calculateRivalryIntensity } from '../lib/rivalry-service';
+import {
+  calculateRivalryIntensity,
+  calculateSeriesMomentum,
+  getKeyMoments,
+  addKeyMoment,
+  deleteKeyMoment,
+} from '../lib/rivalry-service';
+import type { KeyMoment } from '../lib/rivalry-service';
 import { getHeadToHeadRecords } from '../lib/records-service';
 import type { HeadToHeadRecord } from '../lib/records-service';
 import type { Rival } from '@dynasty-os/core-types';
@@ -10,6 +17,11 @@ import type { Rival } from '@dynasty-os/core-types';
 interface RivalFormState {
   opponent: string;
   label: string;
+}
+
+interface MomentFormState {
+  year: string;
+  description: string;
 }
 
 export function RivalryTrackerPage() {
@@ -23,11 +35,24 @@ export function RivalryTrackerPage() {
   const [editLabel, setEditLabel] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
 
+  // Key moments state per rival (rivalId -> moments)
+  const [keyMomentsMap, setKeyMomentsMap] = useState<Record<string, KeyMoment[]>>({});
+  const [momentForms, setMomentForms] = useState<Record<string, MomentFormState>>({});
+
   useEffect(() => {
     if (!activeDynasty) return;
     loadRivals(activeDynasty.id);
     getHeadToHeadRecords(activeDynasty.id).then(setH2hRecords);
   }, [activeDynasty?.id]);
+
+  // Load key moments whenever rivals change
+  useEffect(() => {
+    const map: Record<string, KeyMoment[]> = {};
+    rivals.forEach((r) => {
+      map[r.id] = getKeyMoments(r.id);
+    });
+    setKeyMomentsMap(map);
+  }, [rivals]);
 
   if (!activeDynasty) return null;
 
@@ -76,6 +101,45 @@ export function RivalryTrackerPage() {
     return h2hRecords.find(
       (r) => r.opponent.toLowerCase() === rival.opponent.toLowerCase()
     );
+  };
+
+  const getMomentForm = (rivalId: string): MomentFormState =>
+    momentForms[rivalId] ?? { year: '', description: '' };
+
+  const setMomentForm = (rivalId: string, form: MomentFormState) => {
+    setMomentForms((prev) => ({ ...prev, [rivalId]: form }));
+  };
+
+  const handleAddMoment = (rivalId: string) => {
+    const form = getMomentForm(rivalId);
+    const year = parseInt(form.year, 10);
+    if (!year || !form.description.trim()) return;
+    addKeyMoment(rivalId, { year, description: form.description.trim() });
+    setKeyMomentsMap((prev) => ({ ...prev, [rivalId]: getKeyMoments(rivalId) }));
+    setMomentForm(rivalId, { year: '', description: '' });
+  };
+
+  const handleDeleteMoment = (rivalId: string, moment: KeyMoment) => {
+    deleteKeyMoment(rivalId, moment.year, moment.description);
+    setKeyMomentsMap((prev) => ({ ...prev, [rivalId]: getKeyMoments(rivalId) }));
+  };
+
+  const getMomentumLabel = (score: number): string => {
+    if (score > 0.1) return 'Momentum: You';
+    if (score < -0.1) return 'Momentum: Opponent';
+    return 'Even';
+  };
+
+  const getMomentumColor = (score: number): string => {
+    if (score > 0.1) return 'bg-green-500';
+    if (score < -0.1) return 'bg-red-500';
+    return 'bg-gray-500';
+  };
+
+  const getMomentumTextColor = (score: number): string => {
+    if (score > 0.1) return 'text-green-400';
+    if (score < -0.1) return 'text-red-400';
+    return 'text-gray-400';
   };
 
   return (
@@ -170,6 +234,14 @@ export function RivalryTrackerPage() {
               const winPct = record?.winPct ?? 0;
               const streak = record?.currentStreak;
               const recentGames = record?.games?.slice(0, 3) ?? [];
+
+              // Momentum: computed from all H2H games (sorted by recency already)
+              // Cast result string to union type — records-service guarantees only W/L/T values
+              const allGames = (record?.games ?? []) as Array<{ result: 'W' | 'L' | 'T'; week?: number }>;
+              const momentum = calculateSeriesMomentum(allGames);
+              const momentumPct = ((momentum + 1) / 2) * 100; // normalize -1..+1 to 0..100%
+              const moments = keyMomentsMap[rival.id] ?? [];
+              const momentForm = getMomentForm(rival.id);
 
               return (
                 <div key={rival.id} className="bg-gray-800 rounded-lg p-4">
@@ -292,6 +364,34 @@ export function RivalryTrackerPage() {
                         </div>
                       </div>
 
+                      {/* Series Momentum */}
+                      {allGames.length > 0 && (
+                        <div>
+                          <div className="text-xs text-gray-500 uppercase tracking-wider mb-1.5">
+                            Series Momentum
+                            <span className="text-gray-600 normal-case font-normal ml-1">(last 5 games)</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            {/* Bar */}
+                            <div className="flex-1 h-2 bg-gray-700 rounded-full overflow-hidden">
+                              <div
+                                className={`h-full rounded-full transition-all ${getMomentumColor(momentum)}`}
+                                style={{ width: `${momentumPct}%` }}
+                              />
+                            </div>
+                            {/* Score + label */}
+                            <div className="flex items-center gap-1.5 flex-shrink-0">
+                              <span className={`text-sm font-bold ${getMomentumTextColor(momentum)}`}>
+                                {momentum > 0 ? '+' : ''}{momentum.toFixed(2)}
+                              </span>
+                              <span className={`text-xs ${getMomentumTextColor(momentum)}`}>
+                                {getMomentumLabel(momentum)}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
                       {/* Last 3 Games */}
                       {recentGames.length > 0 && (
                         <div>
@@ -323,6 +423,80 @@ export function RivalryTrackerPage() {
                       )}
                     </div>
                   )}
+
+                  {/* Key Moments Log */}
+                  <div className="mt-4 pt-4 border-t border-gray-700">
+                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-2">
+                      Key Moments
+                    </div>
+
+                    {/* Existing moments */}
+                    {moments.length > 0 ? (
+                      <ul className="flex flex-col gap-1.5 mb-3">
+                        {moments.map((moment, idx) => (
+                          <li
+                            key={idx}
+                            className="flex items-start justify-between gap-2 text-sm"
+                          >
+                            <div className="flex items-baseline gap-2 min-w-0">
+                              <span className="text-amber-400 font-semibold flex-shrink-0">
+                                {moment.year}
+                              </span>
+                              <span className="text-gray-300 truncate">{moment.description}</span>
+                            </div>
+                            <button
+                              onClick={() => handleDeleteMoment(rival.id, moment)}
+                              className="text-gray-600 hover:text-red-400 transition-colors flex-shrink-0"
+                              aria-label={`Delete moment: ${moment.description}`}
+                            >
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-xs text-gray-600 italic mb-2">
+                        No key moments recorded yet.
+                      </p>
+                    )}
+
+                    {/* Add moment form */}
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        value={momentForm.year}
+                        onChange={(e) =>
+                          setMomentForm(rival.id, { ...momentForm, year: e.target.value })
+                        }
+                        placeholder="Year"
+                        className="w-20 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
+                      />
+                      <input
+                        type="text"
+                        value={momentForm.description}
+                        onChange={(e) =>
+                          setMomentForm(rival.id, { ...momentForm, description: e.target.value })
+                        }
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleAddMoment(rival.id);
+                          }
+                        }}
+                        placeholder="Describe the moment..."
+                        className="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
+                      />
+                      <button
+                        onClick={() => handleAddMoment(rival.id)}
+                        disabled={!momentForm.year || !momentForm.description.trim()}
+                        className="px-2.5 py-1 text-xs bg-amber-600 hover:bg-amber-500 disabled:opacity-40 text-white font-semibold rounded transition-colors flex-shrink-0"
+                      >
+                        Add
+                      </button>
+                    </div>
+                  </div>
                 </div>
               );
             })}
