@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 ## Current Position
 
 Phase: 12 — Community Features (in progress)
-Plan: 03 (complete) — ready for 12-04
+Plan: 04 (complete) — ready for 12-05
 Status: Executing
-Last activity: 2026-02-24 — Completed 12-03 (Future Schedule + Player Link — COMM-02, COMM-05)
+Last activity: 2026-02-24 — Completed 12-04 (Playoff Simulator + Trade Calculator — COMM-03, COMM-06)
 
 ## Performance Metrics
 
@@ -56,6 +56,8 @@ Last activity: 2026-02-24 — Completed 12-03 (Future Schedule + Player Link —
 | Phase 12 P01 | 2 | 2 tasks | 6 files |
 | Phase 12 P02 | 3 | 2 tasks | 8 files |
 | Phase 12-community-features P03 | 4 | 2 tasks | 9 files |
+| Phase 12-community-features P04 | 4 | 2 tasks | 7 files |
+| Phase 12 P04 | 4 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -154,6 +156,9 @@ Recent decisions affecting current work:
 - [Phase 12]: [Phase 12-02]: recharts BarChart pattern established: ResponsiveContainer > BarChart > XAxis/YAxis/Tooltip/Bar with amber fill — reuse for 12-05 and 12-07
 - [Phase 12]: [Phase 12-03]: FutureGame.isHome boolean (not location string): UI maps home/away/neutral select to isHome via locationToIsHome() helper — actual type has no location field
 - [Phase 12]: [Phase 12-03]: PlayerLink uses linkedDynastyId + linkedPlayerId (not linkedPlayerName/linkedTeam): player link form captures dynasty ID and player ID from paired Madden dynasty
+- [Phase 12]: [Phase 12-04]: Pure logic in lib/ files (no Zustand) — bracket and trade value are stateless computations
+- [Phase 12]: [Phase 12-04]: 12-team bye logic: seeds 1-4 enter round 2 with team2=null; play-in results fill team2 in reverse index order
+- [Phase 12]: [Phase 12-04]: Trade Calculator in Navigate group (Madden conditional); Playoff Simulator in CFB Program group (CFB conditional) — consistent with existing sport-gating pattern
 
 ### Phase 12 Decisions
 
@@ -211,6 +216,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-24 UTC
-Stopped at: Completed 12-03-PLAN.md — Future Schedule + Player Link (COMM-02, COMM-05)
+Stopped at: Completed 12-04-PLAN.md — Playoff Simulator + Trade Calculator (COMM-03, COMM-06)
 Resume file: None
-Next action: Execute Phase 12 Plan 04
+Next action: Execute Phase 12 Plan 05
