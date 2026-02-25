@@ -18,8 +18,8 @@ Requirements for Milestone v2.0. 32 user-facing requirements across 3 categories
 - [ ] **QOL-06**: New season year input auto-suggests previous season year + 1
 - [ ] **QOL-07**: Log Game modal shows recently-used opponents as quick-select options
 - [ ] **QOL-08**: User can add and edit a free-text note on any player record
-- [ ] **QOL-09**: Dashboard season checklist tracks which annual tasks are complete for the active season
-- [ ] **QOL-10**: Program Timeline includes a horizontal season scrubber for jumping to any dynasty year directly
+- [x] **QOL-09**: Dashboard season checklist tracks which annual tasks are complete for the active season
+- [x] **QOL-10**: Program Timeline includes a horizontal season scrubber for jumping to any dynasty year directly
 
 ### Community Features
 
@@ -289,8 +289,8 @@ Which phases cover which v2.0 requirements. Updated during roadmap creation.
 | QOL-06 | Phase 11 | Pending |
 | QOL-07 | Phase 11 | Pending |
 | QOL-08 | Phase 11 | Pending |
-| QOL-09 | Phase 11 | Pending |
-| QOL-10 | Phase 11 | Pending |
+| QOL-09 | Phase 11 | Complete |
+| QOL-10 | Phase 11 | Complete |
 | COMM-01 | Phase 12 | Pending |
 | COMM-02 | Phase 12 | Pending |
 | COMM-03 | Phase 12 | Pending |

@@ -48,6 +48,7 @@ Last activity: 2026-02-25 — Completed 11-03: CommandPalette component + App.ts
 | Phase 10 P02 | 1 | 2 tasks | 2 files |
 | Phase 10 P03 | 4 | 2 tasks | 8 files |
 | Phase 10 P04 | 2 | 2 tasks | 6 files |
+| Phase 11-qol-wins P05 | 3 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -134,6 +135,8 @@ Recent decisions affecting current work:
 - [Phase 08-screenshot-ingestion]: anthropic-dangerous-direct-browser-access header required for Tauri WebView direct API calls
 - [Phase 08-screenshot-ingestion]: AMBER_INPUT const for amber field classes: single source of truth prevents class drift across 4 form types
 - [Phase 08-screenshot-ingestion]: Screenshot ingestion UX pattern: screen type selection -> Tauri file dialog -> preview -> Vision API spinner -> amber confirmation form -> save/discard
+- [Phase 11-qol-wins]: dynasty-os-checklist-{seasonId} localStorage key: matches existing naming pattern; keyed by season to reset correctly on season switch
+- [Phase 11-qol-wins]: Timeline scrubber only shown when nodes.length > 1: single-season timelines don't need navigation; no-print class hides it during PDF export
 
 ### Phase 10 Decisions
 
