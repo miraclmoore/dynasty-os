@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDynastyStore } from '../store';
 import { useNavigationStore } from '../store/navigation-store';
 import { getTimelineNodes, type TimelineNode } from '../lib/timeline-service';
@@ -8,6 +8,7 @@ export function ProgramTimelinePage() {
   const goToDashboard = useNavigationStore((s) => s.goToDashboard);
   const [nodes, setNodes] = useState<TimelineNode[]>([]);
   const [loading, setLoading] = useState(true);
+  const nodeRefs = useRef<Record<number, HTMLElement | null>>({});
 
   useEffect(() => {
     if (!activeDynasty) return;
@@ -57,6 +58,28 @@ export function ProgramTimelinePage() {
       <main className="max-w-3xl mx-auto px-6 py-6">
         <h1 className="text-2xl font-bold text-white mb-6 no-print">Program Timeline</h1>
 
+        {/* Horizontal timeline scrubber — hidden during print */}
+        {nodes.length > 1 && (
+          <div className="sticky top-0 z-10 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 -mx-6 px-6 py-3 mb-4 no-print">
+            <div className="flex items-center gap-1 overflow-x-auto pb-1">
+              <span className="text-xs text-gray-500 mr-2 flex-shrink-0">Jump to:</span>
+              {nodes.map((node) => (
+                <button
+                  key={node.seasonId}
+                  onClick={() => {
+                    const el = nodeRefs.current[node.year];
+                    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }}
+                  className="flex-shrink-0 px-2 py-0.5 text-xs text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors"
+                  title={`${node.year} season`}
+                >
+                  {node.year}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {loading && (
           <div className="flex items-center justify-center py-16">
             <span className="text-gray-500 text-sm">Loading timeline...</span>
@@ -76,6 +99,7 @@ export function ProgramTimelinePage() {
             {nodes.map((node) => (
               <div
                 key={node.seasonId}
+                ref={(el) => { nodeRefs.current[node.year] = el; }}
                 className="bg-gray-800 rounded-lg p-4 border-l-4 border-amber-500 timeline-node"
               >
                 {/* Year */}
