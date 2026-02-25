@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 ## Current Position
 
 Phase: 12 — Community Features (in progress)
-Plan: 05 (complete) — ready for 12-06
+Plan: 06 (complete) — ready for 12-07
 Status: Executing
-Last activity: 2026-02-25 — Completed 12-05 (Recruiting Comparison + Record Book — COMM-07, COMM-09)
+Last activity: 2026-02-25 — Completed 12-06 (Auto-Export + Rivalry Dashboard Expansion — COMM-08, COMM-10)
 
 ## Performance Metrics
 
@@ -36,7 +36,7 @@ Last activity: 2026-02-25 — Completed 12-05 (Recruiting Comparison + Record Bo
 | 09-madden-sync | 3/3 | ~8 min | ~2.7 min | ✓ Complete |
 | 10-infrastructure-foundation | 4/4 | ~8 min | ~2 min | ✓ Complete |
 | 11-qol-wins | 6/6 | ~30 min | ~5 min | ✓ Complete |
-| 12-community-features | 5/7 | ~11 min | ~2.2 min | In Progress |
+| 12-community-features | 6/7 | ~20 min | ~3.3 min | In Progress |
 | 13-ai-intelligence-layer | 0/TBD | — | — | Not started |
 
 **Recent Trend:**
@@ -59,6 +59,7 @@ Last activity: 2026-02-25 — Completed 12-05 (Recruiting Comparison + Record Bo
 | Phase 12-community-features P04 | 4 | 2 tasks | 7 files |
 | Phase 12 P04 | 4 | 2 tasks | 7 files |
 | Phase 12 P05 | 2 | 2 tasks | 5 files |
+| Phase 12 P06 | 9 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -163,6 +164,11 @@ Recent decisions affecting current work:
 - [Phase 12]: [Phase 12-05]: gradeToScore map converts letter grades to numeric for recharts — A+=100, A=95, A-=90, B+=85, B=80, B-=75, etc; letter shown in custom tooltip
 - [Phase 12]: [Phase 12-05]: RecordBookPage top performer computed by summing all PlayerSeason.stats values — sport-agnostic, no position-specific key needed
 - [Phase 12]: [Phase 12-05]: buildRecordBook pure local function in RecordBookPage (not service layer) — page-specific aggregation matches CoachingResumePage pattern
+- [Phase 12]: [Phase 12-06]: auto-export fire-and-forget IIFE pattern: outer async fn returns void immediately, IIFE does real work and catches silently — never blocks UI thread
+- [Phase 12]: [Phase 12-06]: DynastyExport version typed as 1|2 union; validateExport accepts both — backward compatibility for existing v1 export files
+- [Phase 12]: [Phase 12-06]: fs:scope-app-data added to Tauri capabilities alongside fs:allow-mkdir — both required to write to appDataDir
+- [Phase 12]: [Phase 12-06]: calculateSeriesMomentum result cast guard: HeadToHeadRecord.games.result is string; cast to 'W'|'L'|'T' at call site rather than changing records-service type
+- [Phase 12]: [Phase 12-06]: Key moments inline form uses momentForms Record<rivalId, MomentFormState> — no modal needed, consistent with inline edit pattern
 
 ### Phase 12 Decisions
 
@@ -219,7 +225,7 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-24 UTC
-Stopped at: Completed 12-04-PLAN.md — Playoff Simulator + Trade Calculator (COMM-03, COMM-06)
+Last session: 2026-02-25 UTC
+Stopped at: Completed 12-06-PLAN.md — Auto-Export + Rivalry Dashboard Expansion (COMM-08, COMM-10)
 Resume file: None
-Next action: Execute Phase 12 Plan 05
+Next action: Execute Phase 12 Plan 07

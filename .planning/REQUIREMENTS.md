@@ -29,10 +29,10 @@ Requirements for Milestone v2.0. 32 user-facing requirements across 3 categories
 - [x] **COMM-04**: CFB users can log NIL deals per player (amount, brand, duration) and view total spend by class and position
 - [x] **COMM-05**: User can build a multi-year future schedule and view projected bowl eligibility
 - [x] **COMM-06**: Madden users can calculate trade value for any player based on position, rating, age, and contract
-- [ ] **COMM-07**: CFB users can compare recruiting class grades side-by-side across seasons or rival programs
-- [ ] **COMM-08**: User can enable automatic background export of dynasty data to JSON/CSV on every save
-- [ ] **COMM-09**: User can view a Historical Season Record Book showing all seasons, records, stats, and awards in one scrollable view
-- [ ] **COMM-10**: User can view an expanded Rivalry Dashboard with series momentum, key moments log, and all-time context per rival
+- [x] **COMM-07**: CFB users can compare recruiting class grades side-by-side across seasons or rival programs
+- [x] **COMM-08**: User can enable automatic background export of dynasty data to JSON/CSV on every save
+- [x] **COMM-09**: User can view a Historical Season Record Book showing all seasons, records, stats, and awards in one scrollable view
+- [x] **COMM-10**: User can view an expanded Rivalry Dashboard with series momentum, key moments log, and all-time context per rival
 
 ### AI Intelligence Layer
 
@@ -83,10 +83,10 @@ Requirements for Milestone v2.0. 32 user-facing requirements across 3 categories
 | COMM-04 | Phase 12 | Complete |
 | COMM-05 | Phase 12 | Complete |
 | COMM-06 | Phase 12 | Complete |
-| COMM-07 | Phase 12 | Pending |
-| COMM-08 | Phase 12 | Pending |
-| COMM-09 | Phase 12 | Pending |
-| COMM-10 | Phase 12 | Pending |
+| COMM-07 | Phase 12 | Complete |
+| COMM-08 | Phase 12 | Complete |
+| COMM-09 | Phase 12 | Complete |
+| COMM-10 | Phase 12 | Complete |
 | AINT-01 | Phase 13 | Pending |
 | AINT-02 | Phase 13 | Pending |
 | AINT-03 | Phase 13 | Pending |
