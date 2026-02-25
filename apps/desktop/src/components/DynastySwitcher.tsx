@@ -43,7 +43,7 @@ export function DynastySwitcher() {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-1 w-64 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50 overflow-hidden">
+        <div className="absolute right-0 bottom-full mb-1 w-64 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50 overflow-hidden">
           <div className="max-h-64 overflow-y-auto">
             {dynasties.map((d) => (
               <button
