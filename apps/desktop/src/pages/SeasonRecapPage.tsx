@@ -4,6 +4,7 @@ import { useSeasonStore } from '../store/season-store';
 import { useNarrativeStore } from '../store/narrative-store';
 import { useNavigationStore } from '../store/navigation-store';
 import { getApiKey, setApiKey } from '../lib/legacy-card-service';
+import { getTeamLogoUrl } from '../lib/team-logo-service';
 import type { NarrativeTone } from '../lib/narrative-service';
 
 // ── Tone config ─────────────────────────────────────────────────────────────
@@ -132,13 +133,28 @@ export function SeasonRecapPage() {
             </svg>
             Back
           </button>
-          <div className="flex-1">
-            <h1 className="text-xl font-bold tracking-tight">Season Recap</h1>
-            {season && (
-              <p className="text-sm text-gray-400 mt-0.5">
-                {activeDynasty.teamName} &mdash; {season.year} Season
-              </p>
-            )}
+          <div className="flex-1 flex items-center gap-3">
+            {(() => {
+              const logoUrl = getTeamLogoUrl(activeDynasty.teamName, activeDynasty.sport);
+              return logoUrl ? (
+                <img
+                  src={logoUrl}
+                  alt={activeDynasty.teamName}
+                  width={48}
+                  height={48}
+                  className="object-contain flex-shrink-0"
+                  onError={(e) => (e.currentTarget.style.display = 'none')}
+                />
+              ) : null;
+            })()}
+            <div>
+              <h1 className="text-xl font-bold tracking-tight">Season Recap</h1>
+              {season && (
+                <p className="text-sm text-gray-400 mt-0.5">
+                  {activeDynasty.teamName} &mdash; {season.year} Season
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </header>

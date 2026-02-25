@@ -12,6 +12,7 @@ import { SeasonEndModal } from '../components/SeasonEndModal';
 import { StatHighlights } from '../components/StatHighlights';
 import { GameLog } from '../components/GameLog';
 import { isAutoExportEnabled, setAutoExportEnabled } from '../lib/auto-export-service';
+import { getTeamLogoUrl } from '../lib/team-logo-service';
 import type { GameResult } from '@dynasty-os/core-types';
 
 const CHECKLIST_TASKS = [
@@ -140,7 +141,20 @@ export function DashboardPage() {
         {/* Dynasty identity */}
         <div className="px-4 pt-4 pb-3 border-b border-gray-800">
           <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-sm font-bold truncate leading-tight">{activeDynasty.name}</h1>
+            {(() => {
+              const logoUrl = getTeamLogoUrl(activeDynasty.teamName, activeDynasty.sport);
+              return logoUrl ? (
+                <img
+                  src={logoUrl}
+                  alt={activeDynasty.teamName}
+                  width={32}
+                  height={32}
+                  className="object-contain flex-shrink-0"
+                  onError={(e) => (e.currentTarget.style.display = 'none')}
+                />
+              ) : null;
+            })()}
+            <h1 className="text-sm font-bold truncate leading-tight flex-1">{activeDynasty.name}</h1>
             <span className={`text-xs font-bold px-1.5 py-0.5 rounded flex-shrink-0 ${badge.classes}`}>
               {badge.label}
             </span>
@@ -352,7 +366,13 @@ export function DashboardPage() {
               </div>
 
               {/* Game log — full width, always visible */}
-              <GameLog games={games} onUpdateGame={handleGameUpdate} />
+              <GameLog
+                games={games}
+                dynasty={activeDynasty}
+                season={activeSeason}
+                activeTone="espn"
+                onUpdateGame={handleGameUpdate}
+              />
             </>
           )}
         </div>

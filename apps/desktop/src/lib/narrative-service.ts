@@ -1,5 +1,6 @@
 import { db } from '@dynasty-os/db';
-import type { Dynasty, Season } from '@dynasty-os/core-types';
+import type { Dynasty, Season, Game } from '@dynasty-os/core-types';
+import { getSportConfig } from '@dynasty-os/sport-configs';
 import { getApiKey } from './legacy-card-service';
 import { getGamesBySeason } from './game-service';
 import { getPlayerSeasonsBySeason } from './player-season-service';
@@ -21,25 +22,64 @@ interface NarrativeContext {
   season: Season;
   gameLog: string;
   topPlayers: string;
+  conference: string;
 }
 
-// ── Tone System Prompts ───────────────────────────────────────────────────────
+// ── System Prompt Builder ─────────────────────────────────────────────────────
 
-const TONE_SYSTEM_PROMPTS: Record<NarrativeTone, string> = {
-  espn: `You are a national sports anchor at ESPN delivering a season summary for a prime-time broadcast. Write with authority and polish. You are statistics-driven — specific numbers are your currency. Reference historical context when relevant. Treat every milestone as significant on the national stage. Use phrases like "in a season that will be remembered" and always cite specific numbers. Your voice is confident, authoritative, and network-quality. Write a 2-3 paragraph season recap. Do not use emojis.
+const OUTPUT_INSTRUCTION_SEASON = `Write a 2-3 paragraph season recap. Do not use emojis.
 
-END your response with exactly this format on its own line: TAGLINE: [three-word tagline]. The tagline must be EXACTLY 3 words — no more, no less. It should capture the essence of the season.`,
+END your response with exactly this format on its own line: TAGLINE: [three-word tagline]. The tagline must be EXACTLY 3 words — no more, no less. It should capture the essence of the season.`;
 
-  hometown: `You are a local newspaper beat reporter who has covered this program for years. You know every player by name — they are your neighbors, your community. Write with warmth and familiarity. Refer to the team as "our" or use the team name affectionately. Celebrate individual players by name like the whole town knows them. Find the human stories inside the stats. Your voice is familiar, proud, and slightly sentimental — the kind of column that gets cut out and stuck to a refrigerator. Write a 2-3 paragraph season recap. Do not use emojis.
+const OUTPUT_INSTRUCTION_GAME = `Write a 1-paragraph post-game recap (4–6 sentences). Do not use emojis.
 
-END your response with exactly this format on its own line: TAGLINE: [three-word tagline]. The tagline must be EXACTLY 3 words — no more, no less. It should capture the essence of the season.`,
+END your response with exactly this format on its own line: TAGLINE: [three-word tagline]. The tagline must be EXACTLY 3 words — no more, no less. It should capture the essence of this game.`;
 
-  legend: `You are an epic sports narrator documenting a legendary coaching dynasty for posterity. Treat this season as one chapter in a grander saga. The coach is a dynasty-builder whose decisions reshape the program's trajectory. Use metaphors about building empires, leaving legacies, and cementing greatness. Every win is a stone laid in a monument; every loss is a test of character that forged something stronger. Your voice is sweeping, grandiose, and cinematic — the energy of a video game's dynasty mode cinematic cutscene. Write a 2-3 paragraph season recap. Do not use emojis.
+function buildDataConstraintBlock(dynasty: Dynasty): string {
+  const sportVocab =
+    dynasty.sport === 'cfb'
+      ? 'CFB vocabulary: bowl game, conference championship, College Football Playoff, national ranking, recruiting class'
+      : 'NFL vocabulary: playoffs, Super Bowl, division title, NFL Draft, roster depth';
 
-END your response with exactly this format on its own line: TAGLINE: [three-word tagline]. The tagline must be EXACTLY 3 words — no more, no less. It should capture the essence of the season.`,
+  return `CRITICAL DATA RULES:
+- Use the team name "${dynasty.teamName}" EXACTLY — never alter, abbreviate, or substitute it.
+- Write ONLY from the data provided. Do not invent games, scores, opponents, player names, or history.
+- If a stat or event is not in the data below, do not reference it.
+- ${sportVocab}`;
+}
+
+const TONE_PERSONAS: Record<NarrativeTone, (dynasty: Dynasty) => string> = {
+  espn: (dynasty) => {
+    if (dynasty.sport === 'cfb') {
+      return `You are a national college football broadcaster in the style of Chris Fowler working alongside a Kirk Herbstreit-style analyst. Write conversationally and with precision — no catchphrases, no self-promotion. You document what happened, stay out of the way when the story is good, and add expert context when it adds value. Use active voice. Name specific stats only from the data provided. Tie the record to its conference and national significance. End with what this season means for the program's trajectory (bowl prestige, recruiting perception, conference standing).`;
+    }
+    return `You are writing in the style of Scott Van Pelt's SportsCenter segment — elevated vocabulary, personal perspective, clear celebration of standout performances. Your voice has weight and wit. Anchor the recap in the most compelling stat or moment from the season. Put the record in division and playoff context. Name the standout performer with their numbers. Close with what the season means for the franchise: is the window open, closing, or still being built?`;
+  },
+  hometown: () =>
+    `You are a local sports columnist who has covered this program for 10+ years. You know the players, the town knows you, and your column is the one people read with their morning coffee. Write in first-person plural occasionally ('we', 'our guys') but mostly with the warmth of someone who genuinely cares. Celebrate individual players by first name like the whole community knows them. Find the human angle inside the stats — the sophomore who stepped up, the senior's final season, the comeback win that had everyone on their feet. Your prose is accessible, a little sentimental, and honest even about the losses. This is the column that gets pinned to the locker room bulletin board.`,
+  legend: () =>
+    `You are writing narration for a sports documentary in the style of NFL Films or ESPN's 30 for 30 series — cinematic, weighty, built for posterity. Every season is a chapter in a larger story. Your sentences have rhythm and consequence. Reference what was at stake, what was risked, what was proven. Use the specific data provided to ground the drama in real events. Avoid generic hyperbole — the specifics are what make it feel real. Close with a line that sounds like it belongs on the last frame of a documentary: the kind of sentence a coach reads years later and feels something.`,
 };
 
+function buildSystemPrompt(tone: NarrativeTone, dynasty: Dynasty, isGame = false): string {
+  const dataConstraint = buildDataConstraintBlock(dynasty);
+  const persona = TONE_PERSONAS[tone](dynasty);
+  const outputInstruction = isGame ? OUTPUT_INSTRUCTION_GAME : OUTPUT_INSTRUCTION_SEASON;
+
+  return [dataConstraint, '', persona, '', outputInstruction].join('\n');
+}
+
 // ── Context Aggregation ───────────────────────────────────────────────────────
+
+function resolveConference(dynasty: Dynasty): string {
+  try {
+    const config = getSportConfig(dynasty.sport);
+    const team = config.teams.find((t) => t.name === dynasty.teamName);
+    return team?.conference ?? '';
+  } catch {
+    return '';
+  }
+}
 
 async function buildNarrativeContext(
   dynasty: Dynasty,
@@ -131,13 +171,15 @@ async function buildNarrativeContext(
   const topPlayers =
     topStatLines.length > 0 ? topStatLines.join('\n') : 'No individual stats recorded.';
 
-  return { dynasty, season, gameLog, topPlayers };
+  const conference = resolveConference(dynasty);
+
+  return { dynasty, season, gameLog, topPlayers, conference };
 }
 
-// ── User Message Builder ──────────────────────────────────────────────────────
+// ── User Message Builders ─────────────────────────────────────────────────────
 
-function buildUserMessage(ctx: NarrativeContext): string {
-  const { dynasty, season, gameLog, topPlayers } = ctx;
+function buildSeasonUserMessage(ctx: NarrativeContext): string {
+  const { dynasty, season, gameLog, topPlayers, conference } = ctx;
 
   const record = `${season.wins}-${season.losses}`;
   const confRecord = `${season.confWins}-${season.confLosses}`;
@@ -154,6 +196,7 @@ function buildUserMessage(ctx: NarrativeContext): string {
 
   return [
     `Team: ${dynasty.teamName}`,
+    conference ? `Conference: ${conference}` : '',
     `Coach: ${dynasty.coachName}`,
     `Sport: ${dynasty.sport === 'cfb' ? 'College Football' : 'Madden NFL'}`,
     `Season year: ${season.year}`,
@@ -169,7 +212,43 @@ function buildUserMessage(ctx: NarrativeContext): string {
     'Top player performances:',
     topPlayers,
   ]
-    .filter((line) => line !== undefined && !(line === '' && false))
+    .filter((line) => line !== '')
+    .join('\n')
+    .trim();
+}
+
+function buildGameUserMessage(dynasty: Dynasty, season: Season, game: Game, conference: string): string {
+  const location =
+    game.homeAway === 'home' ? 'Home' : game.homeAway === 'away' ? 'Away' : 'Neutral site';
+  const oppRanking = game.opponentRanking ? `#${game.opponentRanking} ` : '';
+  const teamRanking = game.teamRanking ? `#${game.teamRanking} ` : '';
+  const gameTypeLabels: Record<string, string> = {
+    regular: 'Regular season',
+    conference: 'Conference game',
+    bowl: 'Bowl game',
+    playoff: 'Playoff game',
+    exhibition: 'Exhibition',
+  };
+  const overtimeLine = game.overtime ? 'Game went to overtime: Yes' : '';
+  const notesLine = game.notes ? `Game notes: ${game.notes}` : '';
+
+  return [
+    `Team: ${dynasty.teamName}`,
+    conference ? `Conference: ${conference}` : '',
+    `Coach: ${dynasty.coachName}`,
+    `Sport: ${dynasty.sport === 'cfb' ? 'College Football' : 'Madden NFL'}`,
+    `Season year: ${season.year}`,
+    `Week: ${game.week}`,
+    `Opponent: ${oppRanking}${game.opponent}`,
+    `Team ranking entering game: ${teamRanking || 'Unranked'}`,
+    `Score: ${dynasty.teamName} ${game.teamScore}, ${game.opponent} ${game.opponentScore}`,
+    `Result: ${game.result === 'W' ? 'WIN' : game.result === 'L' ? 'LOSS' : 'TIE'}`,
+    `Location: ${location}`,
+    `Game type: ${gameTypeLabels[game.gameType] ?? game.gameType}`,
+    overtimeLine,
+    notesLine,
+  ]
+    .filter((line) => line !== '')
     .join('\n')
     .trim();
 }
@@ -177,13 +256,17 @@ function buildUserMessage(ctx: NarrativeContext): string {
 // ── Cache Functions ───────────────────────────────────────────────────────────
 
 const CACHE_KEY_PREFIX = 'dynasty-os-narrative-';
+const GAME_CACHE_KEY_PREFIX = 'dynasty-os-game-narrative-';
 
 export async function getCachedNarrative(
   dynastyId: string,
-  seasonId: string
+  seasonId: string,
+  tone?: NarrativeTone
 ): Promise<SeasonNarrative | null> {
   try {
-    const cacheKey = CACHE_KEY_PREFIX + seasonId;
+    const cacheKey = tone
+      ? `${CACHE_KEY_PREFIX}${seasonId}-${tone}`
+      : CACHE_KEY_PREFIX + seasonId;
     const raw = await getAiCache(dynastyId, cacheKey);
     if (!raw) return null;
     return JSON.parse(raw) as SeasonNarrative;
@@ -194,17 +277,108 @@ export async function getCachedNarrative(
 
 export async function clearCachedNarrative(
   dynastyId: string,
-  seasonId: string
+  seasonId: string,
+  tone?: NarrativeTone
 ): Promise<void> {
   try {
-    const cacheKey = CACHE_KEY_PREFIX + seasonId;
+    const cacheKey = tone
+      ? `${CACHE_KEY_PREFIX}${seasonId}-${tone}`
+      : CACHE_KEY_PREFIX + seasonId;
     await deleteAiCache(dynastyId, cacheKey);
   } catch {
     // Ignore storage errors
   }
 }
 
-// ── API Call ──────────────────────────────────────────────────────────────────
+export async function getCachedGameNarrative(
+  dynastyId: string,
+  gameId: string,
+  tone: NarrativeTone
+): Promise<SeasonNarrative | null> {
+  try {
+    const cacheKey = `${GAME_CACHE_KEY_PREFIX}${gameId}-${tone}`;
+    const raw = await getAiCache(dynastyId, cacheKey);
+    if (!raw) return null;
+    return JSON.parse(raw) as SeasonNarrative;
+  } catch {
+    return null;
+  }
+}
+
+// ── Shared API Call Helper ────────────────────────────────────────────────────
+
+async function callClaudeApi(
+  systemPrompt: string,
+  userMessage: string,
+  maxTokens: number
+): Promise<string | null> {
+  const apiKey = getApiKey();
+  if (!apiKey) return null;
+
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'content-type': 'application/json',
+      'anthropic-dangerous-direct-browser-access': 'true',
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: maxTokens,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userMessage }],
+    }),
+  });
+
+  if (!response.ok) {
+    console.warn(`[NarrativeService] Claude API returned ${response.status}: ${response.statusText}`);
+    return null;
+  }
+
+  const data = await response.json();
+  const rawText: string | undefined = data?.content?.[0]?.text;
+  if (!rawText) {
+    console.warn('[NarrativeService] Claude API response missing text content');
+    return null;
+  }
+
+  return rawText;
+}
+
+function parseNarrativeResponse(rawText: string, tone: NarrativeTone): SeasonNarrative {
+  const lines = rawText.trim().split('\n');
+  let tagline = '';
+  let recapLines = lines;
+
+  let taglineIndex = -1;
+  for (let i = lines.length - 1; i >= 0; i--) {
+    if (lines[i].trim().startsWith('TAGLINE:')) {
+      taglineIndex = i;
+      break;
+    }
+  }
+  if (taglineIndex !== -1) {
+    const taglineRaw = lines[taglineIndex].replace(/^TAGLINE:\s*/i, '').trim();
+    const words = taglineRaw.split(/\s+/).filter(Boolean);
+    tagline =
+      words.length === 3
+        ? taglineRaw
+        : words.slice(0, 3).join(' ') || rawText.split(/\s+/).slice(0, 3).join(' ');
+    recapLines = lines.slice(0, taglineIndex);
+  } else {
+    tagline = rawText.split(/\s+/).slice(0, 3).join(' ');
+  }
+
+  return {
+    recap: recapLines.join('\n').trim(),
+    tagline,
+    tone,
+    generatedAt: Date.now(),
+  };
+}
+
+// ── Season Narrative ──────────────────────────────────────────────────────────
 
 export async function generateSeasonNarrative(
   dynasty: Dynasty,
@@ -212,96 +386,65 @@ export async function generateSeasonNarrative(
   tone: NarrativeTone,
   forceRefresh?: boolean
 ): Promise<SeasonNarrative | null> {
-  // Check cache first
   if (!forceRefresh) {
-    const cached = await getCachedNarrative(dynasty.id, season.id);
+    const cached = await getCachedNarrative(dynasty.id, season.id, tone);
     if (cached) return cached;
   }
 
-  // Require API key
-  const apiKey = getApiKey();
-  if (!apiKey) return null;
+  if (!getApiKey()) return null;
 
   try {
     const ctx = await buildNarrativeContext(dynasty, season);
-    const userMessage = buildUserMessage(ctx);
+    const systemPrompt = buildSystemPrompt(tone, dynasty, false);
+    const userMessage = buildSeasonUserMessage(ctx);
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1000,
-        system: TONE_SYSTEM_PROMPTS[tone],
-        messages: [
-          {
-            role: 'user',
-            content: userMessage,
-          },
-        ],
-      }),
-    });
+    const rawText = await callClaudeApi(systemPrompt, userMessage, 1000);
+    if (!rawText) return null;
 
-    if (!response.ok) {
-      console.warn(`[NarrativeService] Claude API returned ${response.status}: ${response.statusText}`);
-      return null;
-    }
+    const narrative = parseNarrativeResponse(rawText, tone);
 
-    const data = await response.json();
-    const rawText: string | undefined = data?.content?.[0]?.text;
-    if (!rawText) {
-      console.warn('[NarrativeService] Claude API response missing text content');
-      return null;
-    }
-
-    // Parse tagline from response — expected format: "TAGLINE: Three Word Summary" on last line
-    const lines = rawText.trim().split('\n');
-    let tagline = '';
-    let recapLines = lines;
-
-    // Find the TAGLINE line (should be at the end) — search from end to front
-    let taglineIndex = -1;
-    for (let i = lines.length - 1; i >= 0; i--) {
-      if (lines[i].trim().startsWith('TAGLINE:')) {
-        taglineIndex = i;
-        break;
-      }
-    }
-    if (taglineIndex !== -1) {
-      const taglineRaw = lines[taglineIndex].replace(/^TAGLINE:\s*/i, '').trim();
-      const words = taglineRaw.split(/\s+/).filter(Boolean);
-      if (words.length === 3) {
-        tagline = taglineRaw;
-      } else {
-        // Fallback: use first 3 words of the tagline raw, or first 3 words of recap
-        tagline = words.slice(0, 3).join(' ') || rawText.split(/\s+/).slice(0, 3).join(' ');
-      }
-      recapLines = lines.slice(0, taglineIndex);
-    } else {
-      // No TAGLINE line found — use first 3 words of response as fallback
-      tagline = rawText.split(/\s+/).slice(0, 3).join(' ');
-    }
-
-    const recap = recapLines.join('\n').trim();
-
-    const narrative: SeasonNarrative = {
-      recap,
-      tagline,
-      tone,
-      generatedAt: Date.now(),
-    };
-
-    // Cache the narrative in Dexie aiCache
-    await setAiCache(dynasty.id, CACHE_KEY_PREFIX + season.id, 'season-narrative', JSON.stringify(narrative));
+    const cacheKey = `${CACHE_KEY_PREFIX}${season.id}-${tone}`;
+    await setAiCache(dynasty.id, cacheKey, 'season-narrative', JSON.stringify(narrative));
 
     return narrative;
   } catch (err) {
     console.warn('[NarrativeService] API call failed:', err);
+    return null;
+  }
+}
+
+// ── Game Narrative ────────────────────────────────────────────────────────────
+
+export async function generateGameNarrative(
+  dynasty: Dynasty,
+  season: Season,
+  game: Game,
+  tone: NarrativeTone,
+  forceRefresh?: boolean
+): Promise<SeasonNarrative | null> {
+  if (!forceRefresh) {
+    const cached = await getCachedGameNarrative(dynasty.id, game.id, tone);
+    if (cached) return cached;
+  }
+
+  if (!getApiKey()) return null;
+
+  try {
+    const conference = resolveConference(dynasty);
+    const systemPrompt = buildSystemPrompt(tone, dynasty, true);
+    const userMessage = buildGameUserMessage(dynasty, season, game, conference);
+
+    const rawText = await callClaudeApi(systemPrompt, userMessage, 400);
+    if (!rawText) return null;
+
+    const narrative = parseNarrativeResponse(rawText, tone);
+
+    const cacheKey = `${GAME_CACHE_KEY_PREFIX}${game.id}-${tone}`;
+    await setAiCache(dynasty.id, cacheKey, 'game-narrative', JSON.stringify(narrative));
+
+    return narrative;
+  } catch (err) {
+    console.warn('[NarrativeService] game API call failed:', err);
     return null;
   }
 }

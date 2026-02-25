@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Dynasty } from '@dynasty-os/core-types';
+import { getTeamLogoUrl } from '../lib/team-logo-service';
 
 interface DynastyCardProps {
   dynasty: Dynasty;
@@ -8,14 +9,16 @@ interface DynastyCardProps {
   onDelete: () => void;
 }
 
-const SPORT_BADGE: Record<string, { label: string; classes: string }> = {
-  cfb: { label: 'CFB', classes: 'bg-orange-600 text-orange-100' },
-  madden: { label: 'NFL', classes: 'bg-green-700 text-green-100' },
+const SPORT_BADGE: Record<string, { label: string; badgeClasses: string; accentColor: string }> = {
+  cfb:    { label: 'CFB',    badgeClasses: 'bg-orange-600 text-orange-100', accentColor: 'border-orange-600' },
+  madden: { label: 'NFL',    badgeClasses: 'bg-green-700 text-green-100',   accentColor: 'border-green-600' },
+  nfl2k:  { label: 'NFL 2K', badgeClasses: 'bg-purple-700 text-purple-100', accentColor: 'border-purple-600' },
 };
 
 export function DynastyCard({ dynasty, onClick, onExport, onDelete }: DynastyCardProps) {
   const [confirming, setConfirming] = useState(false);
-  const badge = SPORT_BADGE[dynasty.sport] ?? { label: dynasty.sport.toUpperCase(), classes: 'bg-gray-600 text-gray-100' };
+  const badge = SPORT_BADGE[dynasty.sport] ?? { label: dynasty.sport.toUpperCase(), badgeClasses: 'bg-gray-600 text-gray-100', accentColor: 'border-gray-600' };
+  const logoUrl = getTeamLogoUrl(dynasty.teamName, dynasty.sport);
 
   function handleDeleteClick(e: React.MouseEvent) {
     e.stopPropagation();
@@ -40,17 +43,29 @@ export function DynastyCard({ dynasty, onClick, onExport, onDelete }: DynastyCar
 
   return (
     <div
-      className="bg-gray-800 border border-gray-700 hover:border-gray-500 rounded-lg p-5 cursor-pointer transition-all hover:bg-gray-750 group"
+      className={`bg-gray-800 border border-gray-700 hover:border-gray-500 rounded-lg p-5 cursor-pointer transition-all hover:shadow-lg hover:shadow-black/30 group border-l-4 ${badge.accentColor}`}
       onClick={onClick}
     >
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex-1 min-w-0">
-          <h3 className="text-white font-semibold text-base truncate">{dynasty.name}</h3>
+          <h3 className="text-white font-semibold text-base truncate group-hover:text-gray-100 transition-colors">{dynasty.name}</h3>
           <p className="text-gray-400 text-sm truncate">{dynasty.teamName}</p>
         </div>
-        <span className={`shrink-0 text-xs font-bold px-2 py-1 rounded ${badge.classes}`}>
-          {badge.label}
-        </span>
+        <div className="flex items-center gap-2 shrink-0">
+          {logoUrl && (
+            <img
+              src={logoUrl}
+              alt={dynasty.teamName}
+              width={40}
+              height={40}
+              className="object-contain"
+              onError={(e) => (e.currentTarget.style.display = 'none')}
+            />
+          )}
+          <span className={`text-xs font-bold px-2 py-1 rounded ${badge.badgeClasses}`}>
+            {badge.label}
+          </span>
+        </div>
       </div>
 
       <dl className="space-y-1 mb-4">

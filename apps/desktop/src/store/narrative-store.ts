@@ -23,8 +23,16 @@ export const useNarrativeStore = create<NarrativeStore>((set) => ({
   error: null,
 
   loadCachedNarrative: async (dynastyId: string, seasonId: string) => {
-    const cached = await getCachedNarrative(dynastyId, seasonId);
-    set({ narrative: cached });
+    // Try the most recent tones in order — first match wins
+    const tones: NarrativeTone[] = ['espn', 'hometown', 'legend'];
+    for (const tone of tones) {
+      const cached = await getCachedNarrative(dynastyId, seasonId, tone);
+      if (cached) {
+        set({ narrative: cached });
+        return;
+      }
+    }
+    set({ narrative: null });
   },
 
   generate: async (dynasty: Dynasty, season: Season, tone: NarrativeTone, forceRefresh?: boolean) => {

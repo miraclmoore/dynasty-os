@@ -1,4 +1,4 @@
-export type AiContentType = 'legacy-blurb' | 'season-narrative' | 'recruiting-grade' | 'journalist-blurb' | 'hot-seat' | 'dossier' | 'rival-prophecy' | 'obituary' | 'generational-arc' | 'what-if' | 'dna-report' | 'living-chronicle';
+export type AiContentType = 'legacy-blurb' | 'season-narrative' | 'game-narrative' | 'recruiting-grade' | 'journalist-blurb' | 'hot-seat' | 'dossier' | 'rival-prophecy' | 'obituary' | 'generational-arc' | 'what-if' | 'dna-report' | 'living-chronicle';
 
 export interface AiCacheEntry {
   id: string;
