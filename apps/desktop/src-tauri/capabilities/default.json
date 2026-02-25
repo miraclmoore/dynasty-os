@@ -11,6 +11,9 @@
     "fs:allow-read-text-file",
     "fs:allow-read-file",
     "fs:allow-exists",
-    "fs:scope-download"
+    "fs:scope-download",
+    "shell:allow-execute",
+    "shell:allow-open",
+    "fs:allow-watch"
   ]
 }

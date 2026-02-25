@@ -1,0 +1,6 @@
+#!/bin/sh
+# Dev-mode sidecar wrapper — forwards to the Node.js source script.
+# In production, replace this with a pkg-compiled binary:
+#   npx pkg sidecar/madden-reader.cjs --target node18-macos-arm64 --output binaries/madden-reader-aarch64-apple-darwin
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+exec node "$SCRIPT_DIR/../sidecar/madden-reader.cjs" "$@"

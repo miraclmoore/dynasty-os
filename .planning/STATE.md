@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** Phase 8 — Screenshot Ingestion (in progress)
+**Current focus:** All phases complete — Milestone 1 done
 
 ## Current Position
 
-Phase: 8 of 9 (Screenshot Ingestion)
-Plan: 2 of 2 in current phase
-Status: 08-02 Tasks 1-2 complete — awaiting Task 3 human verification checkpoint
-Last activity: 2026-02-24 — Tasks 1-2 of 08-02-PLAN.md (Screenshot Ingestion UI) complete; checkpoint at Task 3
+Phase: 9 of 9 (Madden Sync) — COMPLETE
+Plan: 3 of 3 in current phase
+Status: All plans complete
+Last activity: 2026-02-24 — Phase 9 (Madden Sync) all 3 plans complete
 
-Progress: [███████████] 69% (25/36 plans complete)
+Progress: [████████████] 100% (36/36 plans complete)
 
 ## Performance Metrics
 
@@ -34,7 +34,8 @@ Progress: [███████████] 69% (25/36 plans complete)
 | 05-cfb-features | 4/4 | ~12 min | ~3 min | ✓ Complete |
 | 06-social-and-legacy | 3/3 | ~19 min | ~6.3 min | ✓ Complete |
 | 07-achievements | 2/2 | ~5 min | ~2.5 min | ✓ Complete |
-| 08-screenshot-ingestion | 1/2 | ~2 min | ~2 min | In progress |
+| 08-screenshot-ingestion | 2/2 | ~4 min | ~2 min | ✓ Complete |
+| 09-madden-sync | 3/3 | ~8 min | ~2.7 min | ✓ Complete |
 
 **Recent Trend:**
 - Last 5 plans: 4 min, 2 min, 3 min, 3 min, 2 min
@@ -52,7 +53,11 @@ Recent decisions affecting current work:
 - Tauri over Electron: <80MB idle RAM target incompatible with Electron's 150-300MB footprint
 - Sport Config pattern: isolates sport differences in config objects; shared components stay sport-agnostic
 - Local-first, no cloud V1: eliminates auth complexity and hosting costs; JSON export covers portability
-- madden-franchise library risk: Madden 26 schema support in-progress — version-check guard + fallback required
+- madden-franchise library risk: Madden 26 schema support in-progress — version-check guard + fallback implemented in Phase 9
+- [Phase 09-madden-sync]: Tauri sidecar = shell wrapper (dev) forwarding to Node.js madden-reader.cjs; production needs pkg compile
+- [Phase 09-madden-sync]: sidecar binary name must match platform triple: aarch64-apple-darwin (macOS arm64) or x86_64-apple-darwin
+- [Phase 09-madden-sync]: computeSyncDiff team identification uses substring match on dynasty.teamName vs homeTeam/awayTeam strings
+- [Phase 09-madden-sync]: fs:allow-watch capability required for tauri-plugin-fs watch() API
 - Port 1420 for Vite dev server: Tauri convention; set now to avoid config churn in Plan 01-02
 - pnpm v10 onlyBuiltDependencies: esbuild must be explicitly allowed; add to root package.json pnpm.onlyBuiltDependencies
 - type: module in desktop packages: required to avoid ESM/CJS ambiguity warnings with Vite + postcss
@@ -126,16 +131,17 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-None.
+None. All 9 phases complete.
 
 ### Blockers/Concerns
 
-- madden-franchise library may not support Madden 26 schema at launch — Phase 9 must include fallback path (planned)
-- CFB ingestion is console-only; screenshot path is the sole automated ingestion method — Phase 8 coverage is critical for user adoption
-- Windows production memory (<80MB target) not yet validated — needs measurement on actual Windows build after Windows dev setup
+- Madden 26 schema support in madden-franchise library not yet released — fallback UI is live
+- Sidecar production binary not yet compiled — dev mode uses shell wrapper (requires Node.js on dev machine); production needs `npx pkg` step
+- Windows production memory (<80MB target) not yet validated — needs measurement on actual Windows build
+- sidecar/package.json madden-franchise dep needs `npm install` in src-tauri/sidecar/ before first use
 
 ## Session Continuity
 
 Last session: 2026-02-24 UTC
-Stopped at: Task 3 checkpoint in 08-02-PLAN.md — awaiting human verification of ScreenshotIngestionPage UX
+Stopped at: Phase 9 Madden Sync complete — all 9 phases done. Milestone 1 complete.
 Resume file: None

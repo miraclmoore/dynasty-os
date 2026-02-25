@@ -25,7 +25,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 6: Social and Legacy** - Rivalries, program timeline, opponent scouting cards, achievements and trophy room
 - [x] **Phase 7: Achievements** - Achievement engine, trophy room, coaching resume (completed 2026-02-24)
 - [x] **Phase 8: Screenshot Ingestion** - Claude Vision API screenshot parsing for CFB screens (completed 2026-02-24)
-- [ ] **Phase 9: Madden Sync** - madden-franchise save file adapter with confirmation diff and fallback
+- [x] **Phase 9: Madden Sync** - Tauri sidecar + madden-franchise save file adapter with confirmation diff, auto-confirm timer, and file watcher (completed 2026-02-24)
 
 ## Phase Details
 
@@ -184,12 +184,12 @@ if the library does not yet support Madden 26.
   3. Sync presents a confirmation diff showing what will change before committing anything
   4. User can confirm changes immediately or let a 10-second auto-confirm timer complete
   5. If Madden 26 schema is not yet supported by the madden-franchise library, the app displays clear fallback messaging with a manual entry path; optional background file watcher prompts on save file modification
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 09-01: Save file adapter — madden-franchise library integration, file browser and validation, version-check guard with fallback messaging
-- [ ] 09-02: Sync engine — data extraction (game results, stats, rosters, draft), confirmation diff UI, auto-confirm timer
-- [ ] 09-03: Background file watcher — optional OS file watcher, save modification detection, user prompt flow
+- [x] 09-01-PLAN.md — Tauri sidecar infrastructure (Node.js shell wrapper + madden-franchise), save file picker, validate subcommand, version-check guard with fallback UI
+- [x] 09-02-PLAN.md — Sync engine: extract subcommand, computeSyncDiff (games/players/draft), confirmation diff table, 10-second auto-confirm timer
+- [x] 09-03-PLAN.md — Background file watcher (tauri-plugin-fs watch()), save modification banner, navigation wiring (Dashboard → MaddenSyncPage)
 
 ## Progress
 
@@ -206,4 +206,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 | 6. Social and Legacy | 3/3 | Complete | 2026-02-22 |
 | 7. Achievements | 2/2 | Complete    | 2026-02-24 |
 | 8. Screenshot Ingestion | 2/2 | Complete   | 2026-02-24 |
-| 9. Madden Sync | 0/3 | Not started | - |
+| 9. Madden Sync | 3/3 | Complete | 2026-02-24 |

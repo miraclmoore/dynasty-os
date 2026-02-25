@@ -1,0 +1,13 @@
+{
+  "name": "madden-reader-sidecar",
+  "version": "1.0.0",
+  "description": "Node.js sidecar for reading Madden franchise save files",
+  "type": "commonjs",
+  "main": "madden-reader.cjs",
+  "scripts": {
+    "install-deps": "npm install"
+  },
+  "dependencies": {
+    "madden-franchise": "^4.1.6"
+  }
+}

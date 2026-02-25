@@ -18,6 +18,7 @@ import { ScoutingCardPage } from './pages/ScoutingCardPage';
 import { TrophyRoomPage } from './pages/TrophyRoomPage';
 import { CoachingResumePage } from './pages/CoachingResumePage';
 import { ScreenshotIngestionPage } from './pages/ScreenshotIngestionPage';
+import { MaddenSyncPage } from './pages/MaddenSyncPage';
 
 function App() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
@@ -56,6 +57,8 @@ function App() {
       return <CoachingResumePage />;
     case 'screenshot-ingestion':
       return <ScreenshotIngestionPage />;
+    case 'madden-sync':
+      return <MaddenSyncPage />;
     default:
       return <DashboardPage />;
   }

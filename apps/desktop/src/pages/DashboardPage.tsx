@@ -270,6 +270,14 @@ export function DashboardPage() {
                     <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
                       NFL Franchise
                     </h4>
+                    {activeDynasty.sport === 'madden' && (
+                      <button
+                        onClick={() => useNavigationStore.getState().goToMaddenSync()}
+                        className="w-full px-4 py-2.5 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg transition-colors mb-2"
+                      >
+                        Sync Franchise Save
+                      </button>
+                    )}
                     <button
                       onClick={() => useNavigationStore.getState().goToScreenshotIngestion()}
                       className="w-full px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold rounded-lg transition-colors"

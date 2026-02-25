@@ -1,0 +1,4 @@
+#!/bin/sh
+# Dev-mode sidecar wrapper — forwards to the Node.js source script.
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+exec node "$SCRIPT_DIR/../sidecar/madden-reader.cjs" "$@"

@@ -16,7 +16,8 @@ type Page =
   | 'scouting-card'
   | 'trophy-room'
   | 'coaching-resume'
-  | 'screenshot-ingestion';
+  | 'screenshot-ingestion'
+  | 'madden-sync';
 
 interface NavigationState {
   currentPage: Page;
@@ -41,6 +42,7 @@ interface NavigationActions {
   goToTrophyRoom: () => void;
   goToCoachingResume: () => void;
   goToScreenshotIngestion: () => void;
+  goToMaddenSync: () => void;
 }
 
 type NavigationStore = NavigationState & NavigationActions;
@@ -115,5 +117,9 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
 
   goToScreenshotIngestion: () => {
     set({ currentPage: 'screenshot-ingestion', pageParams: {} });
+  },
+
+  goToMaddenSync: () => {
+    set({ currentPage: 'madden-sync', pageParams: {} });
   },
 }));
