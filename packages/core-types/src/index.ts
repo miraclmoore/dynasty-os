@@ -12,3 +12,8 @@ export * from './prestige';
 export * from './rival';
 export * from './scouting-note';
 export * from './achievement';
+export * from './coaching-staff';
+export * from './nil-entry';
+export * from './future-game';
+export * from './player-link';
+export * from './ai-cache';

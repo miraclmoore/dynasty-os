@@ -16,6 +16,7 @@ export interface Player {
   status: PlayerStatus;
   departureYear?: number;
   departureReason?: string;
+  birthYear?: number;
   notes?: string;
   createdAt: number;
   updatedAt: number;
