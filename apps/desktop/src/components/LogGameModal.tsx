@@ -61,6 +61,20 @@ export function LogGameModal({
     [games]
   );
 
+  // 5 most recent unique opponents for quick-select chips
+  const recentOpponents = useMemo(() => {
+    const seen = new Set<string>();
+    return [...games]
+      .sort((a, b) => b.week - a.week)
+      .map((g) => g.opponent)
+      .filter((opp) => {
+        if (seen.has(opp)) return false;
+        seen.add(opp);
+        return true;
+      })
+      .slice(0, 5);
+  }, [games]);
+
   // Next available week (max existing week + 1, or 1 if no games)
   const nextWeek = useMemo(() => {
     if (games.length === 0) return 1;
@@ -192,6 +206,23 @@ export function LogGameModal({
             <label className="block text-sm text-gray-400 mb-1">
               Opponent <span className="text-red-400">*</span>
             </label>
+            {recentOpponents.length > 0 && (
+              <div className="mb-3">
+                <label className="block text-xs text-gray-500 mb-1.5">Recent opponents</label>
+                <div className="flex flex-wrap gap-1.5">
+                  {recentOpponents.map((opp) => (
+                    <button
+                      key={opp}
+                      type="button"
+                      onClick={() => setOpponent(opp)}
+                      className="px-2.5 py-1 bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white text-xs rounded-full transition-colors border border-gray-600"
+                    >
+                      {opp}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             <TeamSelect
               sport={sport}
               value={opponent}

@@ -110,6 +110,11 @@ export function DashboardPage() {
     await useSeasonStore.getState().createSeason(activeDynasty.id, activeDynasty.currentYear);
   };
 
+  const handleNewSeason = async () => {
+    const suggestedYear = activeSeason ? activeSeason.year + 1 : activeDynasty.currentYear;
+    await useSeasonStore.getState().createSeason(activeDynasty.id, suggestedYear);
+  };
+
   const recentGames = [...games].sort((a, b) => b.week - a.week).slice(0, 5);
 
   const handleGameUpdate = async (
@@ -154,6 +159,14 @@ export function DashboardPage() {
           >
             End Season
           </button>
+          {activeSeason && (
+            <button
+              onClick={handleNewSeason}
+              className="w-full px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm font-semibold rounded-lg transition-colors"
+            >
+              + New Season
+            </button>
+          )}
         </div>
 
         {/* Navigation */}

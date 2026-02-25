@@ -40,6 +40,7 @@ export function EditPlayerModal({ isOpen, onClose, player, sport }: EditPlayerMo
     player.weight !== undefined ? String(player.weight) : ''
   );
   const [status, setStatus] = useState<PlayerStatus>(player.status);
+  const [notes, setNotes] = useState(player.notes ?? '');
   const [error, setError] = useState('');
 
   // Sync form when player prop changes
@@ -55,6 +56,7 @@ export function EditPlayerModal({ isOpen, onClose, player, sport }: EditPlayerMo
     setHeight(player.height ?? '');
     setWeight(player.weight !== undefined ? String(player.weight) : '');
     setStatus(player.status);
+    setNotes(player.notes ?? '');
     setError('');
   }, [player]);
 
@@ -82,6 +84,7 @@ export function EditPlayerModal({ isOpen, onClose, player, sport }: EditPlayerMo
         classYear: classYear || undefined,
         height: height.trim() || undefined,
         weight: weight !== '' ? parseInt(weight, 10) : undefined,
+        notes: notes.trim() || undefined,
       });
       onClose();
     } catch (err) {
@@ -291,6 +294,18 @@ export function EditPlayerModal({ isOpen, onClose, player, sport }: EditPlayerMo
                 onChange={(e) => setWeight(e.target.value)}
               />
             </div>
+          </div>
+
+          {/* Notes */}
+          <div>
+            <label className="block text-xs text-gray-500 mb-1.5">Notes</label>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              rows={3}
+              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500 resize-none placeholder-gray-600"
+              placeholder="Free-form notes about this player..."
+            />
           </div>
 
           {error && (
