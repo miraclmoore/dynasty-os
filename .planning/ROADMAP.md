@@ -213,7 +213,13 @@ Plans:
   3. Async AI job queue (pendingAiJobs) in Zustand resolves saves in under 200ms regardless of AI call duration
   4. All 4 npm packages install and import cleanly: cmdk, sonner, zundo, papaparse
   5. ToastStore, FilterStore, and UndoStore are wired into App.tsx and callable from any component
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 10-01-PLAN.md — Dexie schema v6 migration (5 new tables) + 5 new core types + Player.birthYear
+- [ ] 10-02-PLAN.md — Install 4 npm packages: cmdk, sonner, zundo, papaparse
+- [ ] 10-03-PLAN.md — aiCache service layer + localStorage AI content migration (narrative, legacy blurbs)
+- [ ] 10-04-PLAN.md — Scaffold 4 Zustand stores (Toast, Filter, Undo, AiQueue) + App.tsx wiring
 
 ### Phase 11: QOL Wins
 **Goal**: Every interaction in Dynasty OS has responsive feedback, is recoverable from mistakes, and navigates efficiently — coaches feel the app is professional and trustworthy before any new features are added.
