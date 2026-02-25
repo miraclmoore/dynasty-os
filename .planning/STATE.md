@@ -5,21 +5,21 @@
 See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** Milestone v2.0 — The Living Dynasty (Phase 10: Infrastructure Foundation)
+**Current focus:** Milestone v2.0 — The Living Dynasty (Phase 11: QOL Wins)
 
 ## Current Position
 
 Phase: 11 — QOL Wins
-Plan: 03 complete (3/TBD)
+Plan: 01 complete (1/TBD)
 Status: In Progress
-Last activity: 2026-02-25 — Completed 11-03: CommandPalette component + App.tsx Cmd+K wired
+Last activity: 2026-02-25 — Completed 11-01: Toast + undo wired into all 4 Zustand write stores; RosterPage window.confirm() removed
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 25
+- Total plans completed: 26
 - Average duration: ~4.8 min
-- Total execution time: ~111 min
+- Total execution time: ~116 min
 
 **By Phase:**
 
@@ -49,6 +49,7 @@ Last activity: 2026-02-25 — Completed 11-03: CommandPalette component + App.ts
 | Phase 10 P03 | 4 | 2 tasks | 8 files |
 | Phase 10 P04 | 2 | 2 tasks | 6 files |
 | Phase 11-qol-wins P05 | 3 | 2 tasks | 2 files |
+| Phase 11 P01 | 5 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -154,6 +155,8 @@ Recent decisions affecting current work:
 - [Phase 10-04]: ai-queue-store uses generateId() (crypto.randomUUID via lib/uuid.ts) not uuid npm package — consistent with project pattern
 - [Phase 10-04]: Toaster mounted unconditionally outside PageContent so toast() calls on LauncherPage render correctly
 - [Phase 10-04]: Cmd+K listener stub registered in App.tsx useEffect — actual command palette implementation deferred to Phase 11 QOL-04
+- [Phase 11-01]: toast() imported directly from sonner in game-store/player-store for delete undo action button — useToastStore.success() has no action option; direct sonner API required for Undo onClick callback
+- [Phase 11-01]: as unknown as Record<string,unknown> double-cast for Game/Player snapshot — TypeScript strict mode rejects single cast from typed domain objects without index signatures
 - [Phase 11-03]: CommandPalette uses useNavigationStore.getState() not hook — nav actions are fire-and-forget; avoids re-render coupling in palette component
 - [Phase 11-03]: inputRef imperative focus with 50ms timeout — Tauri WKWebView/WebView2 swallows immediate focus call; 50ms allows Radix Dialog portal to mount
 - [Phase 11-03]: Command.Item value IDs prefixed nav- — cmdk fuzzy-filters on value prop; prefixed IDs prevent accidental cross-group matches
@@ -186,6 +189,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-25 UTC
-Stopped at: Completed 11-03-PLAN.md — CommandPalette component with cmdk + App.tsx Cmd+K wired
+Stopped at: Completed 11-01-PLAN.md — Toast + undo wired into all 4 Zustand write stores; RosterPage window.confirm() removed
 Resume file: None
 Next action: Execute Phase 11 remaining plans
