@@ -22,6 +22,7 @@ import { ScreenshotIngestionPage } from './pages/ScreenshotIngestionPage';
 import { MaddenSyncPage } from './pages/MaddenSyncPage';
 import { RosterHubPage } from './pages/RosterHubPage';
 import { CoachingStaffPage } from './pages/CoachingStaffPage';
+import { NilLedgerPage } from './pages/NilLedgerPage';
 import { TickerBar } from './components/TickerBar';
 import { CommandPalette } from './components/CommandPalette';
 
@@ -68,6 +69,8 @@ function PageContent() {
       return <RosterHubPage />;
     case 'coaching-staff':
       return <CoachingStaffPage />;
+    case 'nil-ledger':
+      return <NilLedgerPage />;
     default:
       return <DashboardPage />;
   }

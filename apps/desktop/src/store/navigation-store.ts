@@ -19,7 +19,8 @@ type Page =
   | 'screenshot-ingestion'
   | 'madden-sync'
   | 'roster-hub'
-  | 'coaching-staff';
+  | 'coaching-staff'
+  | 'nil-ledger';
 
 interface NavigationState {
   currentPage: Page;
@@ -47,6 +48,7 @@ interface NavigationActions {
   goToMaddenSync: () => void;
   goToRosterHub: () => void;
   goToCoachingStaff: () => void;
+  goToNilLedger: () => void;
 }
 
 type NavigationStore = NavigationState & NavigationActions;
@@ -133,5 +135,9 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
 
   goToCoachingStaff: () => {
     set({ currentPage: 'coaching-staff', pageParams: {} });
+  },
+
+  goToNilLedger: () => {
+    set({ currentPage: 'nil-ledger', pageParams: {} });
   },
 }));

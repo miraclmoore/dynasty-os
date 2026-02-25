@@ -81,6 +81,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                 <PaletteItem value="nav-prestige-tracker" onSelect={() => select(() => nav.goToPrestigeTracker())}>Program Prestige</PaletteItem>
                 <PaletteItem value="nav-rivalry-tracker" onSelect={() => select(() => nav.goToRivalryTracker())}>Rivalry Tracker</PaletteItem>
                 <PaletteItem value="nav-program-timeline" onSelect={() => select(() => nav.goToProgramTimeline())}>Program Timeline</PaletteItem>
+                <PaletteItem value="nav-nil-ledger" onSelect={() => select(() => nav.goToNilLedger())}>NIL Ledger</PaletteItem>
               </Command.Group>
             )}
           </Command.List>
