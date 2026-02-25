@@ -51,6 +51,7 @@ Last activity: 2026-02-24 — Completed 11-04: CSV export utility, season year a
 | Phase 11-qol-wins P05 | 3 | 2 tasks | 2 files |
 | Phase 11 P01 | 5 | 2 tasks | 5 files |
 | Phase 11-qol-wins P04 | 5 | 2 tasks | 6 files |
+| Phase 11 P02 | 8 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -142,6 +143,8 @@ Recent decisions affecting current work:
 - [Phase 11-04]: exportTableToCsv pattern: papaparse.unparse + Tauri save dialog + writeTextFile — reusable for all tabular CSV export (no blob URLs in WKWebView)
 - [Phase 11-04]: Recent opponents chips in LogGameModal: useMemo sorted by week desc, 5 unique opponents, chip row above TeamSelect
 - [Phase 11-04]: New season year auto-suggest: activeSeason.year + 1 — eliminates manual year entry for the common case
+- [Phase 11]: Filter-store-aware initialization uses synchronous getState().getFilters() at component declaration time — safe for in-memory Zustand
+- [Phase 11]: Setter wrapper pattern: same public setter name, internal useState renamed with Internal suffix — no JSX changes needed, store sync is side-effect
 
 ### Phase 10 Decisions
 
@@ -193,6 +196,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-25 UTC
-Stopped at: Completed 11-01-PLAN.md — Toast + undo wired into all 4 Zustand write stores; RosterPage window.confirm() removed
+Stopped at: Completed 11-02-PLAN.md — Filter persistence wired to all pages with filter controls (Legends/Records/TransferPortal); clearAll() on dynasty switch
 Resume file: None
 Next action: Execute Phase 11 remaining plans

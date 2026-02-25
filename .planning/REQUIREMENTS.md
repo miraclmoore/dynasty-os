@@ -12,7 +12,7 @@ Requirements for Milestone v2.0. 32 user-facing requirements across 3 categories
 
 - [x] **QOL-01**: User receives a toast notification confirming every successful write operation (game log, player edit, stat entry)
 - [x] **QOL-02**: User can undo the last single destructive action (delete or edit) for games, players, and season stats
-- [ ] **QOL-03**: All list and table filter selections persist across navigation within the same app session
+- [x] **QOL-03**: All list and table filter selections persist across navigation within the same app session
 - [x] **QOL-04**: User can open a command palette (Ctrl+K / Cmd+K) to navigate to any page or trigger quick actions from any screen
 - [x] **QOL-05**: User can export any data table to a CSV file via the OS file save dialog
 - [x] **QOL-06**: New season year input auto-suggests previous season year + 1
@@ -283,7 +283,7 @@ Which phases cover which v2.0 requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | QOL-01 | Phase 11 | Complete |
 | QOL-02 | Phase 11 | Complete |
-| QOL-03 | Phase 11 | Pending |
+| QOL-03 | Phase 11 | Complete |
 | QOL-04 | Phase 11 | Complete |
 | QOL-05 | Phase 11 | Complete |
 | QOL-06 | Phase 11 | Complete |
