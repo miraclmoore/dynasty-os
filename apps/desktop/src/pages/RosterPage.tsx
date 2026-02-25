@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useDynastyStore } from '../store';
 import { usePlayerStore } from '../store/player-store';
 import { useNavigationStore } from '../store/navigation-store';
+import { useFilterStore } from '../store/filter-store';
 import { DynastySwitcher } from '../components/DynastySwitcher';
 import { AddPlayerModal } from '../components/AddPlayerModal';
 import { EditPlayerModal } from '../components/EditPlayerModal';
 import { LogPlayerSeasonModal } from '../components/LogPlayerSeasonModal';
 import { getSportConfig } from '@dynasty-os/sport-configs';
 import type { Player, PlayerStatus } from '@dynasty-os/core-types';
+import { exportTableToCsv } from '../lib/csv-export';
 
 const SPORT_BADGE: Record<string, { label: string; classes: string }> = {
   cfb: { label: 'CFB', classes: 'bg-orange-600 text-orange-100' },
@@ -40,6 +42,20 @@ function renderStars(count: number): string {
   return '★'.repeat(count) + '☆'.repeat(5 - count);
 }
 
+function OvrBadge({ ovr }: { ovr: number }) {
+  const color =
+    ovr >= 90 ? 'bg-yellow-500/20 text-yellow-300 border-yellow-600/40' :
+    ovr >= 80 ? 'bg-blue-500/20 text-blue-300 border-blue-600/40' :
+    ovr >= 70 ? 'bg-green-500/20 text-green-300 border-green-600/40' :
+    ovr >= 60 ? 'bg-gray-600/40 text-gray-300 border-gray-600' :
+                'bg-red-900/30 text-red-400 border-red-700/40';
+  return (
+    <span className={`inline-flex items-center justify-center w-9 h-6 rounded border text-xs font-bold tabular-nums ${color}`}>
+      {ovr}
+    </span>
+  );
+}
+
 export function RosterPage() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
   const { players, loading } = usePlayerStore();
@@ -47,8 +63,24 @@ export function RosterPage() {
   const [addOpen, setAddOpen] = useState(false);
   const [editPlayer, setEditPlayer] = useState<Player | null>(null);
   const [logSeasonPlayer, setLogSeasonPlayer] = useState<Player | null>(null);
-  const [positionFilter, setPositionFilter] = useState<string>('All');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('active');
+
+  const PAGE_KEY = 'roster';
+  const _savedFilters = useFilterStore.getState().getFilters(PAGE_KEY);
+  const [positionFilter, setPositionFilterState] = useState<string>(
+    (_savedFilters['position'] as string) ?? 'All'
+  );
+  const [statusFilter, setStatusFilterState] = useState<StatusFilter>(
+    (_savedFilters['status'] as StatusFilter) ?? 'active'
+  );
+
+  const setPositionFilter = (val: string) => {
+    setPositionFilterState(val);
+    useFilterStore.getState().setFilter(PAGE_KEY, 'position', val);
+  };
+  const setStatusFilter = (val: StatusFilter) => {
+    setStatusFilterState(val);
+    useFilterStore.getState().setFilter(PAGE_KEY, 'status', val);
+  };
 
   useEffect(() => {
     if (!activeDynasty) return;
@@ -84,15 +116,24 @@ export function RosterPage() {
   });
 
   async function handleDelete(player: Player) {
-    const confirmed = window.confirm(
-      `Delete ${player.firstName} ${player.lastName}? This will also delete all their season stats.`
-    );
-    if (!confirmed) return;
     await usePlayerStore.getState().deletePlayer(player.id);
   }
 
   function handleRowClick(player: Player) {
     useNavigationStore.getState().goToPlayerProfile(player.id);
+  }
+
+  async function handleExportCsv() {
+    const rows = sortedPlayers.map((p) => ({
+      firstName: p.firstName,
+      lastName: p.lastName,
+      position: p.position,
+      status: p.status,
+      recruitingStars: p.recruitingStars ?? '',
+      homeState: p.homeState ?? '',
+      notes: p.notes ?? '',
+    }));
+    await exportTableToCsv(rows, 'roster.csv');
   }
 
   return (
@@ -126,12 +167,20 @@ export function RosterPage() {
       <div className="border-b border-gray-800 bg-gray-800/50">
         <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-white">Roster</h2>
-          <button
-            onClick={() => setAddOpen(true)}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-lg transition-colors"
-          >
-            + Add Player
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleExportCsv}
+              className="px-4 py-2 border border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white text-sm font-semibold rounded-lg transition-colors"
+            >
+              Export CSV
+            </button>
+            <button
+              onClick={() => setAddOpen(true)}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-lg transition-colors"
+            >
+              + Add Player
+            </button>
+          </div>
         </div>
       </div>
 
@@ -185,8 +234,23 @@ export function RosterPage() {
 
         {/* Loading */}
         {loading && players.length === 0 && (
-          <div className="flex items-center justify-center py-16">
-            <span className="text-gray-500 text-sm">Loading roster...</span>
+          <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+            <table className="w-full text-sm">
+              <tbody>
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <tr key={i} className="border-b border-gray-700/50 animate-pulse">
+                    <td className="px-4 py-3 w-12"><div className="h-3 bg-gray-700 rounded w-6" /></td>
+                    <td className="px-4 py-3"><div className="h-3 bg-gray-700 rounded w-32" /></td>
+                    <td className="px-4 py-3"><div className="h-3 bg-gray-700 rounded w-10" /></td>
+                    <td className="px-4 py-3"><div className="h-3 bg-gray-700 rounded w-16" /></td>
+                    <td className="px-4 py-3"><div className="h-3 bg-gray-700 rounded w-20" /></td>
+                    <td className="px-4 py-3"><div className="h-3 bg-gray-700 rounded w-24" /></td>
+                    <td className="px-4 py-3"><div className="h-5 bg-gray-700 rounded-full w-16" /></td>
+                    <td className="px-4 py-3" />
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
 
@@ -264,7 +328,9 @@ export function RosterPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="text-gray-300 font-medium">{player.position}</span>
+                      <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-gray-700/50 text-gray-200 text-xs font-medium">
+                        {player.position}
+                      </span>
                     </td>
                     <td className="px-4 py-3 text-gray-400">
                       {player.classYear ?? '—'}

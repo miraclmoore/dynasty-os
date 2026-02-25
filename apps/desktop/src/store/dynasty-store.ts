@@ -12,6 +12,7 @@ import {
   downloadJson,
   readFileAsText,
 } from '../lib/export-import';
+import { useFilterStore } from './filter-store';
 
 interface DynastyState {
   dynasties: Dynasty[];
@@ -63,10 +64,12 @@ export const useDynastyStore = create<DynastyStore>((set, get) => ({
   },
 
   setActiveDynasty: (dynasty: Dynasty | null) => {
+    useFilterStore.getState().clearAll();
     set({ activeDynasty: dynasty });
   },
 
   switchDynasty: (dynasty: Dynasty) => {
+    useFilterStore.getState().clearAll();
     set({ activeDynasty: dynasty });
   },
 
