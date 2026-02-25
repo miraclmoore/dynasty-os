@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { usePlayerStore } from '../store/player-store';
 import { useDynastyStore } from '../store';
 import { useNavigationStore } from '../store/navigation-store';
+import { useFilterStore } from '../store/filter-store';
 import { getPlayerSeasonsByDynasty } from '../lib/player-season-service';
 import { buildLegacyCardData, getCachedBlurb } from '../lib/legacy-card-service';
 import type { LegacyCardData } from '../lib/legacy-card-service';
@@ -27,7 +28,23 @@ export function LegendsPage() {
   const [allSeasons, setAllSeasons] = useState<PlayerSeason[]>([]);
   const [loading, setLoading] = useState(true);
   const [blurbsByPlayerId, setBlurbsByPlayerId] = useState<Record<string, string>>({});
-  const [filter, setFilter] = useState<Filter>({ position: '', era: '', award: '' });
+  const PAGE_KEY = 'legends';
+  const _savedFilters = useFilterStore.getState().getFilters(PAGE_KEY);
+  const [filter, setFilterState] = useState<Filter>({
+    position: (_savedFilters['position'] as string) ?? '',
+    era: (_savedFilters['era'] as string) ?? '',
+    award: (_savedFilters['award'] as string) ?? '',
+  });
+
+  const setFilter = (updater: Filter | ((prev: Filter) => Filter)) => {
+    setFilterState((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : updater;
+      useFilterStore.getState().setFilter(PAGE_KEY, 'position', next.position);
+      useFilterStore.getState().setFilter(PAGE_KEY, 'era', next.era);
+      useFilterStore.getState().setFilter(PAGE_KEY, 'award', next.award);
+      return next;
+    });
+  };
 
   // Single bulk load — partition in memory
   useEffect(() => {

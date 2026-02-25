@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDynastyStore } from '../store';
 import { useNavigationStore } from '../store/navigation-store';
+import { useFilterStore } from '../store/filter-store';
 import { getSportConfig } from '@dynasty-os/sport-configs';
 import { db } from '@dynasty-os/db';
 import type { Season } from '@dynasty-os/core-types';
@@ -21,24 +22,64 @@ export function RecordsPage() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
   const goToDashboard = useNavigationStore((s) => s.goToDashboard);
 
-  const [activeTab, setActiveTab] = useState<Tab>('single-season');
+  const PAGE_KEY = 'records';
+  const _savedFilters = useFilterStore.getState().getFilters(PAGE_KEY);
+
+  const [activeTab, setActiveTabInternal] = useState<Tab>(
+    (_savedFilters['activeTab'] as Tab) ?? 'single-season'
+  );
+  const setActiveTab = (val: Tab) => {
+    setActiveTabInternal(val);
+    useFilterStore.getState().setFilter(PAGE_KEY, 'activeTab', val);
+  };
+
   const [loading, setLoading] = useState(false);
 
   // Seasons for season-filter dropdown
   const [allSeasons, setAllSeasons] = useState<Season[]>([]);
 
   // Single-season tab state
-  const [selectedStatKey, setSelectedStatKey] = useState<string>('');
-  const [selectedSeasonId, setSelectedSeasonId] = useState<string>(''); // '' = all seasons
+  const [selectedStatKey, setSelectedStatKeyInternal] = useState<string>(
+    (_savedFilters['selectedStatKey'] as string) ?? ''
+  );
+  const setSelectedStatKey = (val: string) => {
+    setSelectedStatKeyInternal(val);
+    useFilterStore.getState().setFilter(PAGE_KEY, 'selectedStatKey', val);
+  };
+  const [selectedSeasonId, setSelectedSeasonIdInternal] = useState<string>(
+    (_savedFilters['selectedSeasonId'] as string) ?? ''
+  ); // '' = all seasons
+  const setSelectedSeasonId = (val: string) => {
+    setSelectedSeasonIdInternal(val);
+    useFilterStore.getState().setFilter(PAGE_KEY, 'selectedSeasonId', val);
+  };
   const [singleSeasonEntries, setSingleSeasonEntries] = useState<LeaderboardEntry[]>([]);
 
   // Career tab state
-  const [careerStatKey, setCareerStatKey] = useState<string>('');
+  const [careerStatKey, setCareerStatKeyInternal] = useState<string>(
+    (_savedFilters['careerStatKey'] as string) ?? ''
+  );
+  const setCareerStatKey = (val: string) => {
+    setCareerStatKeyInternal(val);
+    useFilterStore.getState().setFilter(PAGE_KEY, 'careerStatKey', val);
+  };
   const [careerEntries, setCareerEntries] = useState<LeaderboardEntry[]>([]);
 
   // H2H tab state
-  const [h2hStartYear, setH2hStartYear] = useState<string>(''); // '' = no filter
-  const [h2hEndYear, setH2hEndYear] = useState<string>('');
+  const [h2hStartYear, setH2hStartYearInternal] = useState<string>(
+    (_savedFilters['h2hStartYear'] as string) ?? ''
+  ); // '' = no filter
+  const setH2hStartYear = (val: string) => {
+    setH2hStartYearInternal(val);
+    useFilterStore.getState().setFilter(PAGE_KEY, 'h2hStartYear', val);
+  };
+  const [h2hEndYear, setH2hEndYearInternal] = useState<string>(
+    (_savedFilters['h2hEndYear'] as string) ?? ''
+  );
+  const setH2hEndYear = (val: string) => {
+    setH2hEndYearInternal(val);
+    useFilterStore.getState().setFilter(PAGE_KEY, 'h2hEndYear', val);
+  };
   const [h2hRecords, setH2hRecords] = useState<HeadToHeadRecord[]>([]);
 
   if (!activeDynasty) return null;

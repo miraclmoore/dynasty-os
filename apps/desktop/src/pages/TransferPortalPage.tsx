@@ -4,6 +4,7 @@ import { useSeasonStore } from '../store/season-store';
 import { useTransferPortalStore } from '../store/transfer-portal-store';
 import { useNavigationStore } from '../store/navigation-store';
 import { calculateNetImpact } from '../lib/transfer-portal-service';
+import { useFilterStore } from '../store/filter-store';
 import type { Season } from '@dynasty-os/core-types';
 
 const POSITIONS = ['QB', 'RB', 'WR', 'TE', 'OL', 'OT', 'OG', 'C', 'DL', 'DE', 'DT', 'LB', 'CB', 'S', 'K', 'P', 'ATH'];
@@ -46,16 +47,32 @@ export function TransferPortalPage() {
   const { entries, loading, loadEntries, addEntry, removeEntry } = useTransferPortalStore();
   const goToDashboard = useNavigationStore((s) => s.goToDashboard);
 
-  const [selectedSeason, setSelectedSeason] = useState<Season | null>(null);
+  const PAGE_KEY = 'transfer-portal';
+  const _savedFilters = useFilterStore.getState().getFilters(PAGE_KEY);
+  const _savedSeasonId = _savedFilters['seasonId'] as string | undefined;
+
+  const [selectedSeason, setSelectedSeasonState] = useState<Season | null>(null);
+  const setSelectedSeason = (season: Season | null) => {
+    setSelectedSeasonState(season);
+    useFilterStore.getState().setFilter(PAGE_KEY, 'seasonId', season?.id ?? '');
+  };
   const [arrivalForm, setArrivalForm] = useState<ArrivalFormData>(defaultArrivalForm);
   const [departureForm, setDepartureForm] = useState<DepartureFormData>(defaultDepartureForm);
 
-  // Initialize selected season to active season
+  // Initialize selected season: restore from filter store first, then fall back to activeSeason
   useEffect(() => {
-    if (activeSeason && !selectedSeason) {
-      setSelectedSeason(activeSeason);
+    if (seasons.length === 0) return;
+    if (_savedSeasonId) {
+      const saved = seasons.find((s) => s.id === _savedSeasonId);
+      if (saved) {
+        setSelectedSeasonState(saved);
+        return;
+      }
     }
-  }, [activeSeason]);
+    if (activeSeason && !selectedSeason) {
+      setSelectedSeasonState(activeSeason);
+    }
+  }, [activeSeason, seasons]);
 
   // Load entries whenever selected season changes
   useEffect(() => {
@@ -93,7 +110,7 @@ export function TransferPortalPage() {
 
   const handleSeasonChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const season = seasons.find((s) => s.id === e.target.value) ?? null;
-    setSelectedSeason(season);
+    setSelectedSeason(season); // wrapper persists to filter store
   };
 
   const handleAddArrival = async (e: React.FormEvent) => {
