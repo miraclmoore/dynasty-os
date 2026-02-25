@@ -12,6 +12,9 @@ import type {
   PlayerStatsParsedData,
   RecruitingParsedData,
   DepthChartParsedData,
+  NflScheduleParsedData,
+  NflPlayerStatsParsedData,
+  NflDepthChartParsedData,
 } from '../lib/screenshot-service';
 import type { GameType, GameResult, HomeAway } from '@dynasty-os/core-types';
 
@@ -95,6 +98,10 @@ export function ScreenshotIngestionPage() {
 
   if (!activeDynasty) return null;
 
+  const NFL_SCREEN_TYPES: ScreenType[] = ['nfl-schedule', 'nfl-player-stats', 'nfl-depth-chart'];
+  const CFB_SCREEN_TYPES: ScreenType[] = ['schedule', 'player-stats', 'recruiting', 'depth-chart'];
+  const availableScreenTypes = activeDynasty.sport === 'cfb' ? CFB_SCREEN_TYPES : NFL_SCREEN_TYPES;
+
   // ── File Open ──────────────────────────────────────────────────────────────
 
   async function handleFileOpen() {
@@ -132,6 +139,7 @@ export function ScreenshotIngestionPage() {
         {
           teamName: activeDynasty.name,
           season: String(activeSeason?.year ?? ''),
+          gameVersion: activeDynasty.gameVersion,
         }
       );
       if (!result) throw new Error('Vision API returned no data');
@@ -145,8 +153,8 @@ export function ScreenshotIngestionPage() {
   }
 
   function initEditableState(data: ParsedScreenData) {
-    if (data.screenType === 'schedule') {
-      const d = data as ScheduleParsedData;
+    if (data.screenType === 'schedule' || data.screenType === 'nfl-schedule') {
+      const d = data as ScheduleParsedData | NflScheduleParsedData;
       setGameRows(
         (d.games ?? []).map((g) => ({
           week: String(g.week ?? ''),
@@ -157,8 +165,8 @@ export function ScreenshotIngestionPage() {
           gameType: g.gameType ?? 'regular',
         }))
       );
-    } else if (data.screenType === 'player-stats') {
-      const d = data as PlayerStatsParsedData;
+    } else if (data.screenType === 'player-stats' || data.screenType === 'nfl-player-stats') {
+      const d = data as PlayerStatsParsedData | NflPlayerStatsParsedData;
       setPlayerRows(
         (d.players ?? []).map((p) => ({
           name: p.name ?? '',
@@ -181,8 +189,8 @@ export function ScreenshotIngestionPage() {
           nationalRank: String(r.nationalRank ?? ''),
         }))
       );
-    } else if (data.screenType === 'depth-chart') {
-      const d = data as DepthChartParsedData;
+    } else if (data.screenType === 'depth-chart' || data.screenType === 'nfl-depth-chart') {
+      const d = data as DepthChartParsedData | NflDepthChartParsedData;
       setDepthEntries(
         (d.entries ?? []).map((e) => ({
           position: e.position ?? '',
@@ -754,12 +762,15 @@ export function ScreenshotIngestionPage() {
     if (!parsedData) return null;
     switch (parsedData.screenType) {
       case 'schedule':
+      case 'nfl-schedule':
         return renderScheduleForm();
       case 'player-stats':
+      case 'nfl-player-stats':
         return renderPlayerStatsForm();
       case 'recruiting':
         return renderRecruitingForm();
       case 'depth-chart':
+      case 'nfl-depth-chart':
         return renderDepthChartForm();
       default:
         return null;
@@ -868,10 +879,9 @@ export function ScreenshotIngestionPage() {
                 className="bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-1 focus:ring-amber-500"
               >
                 <option value="">-- Select a screen type --</option>
-                <option value="schedule">Schedule / Game Results</option>
-                <option value="player-stats">Player Stats</option>
-                <option value="recruiting">Recruiting Class</option>
-                <option value="depth-chart">Depth Chart</option>
+                {availableScreenTypes.map((type) => (
+                  <option key={type} value={type}>{SCREEN_TYPE_LABELS[type]}</option>
+                ))}
               </select>
             </div>
 

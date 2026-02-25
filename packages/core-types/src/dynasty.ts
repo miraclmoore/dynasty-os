@@ -1,4 +1,4 @@
-export type SportType = 'cfb' | 'madden';
+export type SportType = 'cfb' | 'madden' | 'nfl2k';
 
 export interface Dynasty {
   id: string;              // UUID

@@ -2,13 +2,23 @@ import { getApiKey } from './legacy-card-service';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-export type ScreenType = 'schedule' | 'player-stats' | 'recruiting' | 'depth-chart';
+export type ScreenType =
+  | 'schedule'
+  | 'player-stats'
+  | 'recruiting'
+  | 'depth-chart'
+  | 'nfl-schedule'
+  | 'nfl-player-stats'
+  | 'nfl-depth-chart';
 
 export const SCREEN_TYPE_LABELS: Record<ScreenType, string> = {
   'schedule': 'Schedule / Game Results',
   'player-stats': 'Player Stats',
   'recruiting': 'Recruiting Class',
   'depth-chart': 'Depth Chart',
+  'nfl-schedule': 'Schedule / Game Results',
+  'nfl-player-stats': 'Player Stats',
+  'nfl-depth-chart': 'Depth Chart',
 };
 
 // ── Parsed Data Shapes ────────────────────────────────────────────────────────
@@ -57,11 +67,45 @@ export interface DepthChartParsedData {
   }>;
 }
 
+export interface NflScheduleParsedData {
+  screenType: 'nfl-schedule';
+  games: Array<{
+    week?: number;
+    opponent?: string;
+    homeAway?: 'Home' | 'Away' | 'Neutral';
+    teamScore?: number;
+    opponentScore?: number;
+    result?: 'W' | 'L';
+    gameType?: string;
+  }>;
+}
+
+export interface NflPlayerStatsParsedData {
+  screenType: 'nfl-player-stats';
+  players: Array<{
+    name?: string;
+    position?: string;
+    stats: Record<string, number | string>;
+  }>;
+}
+
+export interface NflDepthChartParsedData {
+  screenType: 'nfl-depth-chart';
+  entries: Array<{
+    position?: string;
+    playerName?: string;
+    depth?: number;
+  }>;
+}
+
 export type ParsedScreenData =
   | ScheduleParsedData
   | PlayerStatsParsedData
   | RecruitingParsedData
-  | DepthChartParsedData;
+  | DepthChartParsedData
+  | NflScheduleParsedData
+  | NflPlayerStatsParsedData
+  | NflDepthChartParsedData;
 
 // ── Vision API Prompts ────────────────────────────────────────────────────────
 
@@ -77,6 +121,15 @@ const SCREEN_TYPE_PROMPTS: Record<ScreenType, string> = {
 
   'depth-chart':
     'You are parsing a CFB 25 depth chart screen. Extract each position and its starters/backups: position abbreviation, player name, and depth number (1=starter, 2=backup, etc.). Team context: {teamName} ({season} season). Return ONLY valid JSON matching: {"entries": [{"position": string|null, "playerName": string|null, "depth": number|null}]}. No explanation — JSON only.',
+
+  'nfl-schedule':
+    'You are parsing a {gameVersion} in-game schedule screen. Extract each visible game row: week number, opponent team name, home/away/neutral indicator, team score, opponent score, win/loss result, and game type (regular, playoff, exhibition). Team context: {teamName} ({season} season). Return ONLY valid JSON matching: {"games": [{"week": number|null, "opponent": string|null, "homeAway": "Home"|"Away"|"Neutral"|null, "teamScore": number|null, "opponentScore": number|null, "result": "W"|"L"|null, "gameType": string|null}]}. Leave fields null if not visible. No explanation — JSON only.',
+
+  'nfl-player-stats':
+    'You are parsing a {gameVersion} player statistics screen. Extract each visible player row: player name, position, and all visible stat values with their labels as keys. Team context: {teamName} ({season} season). Return ONLY valid JSON matching: {"players": [{"name": string|null, "position": string|null, "stats": {"statLabel": value}}]}. Use stat labels exactly as shown on screen (e.g. "YDS", "TD", "RTG", "SCK"). No explanation — JSON only.',
+
+  'nfl-depth-chart':
+    'You are parsing a {gameVersion} depth chart screen. Extract each position and its starters/backups: position abbreviation, player name, and depth number (1=starter, 2=backup, etc.). Team context: {teamName} ({season} season). Return ONLY valid JSON matching: {"entries": [{"position": string|null, "playerName": string|null, "depth": number|null}]}. No explanation — JSON only.',
 };
 
 // ── Main Export ───────────────────────────────────────────────────────────────
@@ -93,7 +146,7 @@ const SCREEN_TYPE_PROMPTS: Record<ScreenType, string> = {
 export async function parseScreenshot(
   screenType: ScreenType,
   imageBase64: string,
-  dynastyContext: { teamName: string; season: string }
+  dynastyContext: { teamName: string; season: string; gameVersion?: string }
 ): Promise<ParsedScreenData | null> {
   const apiKey = getApiKey();
   if (!apiKey) {
@@ -106,7 +159,8 @@ export async function parseScreenshot(
   // Build the system prompt with dynasty context substituted
   const systemPrompt = SCREEN_TYPE_PROMPTS[screenType]
     .replace(/\{teamName\}/g, dynastyContext.teamName)
-    .replace(/\{season\}/g, dynastyContext.season);
+    .replace(/\{season\}/g, dynastyContext.season)
+    .replace(/\{gameVersion\}/g, dynastyContext.gameVersion ?? 'NFL');
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {

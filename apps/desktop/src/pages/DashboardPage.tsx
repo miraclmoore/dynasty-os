@@ -16,6 +16,7 @@ import type { GameResult } from '@dynasty-os/core-types';
 const SPORT_BADGE: Record<string, { label: string; classes: string }> = {
   cfb: { label: 'CFB', classes: 'bg-orange-600 text-orange-100' },
   madden: { label: 'NFL', classes: 'bg-green-700 text-green-100' },
+  nfl2k: { label: 'NFL 2K', classes: 'bg-purple-700 text-purple-100' },
 };
 
 export function DashboardPage() {
@@ -263,6 +264,19 @@ export function DashboardPage() {
                       Parse Screenshot
                     </button>
                   </>
+                )}
+                {(activeDynasty.sport === 'madden' || activeDynasty.sport === 'nfl2k') && (
+                  <div className="border-t border-gray-700 mt-2 pt-2">
+                    <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                      NFL Franchise
+                    </h4>
+                    <button
+                      onClick={() => useNavigationStore.getState().goToScreenshotIngestion()}
+                      className="w-full px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold rounded-lg transition-colors"
+                    >
+                      Parse Screenshot
+                    </button>
+                  </div>
                 )}
               </div>
 

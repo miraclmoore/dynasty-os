@@ -1,6 +1,6 @@
 import type { SportConfig, TeamInfo, Conference, StatCategory } from '@dynasty-os/core-types';
 
-const teams: TeamInfo[] = [
+export const maddenTeams: TeamInfo[] = [
   // AFC East
   { name: 'Buffalo Bills', abbreviation: 'BUF', conference: 'AFC East', mascot: 'Bills' },
   { name: 'Miami Dolphins', abbreviation: 'MIA', conference: 'AFC East', mascot: 'Dolphins' },
@@ -43,7 +43,7 @@ const teams: TeamInfo[] = [
   { name: 'Seattle Seahawks', abbreviation: 'SEA', conference: 'NFC West', mascot: 'Seahawks' },
 ];
 
-const conferences: Conference[] = [
+export const maddenConferences: Conference[] = [
   { name: 'AFC East', teams: ['Buffalo Bills', 'Miami Dolphins', 'New England Patriots', 'New York Jets'] },
   { name: 'AFC North', teams: ['Baltimore Ravens', 'Cincinnati Bengals', 'Cleveland Browns', 'Pittsburgh Steelers'] },
   { name: 'AFC South', teams: ['Houston Texans', 'Indianapolis Colts', 'Jacksonville Jaguars', 'Tennessee Titans'] },
@@ -54,7 +54,7 @@ const conferences: Conference[] = [
   { name: 'NFC West', teams: ['Arizona Cardinals', 'Los Angeles Rams', 'San Francisco 49ers', 'Seattle Seahawks'] },
 ];
 
-const statCategories: StatCategory[] = [
+export const maddenStatCategories: StatCategory[] = [
   // Passing
   { key: 'passingYards', label: 'Passing Yards', group: 'Passing', type: 'integer' },
   { key: 'passingTDs', label: 'Passing TDs', group: 'Passing', type: 'integer' },
@@ -88,10 +88,17 @@ const statCategories: StatCategory[] = [
 export const maddenConfig: SportConfig = {
   sport: 'madden',
   label: 'Madden NFL',
-  teams,
-  conferences,
+  teams: maddenTeams,
+  conferences: maddenConferences,
   positions: ['QB', 'HB', 'FB', 'WR', 'TE', 'LT', 'LG', 'C', 'RG', 'RT', 'LE', 'DT', 'RE', 'LOLB', 'MLB', 'ROLB', 'CB', 'FS', 'SS', 'K', 'P'],
-  statCategories,
+  statCategories: maddenStatCategories,
   gameTypes: ['regular', 'playoff', 'exhibition'],
-  gameVersions: ['Madden NFL 25', 'Madden NFL 26'],
+  gameVersions: [
+    'Madden NFL 26', 'Madden NFL 25', 'Madden NFL 24', 'Madden NFL 23',
+    'Madden NFL 22', 'Madden NFL 21', 'Madden NFL 20', 'Madden NFL 19',
+    'Madden NFL 18', 'Madden NFL 17', 'Madden NFL 16', 'Madden NFL 15',
+    'Madden NFL 13', 'Madden NFL 12', 'Madden NFL 11', 'Madden NFL 10',
+    'Madden NFL 09', 'Madden NFL 08', 'Madden NFL 07', 'Madden NFL 06',
+    'Madden NFL 2005', 'Madden NFL 2004',
+  ],
 };
