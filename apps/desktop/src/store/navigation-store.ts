@@ -21,7 +21,9 @@ type Page =
   | 'roster-hub'
   | 'coaching-staff'
   | 'nil-ledger'
-  | 'future-schedule';
+  | 'future-schedule'
+  | 'playoff-simulator'
+  | 'trade-calculator';
 
 interface NavigationState {
   currentPage: Page;
@@ -51,6 +53,8 @@ interface NavigationActions {
   goToCoachingStaff: () => void;
   goToNilLedger: () => void;
   goToFutureSchedule: () => void;
+  goToPlayoffSimulator: () => void;
+  goToTradeCalculator: () => void;
 }
 
 type NavigationStore = NavigationState & NavigationActions;
@@ -145,5 +149,13 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
 
   goToFutureSchedule: () => {
     set({ currentPage: 'future-schedule', pageParams: {} });
+  },
+
+  goToPlayoffSimulator: () => {
+    set({ currentPage: 'playoff-simulator', pageParams: {} });
+  },
+
+  goToTradeCalculator: () => {
+    set({ currentPage: 'trade-calculator', pageParams: {} });
   },
 }));

@@ -65,6 +65,9 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               {activeDynasty?.sport === 'madden' && (
                 <PaletteItem value="nav-madden-sync" onSelect={() => select(() => nav.goToMaddenSync())}>Sync Franchise Save</PaletteItem>
               )}
+              {activeDynasty?.sport === 'madden' && (
+                <PaletteItem value="nav-trade-calculator" onSelect={() => select(() => nav.goToTradeCalculator())}>Trade Calculator</PaletteItem>
+              )}
               {(activeDynasty?.sport === 'madden' || activeDynasty?.sport === 'nfl2k') && (
                 <PaletteItem value="nav-roster-hub" onSelect={() => select(() => nav.goToRosterHub())}>Community Rosters</PaletteItem>
               )}
@@ -83,6 +86,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                 <PaletteItem value="nav-rivalry-tracker" onSelect={() => select(() => nav.goToRivalryTracker())}>Rivalry Tracker</PaletteItem>
                 <PaletteItem value="nav-program-timeline" onSelect={() => select(() => nav.goToProgramTimeline())}>Program Timeline</PaletteItem>
                 <PaletteItem value="nav-nil-ledger" onSelect={() => select(() => nav.goToNilLedger())}>NIL Ledger</PaletteItem>
+                <PaletteItem value="nav-playoff-simulator" onSelect={() => select(() => nav.goToPlayoffSimulator())}>Playoff Simulator</PaletteItem>
               </Command.Group>
             )}
           </Command.List>
