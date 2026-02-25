@@ -1,4 +1,5 @@
 import { db } from '@dynasty-os/db';
+import { getAiCache } from './ai-cache-service';
 
 export interface TimelineNode {
   seasonId: string;
@@ -21,31 +22,34 @@ export async function getTimelineNodes(dynastyId: string): Promise<TimelineNode[
   // Sort oldest first
   seasons.sort((a, b) => a.year - b.year);
 
-  return seasons.map((season) => {
-    let tagline: string | null = null;
-    try {
-      const raw = localStorage.getItem(`dynasty-os-narrative-${season.id}`);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        tagline = parsed?.tagline ?? null;
+  const nodes = await Promise.all(
+    seasons.map(async (season) => {
+      let tagline: string | null = null;
+      try {
+        const raw = await getAiCache(dynastyId, `dynasty-os-narrative-${season.id}`);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          tagline = parsed?.tagline ?? null;
+        }
+      } catch {
+        tagline = null;
       }
-    } catch {
-      tagline = null;
-    }
 
-    return {
-      seasonId: season.id,
-      year: season.year,
-      wins: season.wins,
-      losses: season.losses,
-      confWins: season.confWins,
-      confLosses: season.confLosses,
-      finalRanking: season.finalRanking ?? null,
-      bowlGame: season.bowlGame ?? null,
-      bowlResult: season.bowlResult ?? null,
-      bowlOpponent: (season as any).bowlOpponent ?? null,
-      tagline,
-      keyEvents: (season as any).keyEvents ?? [],
-    };
-  });
+      return {
+        seasonId: season.id,
+        year: season.year,
+        wins: season.wins,
+        losses: season.losses,
+        confWins: season.confWins,
+        confLosses: season.confLosses,
+        finalRanking: season.finalRanking ?? null,
+        bowlGame: season.bowlGame ?? null,
+        bowlResult: season.bowlResult ?? null,
+        bowlOpponent: (season as any).bowlOpponent ?? null,
+        tagline,
+        keyEvents: (season as any).keyEvents ?? [],
+      };
+    })
+  );
+  return nodes;
 }

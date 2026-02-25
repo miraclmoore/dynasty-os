@@ -10,7 +10,7 @@ interface NarrativeState {
 }
 
 interface NarrativeActions {
-  loadCachedNarrative: (seasonId: string) => void;
+  loadCachedNarrative: (dynastyId: string, seasonId: string) => Promise<void>;
   generate: (dynasty: Dynasty, season: Season, tone: NarrativeTone, forceRefresh?: boolean) => Promise<void>;
   clear: () => void;
 }
@@ -22,8 +22,8 @@ export const useNarrativeStore = create<NarrativeStore>((set) => ({
   loading: false,
   error: null,
 
-  loadCachedNarrative: (seasonId: string) => {
-    const cached = getCachedNarrative(seasonId);
+  loadCachedNarrative: async (dynastyId: string, seasonId: string) => {
+    const cached = await getCachedNarrative(dynastyId, seasonId);
     set({ narrative: cached });
   },
 

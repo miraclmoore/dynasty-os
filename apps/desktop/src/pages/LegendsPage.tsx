@@ -3,7 +3,7 @@ import { usePlayerStore } from '../store/player-store';
 import { useDynastyStore } from '../store';
 import { useNavigationStore } from '../store/navigation-store';
 import { getPlayerSeasonsByDynasty } from '../lib/player-season-service';
-import { buildLegacyCardData } from '../lib/legacy-card-service';
+import { buildLegacyCardData, getCachedBlurb } from '../lib/legacy-card-service';
 import type { LegacyCardData } from '../lib/legacy-card-service';
 import { LegacyCard } from '../components/LegacyCard';
 import type { PlayerSeason } from '@dynasty-os/core-types';
@@ -26,6 +26,7 @@ export function LegendsPage() {
 
   const [allSeasons, setAllSeasons] = useState<PlayerSeason[]>([]);
   const [loading, setLoading] = useState(true);
+  const [blurbsByPlayerId, setBlurbsByPlayerId] = useState<Record<string, string>>({});
   const [filter, setFilter] = useState<Filter>({ position: '', era: '', award: '' });
 
   // Single bulk load — partition in memory
@@ -46,6 +47,24 @@ export function LegendsPage() {
     [players]
   );
 
+  // Load legacy blurbs from Dexie aiCache for all departed players
+  useEffect(() => {
+    if (!activeDynasty || departedPlayers.length === 0) return;
+    const dynastyId = activeDynasty.id;
+    Promise.all(
+      departedPlayers.map(async (p) => {
+        const blurb = await getCachedBlurb(dynastyId, p.id);
+        return [p.id, blurb] as [string, string | null];
+      })
+    ).then((results) => {
+      const map: Record<string, string> = {};
+      for (const [id, blurb] of results) {
+        if (blurb) map[id] = blurb;
+      }
+      setBlurbsByPlayerId(map);
+    }).catch(() => {});
+  }, [activeDynasty?.id, departedPlayers]);
+
   // Build a seasons-per-player map
   const seasonsByPlayer = useMemo(() => {
     const map: Record<string, PlayerSeason[]> = {};
@@ -56,15 +75,15 @@ export function LegendsPage() {
     return map;
   }, [allSeasons]);
 
-  // Build LegacyCardData for each departed player, injecting blurb from localStorage
+  // Build LegacyCardData for each departed player, injecting blurb from Dexie aiCache
   const allCards: LegacyCardData[] = useMemo(() => {
     return departedPlayers.map((player) => {
       const seasons = seasonsByPlayer[player.id] ?? [];
       const cardData = buildLegacyCardData(player, seasons);
-      const blurb = localStorage.getItem(`legacy-blurb-${player.id}`) ?? undefined;
+      const blurb = blurbsByPlayerId[player.id];
       return { ...cardData, blurb };
     });
-  }, [departedPlayers, seasonsByPlayer]);
+  }, [departedPlayers, seasonsByPlayer, blurbsByPlayerId]);
 
   // Derive available filter options from actual data
   const positions = useMemo(

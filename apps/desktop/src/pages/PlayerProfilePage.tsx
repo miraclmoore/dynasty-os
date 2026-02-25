@@ -13,6 +13,8 @@ import { LegacyCardExport } from '../components/LegacyCardExport';
 import {
   buildLegacyCardData,
   generateLegacyBlurb,
+  getCachedBlurb,
+  setCachedBlurb,
   getApiKey,
   setApiKey,
   clearApiKey,
@@ -100,13 +102,14 @@ export function PlayerProfilePage() {
   const currentApiKey = getApiKey();
 
   useEffect(() => {
-    if (playerId) {
+    if (playerId && activeDynasty) {
       usePlayerSeasonStore.getState().loadPlayerSeasons(playerId);
-      // Load persisted blurb from localStorage
-      const saved = localStorage.getItem(`legacy-blurb-${playerId}`);
-      setLegacyBlurb(saved ?? undefined);
+      // Load persisted blurb from Dexie aiCache
+      getCachedBlurb(activeDynasty.id, playerId).then((saved) => {
+        setLegacyBlurb(saved ?? undefined);
+      });
     }
-  }, [playerId]);
+  }, [playerId, activeDynasty?.id]);
 
   const sportConfig = useMemo(
     () => activeDynasty ? getSportConfig(activeDynasty.sport) : null,
@@ -160,9 +163,10 @@ export function PlayerProfilePage() {
 
       // Auto-generate Legacy Card blurb in the background — never blocks departure
       const cardData = buildLegacyCardData(player, playerSeasons);
+      const dynastyId = activeDynasty.id;
       generateLegacyBlurb(cardData, activeDynasty.teamName).then((blurb) => {
         if (blurb) {
-          localStorage.setItem(`legacy-blurb-${player.id}`, blurb);
+          setCachedBlurb(dynastyId, player.id, blurb).catch(() => {});
           setLegacyBlurb(blurb);
         }
       });
@@ -177,7 +181,7 @@ export function PlayerProfilePage() {
     const cardData = buildLegacyCardData(player, playerSeasons);
     const blurb = await generateLegacyBlurb(cardData, activeDynasty.teamName);
     if (blurb) {
-      localStorage.setItem(`legacy-blurb-${player.id}`, blurb);
+      await setCachedBlurb(activeDynasty.id, player.id, blurb);
       setLegacyBlurb(blurb);
     }
     setBlurbLoading(false);

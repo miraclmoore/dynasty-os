@@ -3,6 +3,7 @@ import type { Dynasty, Season } from '@dynasty-os/core-types';
 import { getApiKey } from './legacy-card-service';
 import { getGamesBySeason } from './game-service';
 import { getPlayerSeasonsBySeason } from './player-season-service';
+import { getAiCache, setAiCache, deleteAiCache } from './ai-cache-service';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -177,9 +178,13 @@ function buildUserMessage(ctx: NarrativeContext): string {
 
 const CACHE_KEY_PREFIX = 'dynasty-os-narrative-';
 
-export function getCachedNarrative(seasonId: string): SeasonNarrative | null {
+export async function getCachedNarrative(
+  dynastyId: string,
+  seasonId: string
+): Promise<SeasonNarrative | null> {
   try {
-    const raw = localStorage.getItem(CACHE_KEY_PREFIX + seasonId);
+    const cacheKey = CACHE_KEY_PREFIX + seasonId;
+    const raw = await getAiCache(dynastyId, cacheKey);
     if (!raw) return null;
     return JSON.parse(raw) as SeasonNarrative;
   } catch {
@@ -187,9 +192,13 @@ export function getCachedNarrative(seasonId: string): SeasonNarrative | null {
   }
 }
 
-export function clearCachedNarrative(seasonId: string): void {
+export async function clearCachedNarrative(
+  dynastyId: string,
+  seasonId: string
+): Promise<void> {
   try {
-    localStorage.removeItem(CACHE_KEY_PREFIX + seasonId);
+    const cacheKey = CACHE_KEY_PREFIX + seasonId;
+    await deleteAiCache(dynastyId, cacheKey);
   } catch {
     // Ignore storage errors
   }
@@ -205,7 +214,7 @@ export async function generateSeasonNarrative(
 ): Promise<SeasonNarrative | null> {
   // Check cache first
   if (!forceRefresh) {
-    const cached = getCachedNarrative(season.id);
+    const cached = await getCachedNarrative(dynasty.id, season.id);
     if (cached) return cached;
   }
 
@@ -287,12 +296,8 @@ export async function generateSeasonNarrative(
       generatedAt: Date.now(),
     };
 
-    // Cache the narrative
-    try {
-      localStorage.setItem(CACHE_KEY_PREFIX + season.id, JSON.stringify(narrative));
-    } catch {
-      // Ignore storage errors — narrative is still returned
-    }
+    // Cache the narrative in Dexie aiCache
+    await setAiCache(dynasty.id, CACHE_KEY_PREFIX + season.id, 'season-narrative', JSON.stringify(narrative));
 
     return narrative;
   } catch (err) {

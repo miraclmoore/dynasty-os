@@ -1,5 +1,6 @@
 import type { Player, PlayerSeason } from '@dynasty-os/core-types';
 import { computeCareerStats, computeCareerAwards, computeSeasonCount } from './career-stats';
+import { getAiCache, setAiCache } from './ai-cache-service';
 
 export interface LegacyCardData {
   player: Player;
@@ -35,6 +36,25 @@ export function clearApiKey(): void {
   } catch {
     // Ignore storage errors
   }
+}
+
+// ── Blurb Cache Helpers ──────────────────────────────────────────────────────
+
+const BLURB_CACHE_KEY_PREFIX = 'legacy-blurb-';
+
+/**
+ * Retrieves a cached legacy blurb from the Dexie aiCache table.
+ * Returns null if not cached.
+ */
+export async function getCachedBlurb(dynastyId: string, playerId: string): Promise<string | null> {
+  return getAiCache(dynastyId, BLURB_CACHE_KEY_PREFIX + playerId);
+}
+
+/**
+ * Persists a generated legacy blurb to the Dexie aiCache table.
+ */
+export async function setCachedBlurb(dynastyId: string, playerId: string, blurb: string): Promise<void> {
+  await setAiCache(dynastyId, BLURB_CACHE_KEY_PREFIX + playerId, 'legacy-blurb', blurb);
 }
 
 // ── Card Data Builder ────────────────────────────────────────────────────────

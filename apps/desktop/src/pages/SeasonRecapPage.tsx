@@ -80,9 +80,9 @@ export function SeasonRecapPage() {
 
   // Load cached narrative on mount and sync tone selector to cached tone
   useEffect(() => {
-    if (!seasonId) return;
-    useNarrativeStore.getState().loadCachedNarrative(seasonId);
-  }, [seasonId]);
+    if (!seasonId || !activeDynasty) return;
+    useNarrativeStore.getState().loadCachedNarrative(activeDynasty.id, seasonId);
+  }, [seasonId, activeDynasty?.id]);
 
   // When a cached narrative is loaded, sync the tone selector to match
   useEffect(() => {
