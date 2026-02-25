@@ -10,16 +10,16 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 ## Current Position
 
 Phase: 11 — QOL Wins
-Plan: 01 complete (1/TBD)
+Plan: 04 complete (4/TBD)
 Status: In Progress
-Last activity: 2026-02-25 — Completed 11-01: Toast + undo wired into all 4 Zustand write stores; RosterPage window.confirm() removed
+Last activity: 2026-02-24 — Completed 11-04: CSV export utility, season year auto-suggest, recent opponents chips, player notes field
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 26
+- Total plans completed: 29
 - Average duration: ~4.8 min
-- Total execution time: ~116 min
+- Total execution time: ~121 min
 
 **By Phase:**
 
@@ -35,7 +35,7 @@ Last activity: 2026-02-25 — Completed 11-01: Toast + undo wired into all 4 Zus
 | 08-screenshot-ingestion | 2/2 | ~4 min | ~2 min | ✓ Complete |
 | 09-madden-sync | 3/3 | ~8 min | ~2.7 min | ✓ Complete |
 | 10-infrastructure-foundation | 4/4 | ~8 min | ~2 min | ✓ Complete |
-| 11-qol-wins | 3/TBD | — | — | In Progress |
+| 11-qol-wins | 4/TBD | ~25 min | ~6.3 min | In Progress |
 | 12-community-features | 0/TBD | — | — | Not started |
 | 13-ai-intelligence-layer | 0/TBD | — | — | Not started |
 
@@ -50,6 +50,7 @@ Last activity: 2026-02-25 — Completed 11-01: Toast + undo wired into all 4 Zus
 | Phase 10 P04 | 2 | 2 tasks | 6 files |
 | Phase 11-qol-wins P05 | 3 | 2 tasks | 2 files |
 | Phase 11 P01 | 5 | 2 tasks | 5 files |
+| Phase 11-qol-wins P04 | 5 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -138,6 +139,9 @@ Recent decisions affecting current work:
 - [Phase 08-screenshot-ingestion]: Screenshot ingestion UX pattern: screen type selection -> Tauri file dialog -> preview -> Vision API spinner -> amber confirmation form -> save/discard
 - [Phase 11-qol-wins]: dynasty-os-checklist-{seasonId} localStorage key: matches existing naming pattern; keyed by season to reset correctly on season switch
 - [Phase 11-qol-wins]: Timeline scrubber only shown when nodes.length > 1: single-season timelines don't need navigation; no-print class hides it during PDF export
+- [Phase 11-04]: exportTableToCsv pattern: papaparse.unparse + Tauri save dialog + writeTextFile — reusable for all tabular CSV export (no blob URLs in WKWebView)
+- [Phase 11-04]: Recent opponents chips in LogGameModal: useMemo sorted by week desc, 5 unique opponents, chip row above TeamSelect
+- [Phase 11-04]: New season year auto-suggest: activeSeason.year + 1 — eliminates manual year entry for the common case
 
 ### Phase 10 Decisions
 

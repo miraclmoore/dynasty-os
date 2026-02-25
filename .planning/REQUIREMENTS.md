@@ -14,10 +14,10 @@ Requirements for Milestone v2.0. 32 user-facing requirements across 3 categories
 - [x] **QOL-02**: User can undo the last single destructive action (delete or edit) for games, players, and season stats
 - [ ] **QOL-03**: All list and table filter selections persist across navigation within the same app session
 - [x] **QOL-04**: User can open a command palette (Ctrl+K / Cmd+K) to navigate to any page or trigger quick actions from any screen
-- [ ] **QOL-05**: User can export any data table to a CSV file via the OS file save dialog
-- [ ] **QOL-06**: New season year input auto-suggests previous season year + 1
-- [ ] **QOL-07**: Log Game modal shows recently-used opponents as quick-select options
-- [ ] **QOL-08**: User can add and edit a free-text note on any player record
+- [x] **QOL-05**: User can export any data table to a CSV file via the OS file save dialog
+- [x] **QOL-06**: New season year input auto-suggests previous season year + 1
+- [x] **QOL-07**: Log Game modal shows recently-used opponents as quick-select options
+- [x] **QOL-08**: User can add and edit a free-text note on any player record
 - [x] **QOL-09**: Dashboard season checklist tracks which annual tasks are complete for the active season
 - [x] **QOL-10**: Program Timeline includes a horizontal season scrubber for jumping to any dynasty year directly
 
@@ -285,10 +285,10 @@ Which phases cover which v2.0 requirements. Updated during roadmap creation.
 | QOL-02 | Phase 11 | Complete |
 | QOL-03 | Phase 11 | Pending |
 | QOL-04 | Phase 11 | Complete |
-| QOL-05 | Phase 11 | Pending |
-| QOL-06 | Phase 11 | Pending |
-| QOL-07 | Phase 11 | Pending |
-| QOL-08 | Phase 11 | Pending |
+| QOL-05 | Phase 11 | Complete |
+| QOL-06 | Phase 11 | Complete |
+| QOL-07 | Phase 11 | Complete |
+| QOL-08 | Phase 11 | Complete |
 | QOL-09 | Phase 11 | Complete |
 | QOL-10 | Phase 11 | Complete |
 | COMM-01 | Phase 12 | Pending |
