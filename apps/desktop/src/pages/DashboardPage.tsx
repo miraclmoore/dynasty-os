@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { useDynastyStore } from '../store';
 import { useSeasonStore } from '../store/season-store';
 import { useGameStore } from '../store/game-store';
@@ -11,19 +12,11 @@ import { LogGameModal } from '../components/LogGameModal';
 import { SeasonEndModal } from '../components/SeasonEndModal';
 import { StatHighlights } from '../components/StatHighlights';
 import { GameLog } from '../components/GameLog';
+import { Tooltip } from '../components/Tooltip';
+import { CHECKLIST_TASKS, verifyAllTasks } from '../lib/checklist-service';
 import { isAutoExportEnabled, setAutoExportEnabled } from '../lib/auto-export-service';
 import { getTeamLogoUrl } from '../lib/team-logo-service';
 import type { GameResult } from '@dynasty-os/core-types';
-
-const CHECKLIST_TASKS = [
-  { id: 'log-games', label: 'Log all games for the season' },
-  { id: 'season-end', label: 'Record season end data (bowl/playoff/ranking)' },
-  { id: 'narrative', label: 'Generate season recap narrative' },
-  { id: 'player-stats', label: 'Update player stats for the season' },
-  { id: 'recruiting', label: 'Log recruiting class (CFB)', cfbOnly: true },
-  { id: 'nfl-draft', label: 'Log NFL draft class (CFB)', cfbOnly: true },
-  { id: 'transfer-portal', label: 'Log transfer portal activity (CFB)', cfbOnly: true },
-] as const;
 
 const CHECKLIST_KEY = (seasonId: string) => `dynasty-os-checklist-${seasonId}`;
 
@@ -33,14 +26,20 @@ const SPORT_BADGE: Record<string, { label: string; classes: string }> = {
   nfl2k: { label: 'NFL 2K', classes: 'bg-purple-700 text-purple-100' },
 };
 
-function NavLink({ label, onClick }: { label: string; onClick: () => void }) {
-  return (
+function NavLink({ label, onClick, tooltip }: { label: string; onClick: () => void; tooltip?: string }) {
+  const btn = (
     <button
       onClick={onClick}
       className="w-full text-left px-2 py-1.5 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors"
     >
       {label}
     </button>
+  );
+  if (!tooltip) return btn;
+  return (
+    <Tooltip content={tooltip} side="right">
+      {btn}
+    </Tooltip>
   );
 }
 
@@ -74,6 +73,7 @@ export function DashboardPage() {
       return {};
     }
   });
+  const [verified, setVerified] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     if (!activeDynasty) return;
@@ -96,8 +96,23 @@ export function DashboardPage() {
     }
   }, [activeSeason?.id]);
 
+  useEffect(() => {
+    if (!activeDynasty || !activeSeason) return;
+    const applicableTasks = CHECKLIST_TASKS.filter(
+      (t) => !t.cfbOnly || activeDynasty.sport === 'cfb'
+    );
+    verifyAllTasks(activeDynasty.id, activeSeason.id, applicableTasks).then(setVerified);
+  }, [activeDynasty?.id, activeSeason?.id, games.length, activeSeason?.updatedAt]);
+
   const toggleTask = (taskId: string) => {
     if (!activeSeason) return;
+    const isChecking = !checklist[taskId];
+    if (isChecking && !verified[taskId]) {
+      toast('Step not detected in data', {
+        description: 'Mark done anyway if you completed it outside the app.',
+        duration: 4000,
+      });
+    }
     setChecklist((prev) => {
       const next = { ...prev, [taskId]: !prev[taskId] };
       localStorage.setItem(CHECKLIST_KEY(activeSeason.id), JSON.stringify(next));
@@ -197,36 +212,36 @@ export function DashboardPage() {
           )}
 
           <NavSection title="Program">
-            <NavLink label="Trophy Room" onClick={() => nav.goToTrophyRoom()} />
-            <NavLink label="Coaching Resume" onClick={() => nav.goToCoachingResume()} />
-            <NavLink label="Scouting Cards" onClick={() => nav.goToScoutingCard()} />
+            <NavLink label="Trophy Room" onClick={() => nav.goToTrophyRoom()} tooltip="View trophies and championship history from your dynasty" />
+            <NavLink label="Coaching Resume" onClick={() => nav.goToCoachingResume()} tooltip="Your career record, accolades, and coaching history" />
+            <NavLink label="Scouting Cards" onClick={() => nav.goToScoutingCard()} tooltip="Printable-style cards summarizing opponent tendencies" />
           </NavSection>
 
           <NavSection title="Roster">
-            <NavLink label="Manage Roster" onClick={() => nav.goToRoster()} />
-            <NavLink label="Program Legends" onClick={() => nav.goToLegends()} />
-            <NavLink label="Records & Leaderboards" onClick={() => nav.goToRecords()} />
+            <NavLink label="Manage Roster" onClick={() => nav.goToRoster()} tooltip="View and manage your active players and their career stats" />
+            <NavLink label="Program Legends" onClick={() => nav.goToLegends()} tooltip="Hall of fame view of all-time great players from your dynasty" />
+            <NavLink label="Records & Leaderboards" onClick={() => nav.goToRecords()} tooltip="Single-season and career statistical leaders" />
           </NavSection>
 
           {activeDynasty.sport === 'cfb' && (
             <NavSection title="CFB Program">
-              <NavLink label="Recruiting" onClick={() => nav.goToRecruiting()} />
-              <NavLink label="Transfer Portal" onClick={() => nav.goToTransferPortal()} />
-              <NavLink label="NFL Draft Tracker" onClick={() => nav.goToDraftTracker()} />
-              <NavLink label="Program Prestige" onClick={() => nav.goToPrestigeTracker()} />
-              <NavLink label="Rivalry Tracker" onClick={() => nav.goToRivalryTracker()} />
-              <NavLink label="Program Timeline" onClick={() => nav.goToProgramTimeline()} />
-              <NavLink label="Parse Screenshot" onClick={() => nav.goToScreenshotIngestion()} />
+              <NavLink label="Recruiting" onClick={() => nav.goToRecruiting()} tooltip="Track your recruiting classes, star ratings, and class rank" />
+              <NavLink label="Transfer Portal" onClick={() => nav.goToTransferPortal()} tooltip="Track incoming and outgoing players via the portal" />
+              <NavLink label="NFL Draft Tracker" onClick={() => nav.goToDraftTracker()} tooltip="Record which players were drafted and their round/team" />
+              <NavLink label="Program Prestige" onClick={() => nav.goToPrestigeTracker()} tooltip="Track your program's prestige rating over time" />
+              <NavLink label="Rivalry Tracker" onClick={() => nav.goToRivalryTracker()} tooltip="Track series records, momentum, and key moments vs. rivals" />
+              <NavLink label="Program Timeline" onClick={() => nav.goToProgramTimeline()} tooltip="Visual timeline of your dynasty's biggest moments" />
+              <NavLink label="Parse Screenshot" onClick={() => nav.goToScreenshotIngestion()} tooltip="Use AI to extract stats from in-game screenshots" />
             </NavSection>
           )}
 
           {(activeDynasty.sport === 'madden' || activeDynasty.sport === 'nfl2k') && (
             <NavSection title="NFL Franchise">
               {activeDynasty.sport === 'madden' && (
-                <NavLink label="Sync Franchise Save" onClick={() => nav.goToMaddenSync()} />
+                <NavLink label="Sync Franchise Save" onClick={() => nav.goToMaddenSync()} tooltip="Import your Madden franchise data automatically" />
               )}
-              <NavLink label="Parse Screenshot" onClick={() => nav.goToScreenshotIngestion()} />
-              <NavLink label="Community Rosters" onClick={() => nav.goToRosterHub()} />
+              <NavLink label="Parse Screenshot" onClick={() => nav.goToScreenshotIngestion()} tooltip="Use AI to extract stats from in-game screenshots" />
+              <NavLink label="Community Rosters" onClick={() => nav.goToRosterHub()} tooltip="Browse and download community-created NFL rosters" />
             </NavSection>
           )}
         </nav>
@@ -327,37 +342,71 @@ export function DashboardPage() {
                     </h3>
                     <ul className="space-y-2">
                       {CHECKLIST_TASKS.filter(
-                        (task) => !('cfbOnly' in task) || activeDynasty.sport === 'cfb'
-                      ).map((task) => (
-                        <li key={task.id}>
-                          <label className="flex items-start gap-2.5 cursor-pointer group">
+                        (task) => !task.cfbOnly || activeDynasty.sport === 'cfb'
+                      ).map((task) => {
+                        const isChecked = !!checklist[task.id];
+                        const isVerified = !!verified[task.id];
+                        const isConfirmedComplete = isVerified && isChecked;
+                        return (
+                          <li key={task.id} className="group flex items-start gap-2.5">
                             <input
                               type="checkbox"
-                              checked={!!checklist[task.id]}
+                              checked={isChecked}
                               onChange={() => toggleTask(task.id)}
-                              className="mt-0.5 w-4 h-4 rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-900 cursor-pointer flex-shrink-0"
-                            />
-                            <span
-                              className={`text-sm transition-colors ${
-                                checklist[task.id]
-                                  ? 'text-gray-500 line-through'
-                                  : 'text-gray-300 group-hover:text-white'
+                              className={`mt-0.5 w-4 h-4 rounded border-gray-600 bg-gray-700 cursor-pointer flex-shrink-0 focus:ring-offset-gray-900 ${
+                                isConfirmedComplete
+                                  ? 'text-green-500 focus:ring-green-500'
+                                  : 'text-blue-500 focus:ring-blue-500'
                               }`}
-                            >
-                              {task.label}
-                            </span>
-                          </label>
-                        </li>
-                      ))}
+                            />
+                            <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                              {isVerified && !isChecked && (
+                                <span className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" title="Data ready" />
+                              )}
+                              <Tooltip content={task.description} side="top">
+                                <span
+                                  className={`text-sm transition-colors cursor-default ${
+                                    isConfirmedComplete
+                                      ? 'text-green-600 line-through'
+                                      : isChecked
+                                      ? 'text-gray-500 line-through'
+                                      : isVerified
+                                      ? 'text-gray-200 group-hover:text-white'
+                                      : 'text-gray-300 group-hover:text-white'
+                                  }`}
+                                >
+                                  {task.label}
+                                </span>
+                              </Tooltip>
+                            </div>
+                            {task.navigateTo !== 'dashboard' && (
+                              <button
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                onClick={() => nav.navigate(task.navigateTo as any)}
+                                className="opacity-0 group-hover:opacity-100 ml-auto flex-shrink-0 p-0.5 text-gray-500 hover:text-gray-200 transition-all"
+                                title={`Go to ${task.label}`}
+                              >
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                              </button>
+                            )}
+                          </li>
+                        );
+                      })}
                     </ul>
                     {(() => {
                       const applicable = CHECKLIST_TASKS.filter(
-                        (t) => !('cfbOnly' in t) || activeDynasty.sport === 'cfb'
+                        (t) => !t.cfbOnly || activeDynasty.sport === 'cfb'
                       );
                       const done = applicable.filter((t) => checklist[t.id]).length;
+                      const verifiedCount = applicable.filter((t) => verified[t.id]).length;
                       return (
-                        <div className="mt-3 pt-3 border-t border-gray-700 text-xs text-gray-500">
-                          {done}/{applicable.length} complete
+                        <div className="mt-3 pt-3 border-t border-gray-700 text-xs text-gray-500 flex items-center justify-between">
+                          <span>{done}/{applicable.length} complete</span>
+                          {verifiedCount > 0 && (
+                            <span className="text-green-600">{verifiedCount} verified</span>
+                          )}
                         </div>
                       );
                     })()}

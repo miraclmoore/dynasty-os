@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Toaster } from 'sonner';
 import { useDynastyStore } from './store';
 import { useNavigationStore } from './store/navigation-store';
+import { OnboardingModal } from './components/OnboardingModal';
 import { LauncherPage } from './pages/LauncherPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { RosterPage } from './pages/RosterPage';
@@ -94,6 +95,8 @@ function PageContent() {
 function App() {
   const hiddenInputRef = useRef<HTMLInputElement>(null);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const [onboardingOpen, setOnboardingOpen] = useState(false);
+  const activeDynasty = useDynastyStore((s) => s.activeDynasty);
 
   useEffect(() => {
     // Tauri WebView cold-launch fix: force focus into document body
@@ -125,8 +128,19 @@ function App() {
         readOnly
         aria-hidden="true"
       />
+      {/* Help / tour re-open button — only shown when a dynasty is active */}
+      {activeDynasty && (
+        <button
+          onClick={() => setOnboardingOpen(true)}
+          className="fixed top-1 right-2 z-40 w-6 h-6 flex items-center justify-center rounded-full bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-gray-200 text-xs font-bold transition-colors border border-gray-700"
+          title="Open tour / help"
+        >
+          ?
+        </button>
+      )}
       <PageContent />
       <CommandPalette open={commandPaletteOpen} onOpenChange={setCommandPaletteOpen} />
+      <OnboardingModal isOpen={onboardingOpen} onClose={() => setOnboardingOpen(false)} />
       <TickerBar />
       <Toaster richColors position="bottom-right" />
     </div>

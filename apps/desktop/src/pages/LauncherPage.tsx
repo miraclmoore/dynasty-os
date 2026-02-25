@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDynastyStore } from '../store';
 import { DynastyCard } from '../components/DynastyCard';
 import { CreateDynastyModal } from '../components/CreateDynastyModal';
+import { OnboardingModal, ONBOARDING_STORAGE_KEY } from '../components/OnboardingModal';
 import { ExportImportControls } from '../components/ExportImportControls';
 import type { Dynasty } from '@dynasty-os/core-types';
 
@@ -14,6 +15,7 @@ export function LauncherPage() {
   const deleteDynasty = useDynastyStore((s) => s.deleteDynasty);
 
   const [showCreate, setShowCreate] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
     void loadDynasties();
@@ -140,8 +142,14 @@ export function LauncherPage() {
       {showCreate && (
         <CreateDynastyModal
           onClose={() => setShowCreate(false)}
+          onCreated={() => {
+            if (dynasties.length === 0 && !localStorage.getItem(ONBOARDING_STORAGE_KEY)) {
+              setShowOnboarding(true);
+            }
+          }}
         />
       )}
+      <OnboardingModal isOpen={showOnboarding} onClose={() => setShowOnboarding(false)} />
     </div>
   );
 }
