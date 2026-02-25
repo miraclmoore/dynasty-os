@@ -14,5 +14,14 @@ export const SCHEMA = {
   achievements: 'id, dynastyId, achievementId, [dynastyId+achievementId]',
 } as const;
 
+export const SCHEMA_V6 = {
+  ...SCHEMA,
+  coachingStaff: 'id, dynastyId, role, hireYear, [dynastyId+role]',
+  nilEntries: 'id, dynastyId, playerId, year, [dynastyId+playerId]',
+  futureGames: 'id, dynastyId, year, [dynastyId+year]',
+  playerLinks: 'id, dynastyId, playerId, [dynastyId+playerId]',
+  aiCache: 'id, dynastyId, cacheKey, contentType, createdAt, [dynastyId+contentType]',
+} as const;
+
 export const DB_NAME = 'dynasty-os-db';
-export const DB_VERSION = 5;
+export const DB_VERSION = 6;

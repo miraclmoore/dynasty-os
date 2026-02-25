@@ -13,8 +13,13 @@ import type {
   Rival,
   ScoutingNote,
   Achievement,
+  CoachingStaff,
+  NilEntry,
+  FutureGame,
+  PlayerLink,
+  AiCacheEntry,
 } from '@dynasty-os/core-types';
-import { SCHEMA, DB_NAME } from './schema';
+import { SCHEMA, SCHEMA_V6, DB_NAME } from './schema';
 
 export class DynastyDB extends Dexie {
   dynasties!: Table<Dynasty, string>;
@@ -30,12 +35,19 @@ export class DynastyDB extends Dexie {
   rivals!: Table<Rival, string>;
   scoutingNotes!: Table<ScoutingNote, string>;
   achievements!: Table<Achievement, string>;
+  coachingStaff!: Table<CoachingStaff, string>;
+  nilEntries!: Table<NilEntry, string>;
+  futureGames!: Table<FutureGame, string>;
+  playerLinks!: Table<PlayerLink, string>;
+  aiCache!: Table<AiCacheEntry, string>;
 
   constructor() {
     super(DB_NAME);
     this.version(1).stores(SCHEMA);
     this.version(4).stores(SCHEMA);
     this.version(5).stores(SCHEMA);
+    this.version(6).stores(SCHEMA_V6);
+    this.on('versionchange', () => { this.close(); window.location.reload(); });
   }
 }
 
