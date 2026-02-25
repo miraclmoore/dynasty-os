@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 ## Current Position
 
 Phase: 12 — Community Features (in progress)
-Plan: 02 (complete) — ready for 12-03
+Plan: 03 (complete) — ready for 12-04
 Status: Executing
-Last activity: 2026-02-25 — Completed 12-02 (NIL Ledger with recharts BarCharts)
+Last activity: 2026-02-24 — Completed 12-03 (Future Schedule + Player Link — COMM-02, COMM-05)
 
 ## Performance Metrics
 
@@ -36,7 +36,7 @@ Last activity: 2026-02-25 — Completed 12-02 (NIL Ledger with recharts BarChart
 | 09-madden-sync | 3/3 | ~8 min | ~2.7 min | ✓ Complete |
 | 10-infrastructure-foundation | 4/4 | ~8 min | ~2 min | ✓ Complete |
 | 11-qol-wins | 6/6 | ~30 min | ~5 min | ✓ Complete |
-| 12-community-features | 2/7 | ~5 min | ~2.5 min | In Progress |
+| 12-community-features | 3/7 | ~9 min | ~3 min | In Progress |
 | 13-ai-intelligence-layer | 0/TBD | — | — | Not started |
 
 **Recent Trend:**
@@ -55,6 +55,7 @@ Last activity: 2026-02-25 — Completed 12-02 (NIL Ledger with recharts BarChart
 | Phase 11 P06 | 5 | 2 tasks | 0 files |
 | Phase 12 P01 | 2 | 2 tasks | 6 files |
 | Phase 12 P02 | 3 | 2 tasks | 8 files |
+| Phase 12-community-features P03 | 4 | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -151,6 +152,8 @@ Recent decisions affecting current work:
 - [Phase 12]: [Phase 12-02]: NilEntry actual type uses year/durationMonths not startYear/endYear — service and page adapted to match actual DB schema
 - [Phase 12]: [Phase 12-02]: recharts v3 Tooltip formatter value typed as number | undefined — null guard required for TypeScript strict mode
 - [Phase 12]: [Phase 12-02]: recharts BarChart pattern established: ResponsiveContainer > BarChart > XAxis/YAxis/Tooltip/Bar with amber fill — reuse for 12-05 and 12-07
+- [Phase 12]: [Phase 12-03]: FutureGame.isHome boolean (not location string): UI maps home/away/neutral select to isHome via locationToIsHome() helper — actual type has no location field
+- [Phase 12]: [Phase 12-03]: PlayerLink uses linkedDynastyId + linkedPlayerId (not linkedPlayerName/linkedTeam): player link form captures dynasty ID and player ID from paired Madden dynasty
 
 ### Phase 12 Decisions
 
@@ -207,7 +210,7 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-25 UTC
-Stopped at: Completed 12-02-PLAN.md — NIL Ledger with recharts BarCharts, nil-service, nil-store, NilLedgerPage (CFB-only)
+Last session: 2026-02-24 UTC
+Stopped at: Completed 12-03-PLAN.md — Future Schedule + Player Link (COMM-02, COMM-05)
 Resume file: None
-Next action: Execute Phase 12 Plan 03
+Next action: Execute Phase 12 Plan 04

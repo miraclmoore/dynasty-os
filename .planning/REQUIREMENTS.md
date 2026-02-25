@@ -24,10 +24,10 @@ Requirements for Milestone v2.0. 32 user-facing requirements across 3 categories
 ### Community Features
 
 - [x] **COMM-01**: User can track coaching staff lifecycle — hire, fire, promote roles with tenure dates and scheme notes
-- [ ] **COMM-02**: User can link a CFB player record to their NFL/Madden career counterpart across dynasty types
+- [x] **COMM-02**: User can link a CFB player record to their NFL/Madden career counterpart across dynasty types
 - [ ] **COMM-03**: User can simulate a playoff bracket for the current season with customizable seedings
 - [x] **COMM-04**: CFB users can log NIL deals per player (amount, brand, duration) and view total spend by class and position
-- [ ] **COMM-05**: User can build a multi-year future schedule and view projected bowl eligibility
+- [x] **COMM-05**: User can build a multi-year future schedule and view projected bowl eligibility
 - [ ] **COMM-06**: Madden users can calculate trade value for any player based on position, rating, age, and contract
 - [ ] **COMM-07**: CFB users can compare recruiting class grades side-by-side across seasons or rival programs
 - [ ] **COMM-08**: User can enable automatic background export of dynasty data to JSON/CSV on every save
@@ -78,10 +78,10 @@ Requirements for Milestone v2.0. 32 user-facing requirements across 3 categories
 | QOL-09 | Phase 11 | Complete |
 | QOL-10 | Phase 11 | Complete |
 | COMM-01 | Phase 12 | Complete |
-| COMM-02 | Phase 12 | Pending |
+| COMM-02 | Phase 12 | Complete |
 | COMM-03 | Phase 12 | Pending |
 | COMM-04 | Phase 12 | Complete |
-| COMM-05 | Phase 12 | Pending |
+| COMM-05 | Phase 12 | Complete |
 | COMM-06 | Phase 12 | Pending |
 | COMM-07 | Phase 12 | Pending |
 | COMM-08 | Phase 12 | Pending |
