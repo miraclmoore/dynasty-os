@@ -6,6 +6,7 @@ import {
   updatePlayerSeason as svcUpdate,
   deletePlayerSeason as svcDelete,
 } from '../lib/player-season-service';
+import { useToastStore } from './toast-store';
 
 interface PlayerSeasonState {
   playerSeasons: PlayerSeason[];
@@ -48,9 +49,11 @@ export const usePlayerSeasonStore = create<PlayerSeasonStore>((set, get) => ({
       // Reload after mutation
       const playerSeasons = await getPlayerSeasonsByPlayer(input.playerId);
       set({ playerSeasons, loading: false });
+      useToastStore.getState().success('Season stats saved');
       return playerSeason;
     } catch (err) {
       set({ error: String(err), loading: false });
+      useToastStore.getState().error('Failed to save stats', String(err));
       throw err;
     }
   },
@@ -71,8 +74,10 @@ export const usePlayerSeasonStore = create<PlayerSeasonStore>((set, get) => ({
       } else {
         set({ loading: false });
       }
+      useToastStore.getState().success('Season stats updated');
     } catch (err) {
       set({ error: String(err), loading: false });
+      useToastStore.getState().error('Failed to update stats', String(err));
       throw err;
     }
   },
@@ -89,8 +94,10 @@ export const usePlayerSeasonStore = create<PlayerSeasonStore>((set, get) => ({
       } else {
         set({ loading: false });
       }
+      useToastStore.getState().success('Season stats deleted');
     } catch (err) {
       set({ error: String(err), loading: false });
+      useToastStore.getState().error('Failed to delete stats', String(err));
       throw err;
     }
   },

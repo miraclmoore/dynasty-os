@@ -5,6 +5,7 @@ import {
   getSeasonsByDynasty,
   updateSeason as svcUpdate,
 } from '../lib/season-service';
+import { useToastStore } from './toast-store';
 
 interface SeasonState {
   seasons: Season[];
@@ -47,9 +48,11 @@ export const useSeasonStore = create<SeasonStore>((set, get) => ({
       const season = await svcCreate({ dynastyId, year });
       const seasons = await getSeasonsByDynasty(dynastyId);
       set({ seasons, activeSeason: season, loading: false });
+      useToastStore.getState().success('Season started', `${season.year} season`);
       return season;
     } catch (err) {
       set({ error: String(err), loading: false });
+      useToastStore.getState().error('Failed to start season', String(err));
       throw err;
     }
   },
@@ -68,8 +71,10 @@ export const useSeasonStore = create<SeasonStore>((set, get) => ({
       } else {
         set({ loading: false });
       }
+      useToastStore.getState().success('Season data saved');
     } catch (err) {
       set({ error: String(err), loading: false });
+      useToastStore.getState().error('Failed to save season data', String(err));
       throw err;
     }
   },
