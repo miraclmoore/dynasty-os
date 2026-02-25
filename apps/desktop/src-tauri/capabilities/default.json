@@ -16,6 +16,6 @@
     "shell:allow-open",
     "fs:allow-watch",
     "fs:allow-mkdir",
-    "fs:scope-app-data"
+    "fs:scope-appdata-recursive"
   ]
 }
