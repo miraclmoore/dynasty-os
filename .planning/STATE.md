@@ -10,16 +10,16 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 ## Current Position
 
 Phase: 12 — Community Features (in progress)
-Plan: 04 (complete) — ready for 12-05
+Plan: 05 (complete) — ready for 12-06
 Status: Executing
-Last activity: 2026-02-24 — Completed 12-04 (Playoff Simulator + Trade Calculator — COMM-03, COMM-06)
+Last activity: 2026-02-25 — Completed 12-05 (Recruiting Comparison + Record Book — COMM-07, COMM-09)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 33
-- Average duration: ~4.8 min
-- Total execution time: ~121 min
+- Total plans completed: 34
+- Average duration: ~4.7 min
+- Total execution time: ~123 min
 
 **By Phase:**
 
@@ -36,11 +36,11 @@ Last activity: 2026-02-24 — Completed 12-04 (Playoff Simulator + Trade Calcula
 | 09-madden-sync | 3/3 | ~8 min | ~2.7 min | ✓ Complete |
 | 10-infrastructure-foundation | 4/4 | ~8 min | ~2 min | ✓ Complete |
 | 11-qol-wins | 6/6 | ~30 min | ~5 min | ✓ Complete |
-| 12-community-features | 3/7 | ~9 min | ~3 min | In Progress |
+| 12-community-features | 5/7 | ~11 min | ~2.2 min | In Progress |
 | 13-ai-intelligence-layer | 0/TBD | — | — | Not started |
 
 **Recent Trend:**
-- Last 5 plans: 4 min, 2 min, 3 min, 3 min, 2 min
+- Last 5 plans: 2 min, 3 min, 3 min, 2 min, 2 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -58,6 +58,7 @@ Last activity: 2026-02-24 — Completed 12-04 (Playoff Simulator + Trade Calcula
 | Phase 12-community-features P03 | 4 | 2 tasks | 9 files |
 | Phase 12-community-features P04 | 4 | 2 tasks | 7 files |
 | Phase 12 P04 | 4 | 2 tasks | 7 files |
+| Phase 12 P05 | 2 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -159,6 +160,9 @@ Recent decisions affecting current work:
 - [Phase 12]: [Phase 12-04]: Pure logic in lib/ files (no Zustand) — bracket and trade value are stateless computations
 - [Phase 12]: [Phase 12-04]: 12-team bye logic: seeds 1-4 enter round 2 with team2=null; play-in results fill team2 in reverse index order
 - [Phase 12]: [Phase 12-04]: Trade Calculator in Navigate group (Madden conditional); Playoff Simulator in CFB Program group (CFB conditional) — consistent with existing sport-gating pattern
+- [Phase 12]: [Phase 12-05]: gradeToScore map converts letter grades to numeric for recharts — A+=100, A=95, A-=90, B+=85, B=80, B-=75, etc; letter shown in custom tooltip
+- [Phase 12]: [Phase 12-05]: RecordBookPage top performer computed by summing all PlayerSeason.stats values — sport-agnostic, no position-specific key needed
+- [Phase 12]: [Phase 12-05]: buildRecordBook pure local function in RecordBookPage (not service layer) — page-specific aggregation matches CoachingResumePage pattern
 
 ### Phase 12 Decisions
 
