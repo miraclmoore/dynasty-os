@@ -10,14 +10,14 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 ## Current Position
 
 Phase: 12 — Community Features (in progress)
-Plan: 01 (complete) — ready for 12-02
+Plan: 02 (complete) — ready for 12-03
 Status: Executing
-Last activity: 2026-02-25 — Completed 12-01 (Coaching Staff lifecycle feature)
+Last activity: 2026-02-25 — Completed 12-02 (NIL Ledger with recharts BarCharts)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 32
+- Total plans completed: 33
 - Average duration: ~4.8 min
 - Total execution time: ~121 min
 
@@ -36,7 +36,7 @@ Last activity: 2026-02-25 — Completed 12-01 (Coaching Staff lifecycle feature)
 | 09-madden-sync | 3/3 | ~8 min | ~2.7 min | ✓ Complete |
 | 10-infrastructure-foundation | 4/4 | ~8 min | ~2 min | ✓ Complete |
 | 11-qol-wins | 6/6 | ~30 min | ~5 min | ✓ Complete |
-| 12-community-features | 1/7 | ~2 min | ~2 min | In Progress |
+| 12-community-features | 2/7 | ~5 min | ~2.5 min | In Progress |
 | 13-ai-intelligence-layer | 0/TBD | — | — | Not started |
 
 **Recent Trend:**
@@ -54,6 +54,7 @@ Last activity: 2026-02-25 — Completed 12-01 (Coaching Staff lifecycle feature)
 | Phase 11 P02 | 8 | 2 tasks | 5 files |
 | Phase 11 P06 | 5 | 2 tasks | 0 files |
 | Phase 12 P01 | 2 | 2 tasks | 6 files |
+| Phase 12 P02 | 3 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -147,6 +148,9 @@ Recent decisions affecting current work:
 - [Phase 11-04]: New season year auto-suggest: activeSeason.year + 1 — eliminates manual year entry for the common case
 - [Phase 11]: Filter-store-aware initialization uses synchronous getState().getFilters() at component declaration time — safe for in-memory Zustand
 - [Phase 11]: Setter wrapper pattern: same public setter name, internal useState renamed with Internal suffix — no JSX changes needed, store sync is side-effect
+- [Phase 12]: [Phase 12-02]: NilEntry actual type uses year/durationMonths not startYear/endYear — service and page adapted to match actual DB schema
+- [Phase 12]: [Phase 12-02]: recharts v3 Tooltip formatter value typed as number | undefined — null guard required for TypeScript strict mode
+- [Phase 12]: [Phase 12-02]: recharts BarChart pattern established: ResponsiveContainer > BarChart > XAxis/YAxis/Tooltip/Bar with amber fill — reuse for 12-05 and 12-07
 
 ### Phase 12 Decisions
 
@@ -204,6 +208,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-25 UTC
-Stopped at: Completed 12-01-PLAN.md — Coaching Staff lifecycle feature; coaching-staff-service, store, page, and navigation registration
+Stopped at: Completed 12-02-PLAN.md — NIL Ledger with recharts BarCharts, nil-service, nil-store, NilLedgerPage (CFB-only)
 Resume file: None
-Next action: Execute Phase 12 Plan 02 (NIL Ledger)
+Next action: Execute Phase 12 Plan 03
