@@ -87,7 +87,16 @@ Plans:
   3. Madden users can calculate trade value for any player based on position, rating, age, and contract
   4. User can view the full dynasty arc in a Historical Season Record Book — all seasons, records, stats, and awards in one scrollable view
   5. User can view an expanded Rivalry Dashboard with series momentum, key moment log, and all-time context, and dynasty data auto-exports to JSON/CSV in the background on every save
-**Plans**: TBD
+**Plans**: 7 plans
+
+Plans:
+- [ ] 12-01-PLAN.md — Coaching Staff: coaching-staff-service + coaching-staff-store + CoachingStaffPage + navigation registration (COMM-01)
+- [ ] 12-02-PLAN.md — NIL Ledger: install recharts, nil-service + nil-store + NilLedgerPage with spend charts (COMM-04)
+- [ ] 12-03-PLAN.md — Future Schedule + Player Links: future-schedule-service/store + FutureSchedulePage; player-link-service/store + PlayerProfilePage section (COMM-02, COMM-05)
+- [ ] 12-04-PLAN.md — Playoff Simulator + Trade Calculator: playoff-bracket.ts + PlayoffSimulatorPage (CFB); trade-calculator.ts + TradeCalculatorPage (Madden) (COMM-03, COMM-06)
+- [ ] 12-05-PLAN.md — Recruiting Comparison + Record Book: RecruitingComparisonPage (CFB, recharts); RecordBookPage (sport-agnostic, direct db queries) (COMM-07, COMM-09)
+- [ ] 12-06-PLAN.md — Auto-Export + Rivalry Dashboard expansion: auto-export-service + dynasty-store wiring + export-import v2; rivalry momentum + key moments (COMM-08, COMM-10)
+- [ ] 12-07-PLAN.md — Human verification checkpoint: build check + interactive walkthrough of all 10 COMM features
 
 ### Phase 13: AI Intelligence Layer
 **Goal**: Dynasty OS is a living companion that observes, interprets, and narrates the dynasty in real time — AI features are triggered by data events, cached reliably, and sequenced from cheap Haiku features to complex Sonnet synthesis.
@@ -119,5 +128,5 @@ v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13.
 | 9. Madden Sync | v1.0 | 3/3 | Complete | 2026-02-24 |
 | 10. Infrastructure Foundation | v2.0 | 4/4 | Complete | 2026-02-25 |
 | 11. QOL Wins | v2.0 | 6/6 | Complete | 2026-02-25 |
-| 12. Community Features | v2.0 | 0/TBD | Not started | - |
+| 12. Community Features | v2.0 | 0/7 | Not started | - |
 | 13. AI Intelligence Layer | v2.0 | 0/TBD | Not started | - |
