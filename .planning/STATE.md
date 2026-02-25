@@ -5,19 +5,19 @@
 See: .planning/PROJECT.md (updated 2026-02-25)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** Milestone v2.0 — The Living Dynasty (Phase 12: Community Features — next to plan)
+**Current focus:** Milestone v2.0 — The Living Dynasty (Phase 12: Community Features — in progress)
 
 ## Current Position
 
-Phase: 12 — Community Features (next to execute)
-Plan: 00 (not started)
-Status: Planning
-Last activity: 2026-02-25 — Archived v1.0 milestone (Phases 1–9, 26 plans); v2.0 Phases 10–11 complete
+Phase: 12 — Community Features (in progress)
+Plan: 01 (complete) — ready for 12-02
+Status: Executing
+Last activity: 2026-02-25 — Completed 12-01 (Coaching Staff lifecycle feature)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 31
+- Total plans completed: 32
 - Average duration: ~4.8 min
 - Total execution time: ~121 min
 
@@ -36,7 +36,7 @@ Last activity: 2026-02-25 — Archived v1.0 milestone (Phases 1–9, 26 plans); 
 | 09-madden-sync | 3/3 | ~8 min | ~2.7 min | ✓ Complete |
 | 10-infrastructure-foundation | 4/4 | ~8 min | ~2 min | ✓ Complete |
 | 11-qol-wins | 6/6 | ~30 min | ~5 min | ✓ Complete |
-| 12-community-features | 0/TBD | — | — | Not started |
+| 12-community-features | 1/7 | ~2 min | ~2 min | In Progress |
 | 13-ai-intelligence-layer | 0/TBD | — | — | Not started |
 
 **Recent Trend:**
@@ -53,6 +53,7 @@ Last activity: 2026-02-25 — Archived v1.0 milestone (Phases 1–9, 26 plans); 
 | Phase 11-qol-wins P04 | 5 | 2 tasks | 6 files |
 | Phase 11 P02 | 8 | 2 tasks | 5 files |
 | Phase 11 P06 | 5 | 2 tasks | 0 files |
+| Phase 12 P01 | 2 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -147,6 +148,12 @@ Recent decisions affecting current work:
 - [Phase 11]: Filter-store-aware initialization uses synchronous getState().getFilters() at component declaration time — safe for in-memory Zustand
 - [Phase 11]: Setter wrapper pattern: same public setter name, internal useState renamed with Internal suffix — no JSX changes needed, store sync is side-effect
 
+### Phase 12 Decisions
+
+- [Phase 12-01]: CoachingStaffPage uses inline fire/promote UI (toggle state per-row) — no modal, minimal state, no additional dependencies
+- [Phase 12-01]: CoachingRole values use API keys mapped to display labels via ROLE_OPTIONS array — consistent with core-types definition
+- [Phase 12-01]: Collapsible Staff History section (default open) — avoids long scroll when many coaches have been fired across a long dynasty
+
 ### Phase 10 Decisions
 
 - [Phase 10-01]: SCHEMA_V6 uses spread over SCHEMA: guarantees all 13 existing tables preserved; version(6).stores(SCHEMA_V6) not SCHEMA — critical distinction prevents silent table drop
@@ -197,6 +204,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-25 UTC
-Stopped at: Completed 11-06-PLAN.md — All 10 QOL features human-verified and approved; Phase 11 QOL Wins complete
+Stopped at: Completed 12-01-PLAN.md — Coaching Staff lifecycle feature; coaching-staff-service, store, page, and navigation registration
 Resume file: None
-Next action: Execute Phase 12 (Community Features) or Phase 13 (AI Intelligence Layer)
+Next action: Execute Phase 12 Plan 02 (NIL Ledger)

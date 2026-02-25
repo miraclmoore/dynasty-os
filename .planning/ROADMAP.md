@@ -128,5 +128,5 @@ v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13.
 | 9. Madden Sync | v1.0 | 3/3 | Complete | 2026-02-24 |
 | 10. Infrastructure Foundation | v2.0 | 4/4 | Complete | 2026-02-25 |
 | 11. QOL Wins | v2.0 | 6/6 | Complete | 2026-02-25 |
-| 12. Community Features | v2.0 | 0/7 | Not started | - |
+| 12. Community Features | 1/7 | In Progress|  | - |
 | 13. AI Intelligence Layer | v2.0 | 0/TBD | Not started | - |
