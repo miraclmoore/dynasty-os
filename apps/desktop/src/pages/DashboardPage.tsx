@@ -45,9 +45,9 @@ function NavLink({ label, onClick, tooltip }: { label: string; onClick: () => vo
   );
 }
 
-function NavSection({ title, children }: { title: string; children: React.ReactNode }) {
+function NavSection({ title, children, tourId }: { title: string; children: React.ReactNode; tourId?: string }) {
   return (
-    <div>
+    <div data-tour-id={tourId}>
       <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1 px-2">
         {title}
       </div>
@@ -217,20 +217,20 @@ export function DashboardPage() {
             </NavSection>
           )}
 
-          <NavSection title="Program">
+          <NavSection title="Program" tourId="tour-program">
             <NavLink label="Trophy Room" onClick={() => nav.goToTrophyRoom()} tooltip="View trophies and championship history from your dynasty" />
             <NavLink label="Coaching Resume" onClick={() => nav.goToCoachingResume()} tooltip="Your career record, accolades, and coaching history" />
             <NavLink label="Scouting Cards" onClick={() => nav.goToScoutingCard()} tooltip="Printable-style cards summarizing opponent tendencies" />
           </NavSection>
 
-          <NavSection title="Roster">
+          <NavSection title="Roster" tourId="tour-roster">
             <NavLink label="Manage Roster" onClick={() => nav.goToRoster()} tooltip="View and manage your active players and their career stats" />
             <NavLink label="Program Legends" onClick={() => nav.goToLegends()} tooltip="Hall of fame view of all-time great players from your dynasty" />
             <NavLink label="Records & Leaderboards" onClick={() => nav.goToRecords()} tooltip="Single-season and career statistical leaders" />
           </NavSection>
 
           {activeDynasty.sport === 'cfb' && (
-            <NavSection title="CFB Program">
+            <NavSection title="CFB Program" tourId="tour-sport-section">
               <NavLink label="Recruiting" onClick={() => nav.goToRecruiting()} tooltip="Track your recruiting classes, star ratings, and class rank" />
               <NavLink label="Transfer Portal" onClick={() => nav.goToTransferPortal()} tooltip="Track incoming and outgoing players via the portal" />
               <NavLink label="NFL Draft Tracker" onClick={() => nav.goToDraftTracker()} tooltip="Record which players were drafted and their round/team" />
@@ -242,7 +242,7 @@ export function DashboardPage() {
           )}
 
           {(activeDynasty.sport === 'madden' || activeDynasty.sport === 'nfl2k') && (
-            <NavSection title="NFL Franchise">
+            <NavSection title="NFL Franchise" tourId="tour-sport-section">
               {activeDynasty.sport === 'madden' && (
                 <NavLink label="Sync Franchise Save" onClick={() => nav.goToMaddenSync()} tooltip="Import your Madden franchise data automatically" />
               )}
