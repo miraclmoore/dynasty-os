@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-25)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** Milestone v2.0 — The Living Dynasty (Phase 12 plans 01-06 complete; 12-07 verification pending; out-of-plan AI recap + team logo work committed; TickerBar + RosterHub in progress)
+**Current focus:** Milestone v2.1 — UX/UI Polish (Phase 14+)
 
 ## Current Position
 
-Phase: 12 — Community Features (6/7 plans complete)
-Plan: 07 — verification checkpoint (PLAN exists, no SUMMARY)
-Status: In Progress — out-of-plan work committed + additional features in working tree
-Last activity: 2026-02-25 — AI recap overhaul + per-game recaps + team logos (ea77417); Madden version-check UI uncommitted; TickerBar + RosterHub untracked
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements for v2.1 UX/UI Polish
+Last activity: 2026-02-25 — Milestone v2.1 started
 
 ## Performance Metrics
 

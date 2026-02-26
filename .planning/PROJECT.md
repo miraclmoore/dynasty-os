@@ -8,15 +8,29 @@ Dynasty OS is a desktop companion platform for sports game dynasty and franchise
 
 The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
 
-## Current Milestone: v2.0 The Living Dynasty
+## Current Milestone: v2.1 UX/UI Polish
+
+**Goal:** Eliminate the UX rough edges identified in post-v2.0 audit — onboarding gaps, navigation dead-ends, unreadable UI copy, and pages that feel incomplete — so every corner of the app feels intentional and production-grade.
+
+**Target features:**
+- Onboarding tour surfaced for existing users who missed it
+- Tooltip positioning fixed (no sidebar overflow / viewport clipping)
+- SetupWizard readable description text
+- Breadcrumb / back navigation on all inner pages
+- QuickEntryHub category text legible at a glance
+- GameLog notes expandable inline without truncation
+- Recap API errors with actionable guidance
+- Sparse pages fleshed out as complete standalone views
+
+## Previous Milestone: v2.0 The Living Dynasty
 
 **Goal:** Elevate Dynasty OS from a data tracker into an intelligent, living dynasty companion — 33 new capabilities across UX polish, community-requested features, and a novel AI intelligence layer.
 
-**Status:** Phases 10–11 complete (infrastructure + QOL wins). Phases 12–13 in planning (community features + AI layer).
+**Status:** Phases 10–12 complete. Phase 13 (AI Intelligence Layer) pending v2.1 completion.
 
 **Target features:**
 - QOL Wins (10): ✅ All 10 shipped in Phase 11
-- Community Features (10): Coaching staff lifecycle tracker, CFB-to-Madden player continuity, playoff scenario simulator, NIL budget ledger, future schedule builder + bowl projection, trade value calculator, recruiting class grade comparison, auto-sync/live data export, historical season record book, rivalry dashboard with full series context
+- Community Features (10): ✅ Phases 12 shipped coaching staff tracker, CFB-Madden player continuity, playoff simulator, NIL ledger, schedule builder, trade calculator, class grade comparison, auto-sync, record book, rivalry dashboard expansion
 - AI Intelligence Layer (12): Living Chronicle, Hot Seat/Pressure Meter, Opponent Intelligence Dossiers, Generational Player Arcs, Rival Prophecy, The Obituary Room, The Journalist, Cross-Dynasty Intelligence, Momentum Heat Map, What If Engine, Broadcast Booth/Audio Mode, DNA Report
 
 ## Requirements
@@ -121,4 +135,4 @@ The memory layer, narrative engine, and legacy vault that sports games never bui
 
 ---
 
-*Last updated: 2026-02-25 after v1.0 milestone archived; v2.0 Phases 10–11 complete*
+*Last updated: 2026-02-25 — v2.1 UX/UI Polish milestone started*
