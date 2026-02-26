@@ -14,8 +14,8 @@ interface StatCard {
 export function StatHighlights({ games }: StatHighlightsProps) {
   if (games.length === 0) {
     return (
-      <div className="bg-gray-800 rounded-lg p-5">
-        <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">
+      <div data-tour-id="tour-stat-highlights" className="bg-gray-800 rounded-lg p-5">
+        <h2 className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-3">
           Stat Highlights
         </h2>
         <p className="text-gray-500 text-sm">Log games to see stat highlights</p>
@@ -71,8 +71,8 @@ export function StatHighlights({ games }: StatHighlightsProps) {
   ];
 
   return (
-    <div className="bg-gray-800 rounded-lg p-5">
-      <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
+    <div data-tour-id="tour-stat-highlights" className="bg-gray-800 rounded-lg p-5">
+      <h2 className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-4">
         Stat Highlights
       </h2>
       <div className="grid grid-cols-2 gap-3">

@@ -13,6 +13,8 @@ import { SeasonEndModal } from '../components/SeasonEndModal';
 import { StatHighlights } from '../components/StatHighlights';
 import { GameLog } from '../components/GameLog';
 import { Tooltip } from '../components/Tooltip';
+import { QuickEntryHub } from '../components/QuickEntryHub';
+import { SetupWizard } from '../components/SetupWizard';
 import { CHECKLIST_TASKS, verifyAllTasks } from '../lib/checklist-service';
 import { isAutoExportEnabled, setAutoExportEnabled } from '../lib/auto-export-service';
 import { getTeamLogoUrl } from '../lib/team-logo-service';
@@ -30,7 +32,7 @@ function NavLink({ label, onClick, tooltip }: { label: string; onClick: () => vo
   const btn = (
     <button
       onClick={onClick}
-      className="w-full text-left px-2 py-1.5 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors"
+      className="w-full text-left px-2 py-1.5 text-sm text-gray-100 hover:text-white hover:bg-gray-800 rounded transition-colors"
     >
       {label}
     </button>
@@ -46,7 +48,7 @@ function NavLink({ label, onClick, tooltip }: { label: string; onClick: () => vo
 function NavSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-2">
+      <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1 px-2">
         {title}
       </div>
       {children}
@@ -152,21 +154,23 @@ export function DashboardPage() {
   return (
     <div className="flex h-[calc(100vh-40px)] bg-gray-900 text-white overflow-hidden">
       {/* ── LEFT SIDEBAR ───────────────────────────────────────────── */}
-      <aside className="w-56 flex-shrink-0 flex flex-col border-r border-gray-800 bg-gray-900">
+      <aside data-tour-id="tour-sidebar" className="w-56 flex-shrink-0 flex flex-col border-r border-gray-800 bg-gray-900">
         {/* Dynasty identity */}
         <div className="px-4 pt-4 pb-3 border-b border-gray-800">
           <div className="flex items-center gap-2 mb-1">
             {(() => {
               const logoUrl = getTeamLogoUrl(activeDynasty.teamName, activeDynasty.sport);
               return logoUrl ? (
-                <img
-                  src={logoUrl}
-                  alt={activeDynasty.teamName}
-                  width={32}
-                  height={32}
-                  className="object-contain flex-shrink-0"
-                  onError={(e) => (e.currentTarget.style.display = 'none')}
-                />
+                <div className="w-8 h-8 rounded-md bg-white flex-shrink-0 flex items-center justify-center overflow-hidden p-0.5">
+                  <img
+                    src={logoUrl}
+                    alt={activeDynasty.teamName}
+                    width={28}
+                    height={28}
+                    className="object-contain w-full h-full"
+                    onError={(e) => { const p = e.currentTarget.parentElement; if (p) p.style.display = 'none'; }}
+                  />
+                </div>
               ) : null;
             })()}
             <h1 className="text-sm font-bold truncate leading-tight flex-1">{activeDynasty.name}</h1>
@@ -174,7 +178,7 @@ export function DashboardPage() {
               {badge.label}
             </span>
           </div>
-          <div className="text-xs text-gray-500">
+          <div className="text-xs text-gray-400">
             {activeDynasty.teamName} &middot; {activeDynasty.currentYear}
           </div>
         </div>
@@ -182,12 +186,14 @@ export function DashboardPage() {
         {/* Primary CTAs */}
         <div className="px-3 py-3 border-b border-gray-800 flex flex-col gap-2">
           <button
+            data-tour-id="tour-log-game"
             onClick={() => setLogGameOpen(true)}
             className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-lg transition-colors"
           >
             + Log Game
           </button>
           <button
+            data-tour-id="tour-end-season"
             onClick={() => setSeasonEndOpen(true)}
             className="w-full px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm font-semibold rounded-lg transition-colors"
           >
@@ -259,7 +265,7 @@ export function DashboardPage() {
               }}
               className="w-3.5 h-3.5 rounded border-gray-600 bg-gray-700 text-amber-500 focus:ring-amber-500 focus:ring-offset-gray-900 cursor-pointer flex-shrink-0"
             />
-            <span className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors leading-tight">
+            <span className="text-xs text-gray-300 group-hover:text-gray-200 transition-colors leading-tight">
               Auto-export on save
             </span>
           </label>
@@ -276,12 +282,12 @@ export function DashboardPage() {
         {/* Dynasty info strip */}
         <div className="flex-shrink-0 border-b border-gray-800 bg-gray-800/30 px-6 py-2 flex gap-6 text-sm">
           <div>
-            <span className="text-gray-500">Coach </span>
-            <span className="text-gray-200">{activeDynasty.coachName}</span>
+            <span className="text-gray-400">Coach </span>
+            <span className="text-gray-100">{activeDynasty.coachName}</span>
           </div>
           <div>
-            <span className="text-gray-500">Game </span>
-            <span className="text-gray-200">{activeDynasty.gameVersion}</span>
+            <span className="text-gray-400">Game </span>
+            <span className="text-gray-100">{activeDynasty.gameVersion}</span>
           </div>
         </div>
 
@@ -326,6 +332,19 @@ export function DashboardPage() {
           {/* Active season dashboard */}
           {activeSeason && (
             <>
+              {/* Setup Wizard — shown until dismissed */}
+              <SetupWizard
+                dynastyId={activeDynasty.id}
+                sport={activeDynasty.sport}
+                onLogGame={() => setLogGameOpen(true)}
+              />
+
+              {/* Quick Entry Hub */}
+              <QuickEntryHub
+                onLogGame={() => setLogGameOpen(true)}
+                onEndSeason={() => setSeasonEndOpen(true)}
+              />
+
               {/* Stats row: left 2/3 + right 1/3 */}
               <div className="grid grid-cols-3 gap-4">
                 <div className="col-span-2 flex flex-col gap-4">
@@ -336,8 +355,8 @@ export function DashboardPage() {
                   <WeeklySnapshot season={activeSeason} games={games} />
                   <StatHighlights games={games} />
                   {/* Season Checklist widget */}
-                  <div className="bg-gray-800 rounded-lg p-4">
-                    <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                  <div data-tour-id="tour-checklist" className="bg-gray-800 rounded-lg p-4">
+                    <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
                       Season Checklist
                     </h3>
                     <ul className="space-y-2">
@@ -371,8 +390,8 @@ export function DashboardPage() {
                                       : isChecked
                                       ? 'text-gray-500 line-through'
                                       : isVerified
-                                      ? 'text-gray-200 group-hover:text-white'
-                                      : 'text-gray-300 group-hover:text-white'
+                                      ? 'text-gray-100 group-hover:text-white'
+                                      : 'text-gray-200 group-hover:text-white'
                                   }`}
                                 >
                                   {task.label}
@@ -402,7 +421,7 @@ export function DashboardPage() {
                       const done = applicable.filter((t) => checklist[t.id]).length;
                       const verifiedCount = applicable.filter((t) => verified[t.id]).length;
                       return (
-                        <div className="mt-3 pt-3 border-t border-gray-700 text-xs text-gray-500 flex items-center justify-between">
+                        <div className="mt-3 pt-3 border-t border-gray-700 text-xs text-gray-400 flex items-center justify-between">
                           <span>{done}/{applicable.length} complete</span>
                           {verifiedCount > 0 && (
                             <span className="text-green-600">{verifiedCount} verified</span>

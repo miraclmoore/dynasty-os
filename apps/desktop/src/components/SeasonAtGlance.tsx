@@ -14,8 +14,8 @@ export function SeasonAtGlance({ season }: SeasonAtGlanceProps) {
   const hasConfRecord = confWins > 0 || confLosses > 0;
 
   return (
-    <div className="bg-gray-800 rounded-lg p-5">
-      <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">
+    <div data-tour-id="tour-season-at-glance" className="bg-gray-800 rounded-lg p-5">
+      <h2 className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-3">
         Season at a Glance
       </h2>
 

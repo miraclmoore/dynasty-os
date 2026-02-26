@@ -13,8 +13,8 @@ const RESULT_BADGE: Record<string, { label: string; classes: string }> = {
 
 export function RecentActivity({ games }: RecentActivityProps) {
   return (
-    <div className="bg-gray-800 rounded-lg p-5">
-      <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">
+    <div data-tour-id="tour-recent-activity" className="bg-gray-800 rounded-lg p-5">
+      <h2 className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-3">
         Recent Results
       </h2>
 
@@ -42,19 +42,19 @@ export function RecentActivity({ games }: RecentActivityProps) {
 
                 {/* Opponent */}
                 <div className="flex-1 min-w-0">
-                  <span className="text-gray-400 text-sm mr-1">{prefix}</span>
-                  <span className="text-gray-200 text-sm font-medium truncate">
+                  <span className="text-gray-300 text-sm mr-1">{prefix}</span>
+                  <span className="text-gray-100 text-sm font-medium truncate">
                     {opponentDisplay}
                   </span>
                 </div>
 
                 {/* Score */}
-                <div className="text-sm font-mono text-gray-300 shrink-0">
+                <div className="text-sm font-mono text-gray-200 shrink-0">
                   {game.teamScore}-{game.opponentScore}
                 </div>
 
                 {/* Week */}
-                <div className="text-xs text-gray-500 shrink-0 w-12 text-right">
+                <div className="text-xs text-gray-400 shrink-0 w-12 text-right">
                   Wk {game.week}
                 </div>
               </li>

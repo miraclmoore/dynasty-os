@@ -43,8 +43,8 @@ export function WeeklySnapshot({ season, games }: WeeklySnapshotProps) {
     currentRanking ?? season?.finalRanking ?? undefined;
 
   return (
-    <div className="bg-gray-800 rounded-lg p-5">
-      <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">
+    <div data-tour-id="tour-weekly-snapshot" className="bg-gray-800 rounded-lg p-5">
+      <h2 className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-3">
         This Week
       </h2>
 
@@ -52,7 +52,7 @@ export function WeeklySnapshot({ season, games }: WeeklySnapshotProps) {
       <div className="text-2xl font-bold text-white mb-1">Week {currentWeek}</div>
 
       {/* Record */}
-      <div className="text-sm text-gray-300 mb-3">
+      <div className="text-sm text-gray-200 mb-3">
         Record:{' '}
         <span className="font-semibold text-white">
           {wins}-{losses}
@@ -61,7 +61,7 @@ export function WeeklySnapshot({ season, games }: WeeklySnapshotProps) {
 
       {/* Ranking with movement delta */}
       {displayRanking != null && (
-        <div className="text-sm text-gray-400 mb-3">
+        <div className="text-sm text-gray-300 mb-3">
           Ranking:{' '}
           <span className="text-amber-400 font-semibold">#{displayRanking}</span>
           {rankingDelta != null && rankingDelta !== 0 && (
@@ -80,7 +80,7 @@ export function WeeklySnapshot({ season, games }: WeeklySnapshotProps) {
 
       {/* Last game result */}
       {lastGame != null && (
-        <div className="text-sm text-gray-400 mb-3">
+        <div className="text-sm text-gray-300 mb-3">
           Last:{' '}
           <span
             className={
@@ -101,7 +101,7 @@ export function WeeklySnapshot({ season, games }: WeeklySnapshotProps) {
       )}
 
       {/* Upcoming opponent */}
-      <div className="text-sm text-gray-400">
+      <div className="text-sm text-gray-300">
         Next:{' '}
         {upcomingGame != null ? (
           <span className="text-gray-200">

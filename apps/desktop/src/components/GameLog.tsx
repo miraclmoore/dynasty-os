@@ -129,7 +129,7 @@ export function GameLog({ games, dynasty, season, activeTone, onUpdateGame }: Ga
   };
 
   return (
-    <div className="bg-gray-800 rounded-lg p-5">
+    <div data-tour-id="tour-gamelog" className="bg-gray-800 rounded-lg p-5">
       <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
         Game Log
       </h2>
