@@ -207,19 +207,27 @@ export function TourOverlay({ isOpen, onClose }: TourOverlayProps) {
   const vw = typeof window !== 'undefined' ? window.innerWidth : 1280;
   const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
 
-  // Card position: below by default, above if no room
+  // Card position: below by default, above if no room, always clamped to viewport
   const cardWidth = 360;
   const cardEstHeight = 220;
+  const cardMargin = 12;
   const spaceBelow = hasBounds ? vh - (spotTop + spotH) : vh;
-  const showBelow = !hasBounds || spaceBelow >= cardEstHeight + 24;
-  const cardTop = hasBounds
+  const spaceAbove = hasBounds ? spotTop : vh;
+  const showBelow = !hasBounds || spaceBelow >= cardEstHeight + 24 || spaceBelow >= spaceAbove;
+  const rawCardTop = hasBounds
     ? showBelow
       ? spotTop + spotH + 16
       : spotTop - cardEstHeight - 16
     : vh / 2 - cardEstHeight / 2;
-  const cardLeft = hasBounds
-    ? Math.max(12, Math.min(spotLeft + spotW / 2 - cardWidth / 2, vw - cardWidth - 12))
-    : vw / 2 - cardWidth / 2;
+  // Always clamp so the card stays fully on-screen
+  const cardTop = Math.max(cardMargin, Math.min(rawCardTop, vh - cardEstHeight - cardMargin));
+  const cardLeft = Math.max(
+    cardMargin,
+    Math.min(
+      hasBounds ? spotLeft + spotW / 2 - cardWidth / 2 : vw / 2 - cardWidth / 2,
+      vw - cardWidth - cardMargin,
+    ),
+  );
 
   return (
     <>
