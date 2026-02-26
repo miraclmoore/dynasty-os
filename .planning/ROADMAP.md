@@ -4,6 +4,7 @@
 
 - ✅ **v1.0 Initial MVP** — Phases 1–9 (shipped 2026-02-24)
 - 🚧 **v2.0 The Living Dynasty** — Phases 10–13 (in progress)
+- 🚧 **v2.1 UX/UI Polish** — Phases 14–18 (in progress)
 
 ## Phases
 
@@ -24,18 +25,25 @@ Full details: `.planning/milestones/v1.0-ROADMAP.md`
 
 </details>
 
-### 🚧 v2.0 The Living Dynasty (In Progress)
-
-**Phase Numbering:**
-- Integer phases (1, 2, 3): Planned milestone work
-- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
-
-Decimal phases appear between their surrounding integers in numeric order.
+<details>
+<summary>🚧 v2.0 The Living Dynasty (Phases 10–13) — In Progress</summary>
 
 - [x] **Phase 10: Infrastructure Foundation** - Dexie v6 schema (5 new tables), async AI job queue, localStorage→aiCache migration, core-types additions, 4 npm packages, global store scaffolding (completed 2026-02-25)
 - [x] **Phase 11: QOL Wins** - Toast notifications, undo, persistent filters, command palette, CSV export, season checklist, auto-suggest year, recent opponents, inline notes, timeline scrubber (completed 2026-02-25)
 - [x] **Phase 12: Community Features** - Coaching staff tracker, CFB-Madden player continuity, playoff simulator, NIL ledger, schedule builder, trade calculator, class grade comparison, auto-sync, record book, rivalry dashboard expansion (plans 01-06 complete; 12-07 verification checkpoint pending)
 - [ ] **Phase 13: AI Intelligence Layer** - Living Chronicle, Hot Seat, Opponent Dossiers, Generational Arcs, Rival Prophecy, Obituary Room, The Journalist, Cross-Dynasty Intelligence, Momentum Heat Map, What If Engine, Broadcast Booth, DNA Report
+
+Full details: Phase Details — v2.0 section below.
+
+</details>
+
+### 🚧 v2.1 UX/UI Polish (In Progress)
+
+- [ ] **Phase 14: Onboarding Overhaul** - Tour auto-launches on dynasty creation, re-triggerable from persistent entry point, SetupWizard text legibility fix
+- [ ] **Phase 15: Navigation** - Page headers with back navigation on all inner pages, visible page context at all times
+- [ ] **Phase 16: Tooltips and Quick Entry** - Sidebar tooltip overflow fix, auto-adjusting tooltip placement, QuickEntryHub label legibility
+- [ ] **Phase 17: Data Display and Page Audit** - GameLog inline note expansion, sparse inner pages fleshed out with content structure and empty states
+- [ ] **Phase 18: Error States** - Recap API error UX with human-readable messages and actionable guidance
 
 ## Phase Details — v2.0
 
@@ -110,10 +118,59 @@ Plans:
   5. User can view Cross-Dynasty Intelligence insights comparing patterns across up to 5 dynasties, and activate Broadcast Booth mode for AI text-to-speech recap fragments with graceful fallback when TTS voices are unavailable
 **Plans**: TBD
 
+## Phase Details — v2.1
+
+### Phase 14: Onboarding Overhaul
+**Goal**: New users are guided through the full app on first dynasty creation, and existing users can re-discover the tour at any time — no one is left wondering what a section does.
+**Depends on**: Phase 13 (or can run in parallel — no data model dependencies)
+**Requirements**: ONBD-01, ONBD-02, ONBD-03
+**Success Criteria** (what must be TRUE):
+  1. After a user creates a new dynasty and lands on the dashboard, the onboarding tour launches automatically and cycles through every major section — sidebar, Log Game, End Season, SeasonAtGlance, RecentActivity, WeeklySnapshot, StatHighlights, QuickEntryHub, Season Checklist, GameLog — each with a spotlight highlight and an explanatory popup
+  2. User can dismiss and later re-trigger the full tour at any time via a persistent `?` button visible on the dashboard (or equivalent Settings entry)
+  3. SetupWizard description text is fully legible — no dimmed or low-opacity text on the wizard step descriptions
+**Plans**: TBD
+
+### Phase 15: Navigation
+**Goal**: Users always know where they are and can get back without hunting for a sidebar link — every inner page feels like a complete, navigable screen.
+**Depends on**: Phase 14 (tour must identify pages that are being navigated)
+**Requirements**: NAV-01, NAV-02
+**Success Criteria** (what must be TRUE):
+  1. From every non-root inner page (Coaching Staff, NIL Ledger, Future Schedule, Player Profile, Record Book, Rivalry Dashboard, and all other pages reachable from the sidebar), a back button or breadcrumb is visible and clicking it returns the user to the previous page without a full app reload
+  2. Every inner page displays a page title (and optional parent context) in a consistent header position — a user landing mid-session can identify their current location without checking the sidebar
+**Plans**: TBD
+
+### Phase 16: Tooltips and Quick Entry
+**Goal**: Contextual hints are always readable and never obscured — sidebar tooltips stay inside the viewport and QuickEntryHub category labels are scannable at a glance.
+**Depends on**: Phase 14 (onboarding tour relies on tooltip-adjacent positioning logic)
+**Requirements**: TIP-01, TIP-02, ENTRY-01
+**Success Criteria** (what must be TRUE):
+  1. Tooltips triggered by hovering sidebar nav items never overflow or clip at the right viewport edge — they remain fully visible regardless of window width
+  2. Tooltip placement automatically flips to the available side (e.g. left-to-right or top-to-bottom) when the default placement does not have sufficient space
+  3. QuickEntryHub category labels are large enough that a user can scan and identify the correct entry category without zooming or leaning in
+**Plans**: TBD
+
+### Phase 17: Data Display and Page Audit
+**Goal**: GameLog notes are readable in full inline, and every inner page has enough structure that it feels intentional whether it has data or not.
+**Depends on**: Phase 15 (navigation headers give sparse pages the structural frame they need before content is added)
+**Requirements**: DISP-01, DISP-02
+**Success Criteria** (what must be TRUE):
+  1. In the GameLog, any note that exceeds one line shows an inline "show more" / "show less" control — the user can read the full note without opening a modal or navigating away
+  2. Every inner page identified as sparse in the page audit has a non-trivial empty state (descriptive message + call to action) and at least a content skeleton when data is present — no page feels like a dead end
+**Plans**: TBD
+
+### Phase 18: Error States
+**Goal**: When the Recap API fails, users see a clear explanation and a concrete next step — no raw error strings, no dead UI.
+**Depends on**: Phase 16 (tooltip + UI polish baseline in place before layering error UX)
+**Requirements**: ERR-01, ERR-02
+**Success Criteria** (what must be TRUE):
+  1. When the Season Recap API call fails for any reason, the error displayed is a plain-English sentence describing what went wrong — no raw error objects, stack traces, or API response strings are shown to the user
+  2. The error UI includes at least one specific actionable suggestion — for example, prompting the user to check their API key in Settings, verify their internet connection, or use the retry button — so the user knows exactly what to do next
+**Plans**: TBD
+
 ## Progress
 
 **Execution Order:**
-v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13.
+v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 phases execute 14 → 15 → 16 → 17 → 18.
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -130,3 +187,8 @@ v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13.
 | 11. QOL Wins | v2.0 | 6/6 | Complete | 2026-02-25 |
 | 12. Community Features | v2.0 | 6/7 | In Progress | - |
 | 13. AI Intelligence Layer | v2.0 | 0/TBD | Not started | - |
+| 14. Onboarding Overhaul | v2.1 | 0/TBD | Not started | - |
+| 15. Navigation | v2.1 | 0/TBD | Not started | - |
+| 16. Tooltips and Quick Entry | v2.1 | 0/TBD | Not started | - |
+| 17. Data Display and Page Audit | v2.1 | 0/TBD | Not started | - |
+| 18. Error States | v2.1 | 0/TBD | Not started | - |

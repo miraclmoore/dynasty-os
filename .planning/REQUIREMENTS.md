@@ -68,24 +68,24 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ONBD-01 | TBD | Pending |
-| ONBD-02 | TBD | Pending |
-| ONBD-03 | TBD | Pending |
-| NAV-01 | TBD | Pending |
-| NAV-02 | TBD | Pending |
-| TIP-01 | TBD | Pending |
-| TIP-02 | TBD | Pending |
-| ENTRY-01 | TBD | Pending |
-| DISP-01 | TBD | Pending |
-| DISP-02 | TBD | Pending |
-| ERR-01 | TBD | Pending |
-| ERR-02 | TBD | Pending |
+| ONBD-01 | Phase 14 | Pending |
+| ONBD-02 | Phase 14 | Pending |
+| ONBD-03 | Phase 14 | Pending |
+| NAV-01 | Phase 15 | Pending |
+| NAV-02 | Phase 15 | Pending |
+| TIP-01 | Phase 16 | Pending |
+| TIP-02 | Phase 16 | Pending |
+| ENTRY-01 | Phase 16 | Pending |
+| DISP-01 | Phase 17 | Pending |
+| DISP-02 | Phase 17 | Pending |
+| ERR-01 | Phase 18 | Pending |
+| ERR-02 | Phase 18 | Pending |
 
 **Coverage:**
 - v2.1 requirements: 12 total
-- Mapped to phases: 0 (roadmap pending)
-- Unmapped: 12 ⚠️
+- Mapped to phases: 12
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-25*
-*Last updated: 2026-02-25 after initial definition*
+*Last updated: 2026-02-25 — traceability filled in after roadmap creation*

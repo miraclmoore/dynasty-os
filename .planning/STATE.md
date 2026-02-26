@@ -5,14 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-25)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** Milestone v2.1 — UX/UI Polish (Phase 14+)
+**Current focus:** Milestone v2.1 — UX/UI Polish (Phases 14–18)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 14 — Onboarding Overhaul (not started)
 Plan: —
-Status: Defining requirements for v2.1 UX/UI Polish
-Last activity: 2026-02-25 — Milestone v2.1 started
+Status: Roadmap created; ready to plan Phase 14
+Last activity: 2026-02-25 — v2.1 roadmap written (Phases 14–18, 12 requirements mapped)
+
+Progress: [Phase 14 of 18] ░░░░░░░░░░░░░░░░░░░░ 0%
 
 ## Performance Metrics
 
@@ -38,6 +40,11 @@ Last activity: 2026-02-25 — Milestone v2.1 started
 | 11-qol-wins | 6/6 | ~30 min | ~5 min | ✓ Complete |
 | 12-community-features | 6/7 | ~20 min | ~3.3 min | In Progress |
 | 13-ai-intelligence-layer | 0/TBD | — | — | Not started |
+| 14-onboarding-overhaul | 0/TBD | — | — | Not started |
+| 15-navigation | 0/TBD | — | — | Not started |
+| 16-tooltips-and-quick-entry | 0/TBD | — | — | Not started |
+| 17-data-display-and-page-audit | 0/TBD | — | — | Not started |
+| 18-error-states | 0/TBD | — | — | Not started |
 
 **Recent Trend:**
 - Last 5 plans: 2 min, 3 min, 3 min, 2 min, 2 min
@@ -232,7 +239,7 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-25 UTC
-Stopped at: Multiple out-of-plan features built after 12-06
+Stopped at: v2.1 roadmap creation (Phases 14–18)
 Resume file: None
 
 ### Work done since 12-06 (not tracked in any plan)
@@ -255,4 +262,4 @@ Resume file: None
 - TickerBar.tsx + ticker-service.ts + ticker-store.ts: live ESPN score/news ticker (60s polling, 20s during live games, NFL+CFB)
 - RosterHubPage.tsx + roster-hub-data.ts: community roster hub linking to Operation Sports, curated by Madden year
 
-Next action: Decide what to tackle — commit working tree, run 12-07 verification, continue building
+Next action: Plan Phase 14 — Onboarding Overhaul
