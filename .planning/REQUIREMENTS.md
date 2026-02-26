@@ -9,8 +9,8 @@ Requirements for the UX/UI Polish milestone. Each maps to roadmap phases.
 
 ### Onboarding
 
-- [ ] **ONBD-01**: After creating a new dynasty, the onboarding tour auto-launches on the dashboard and walks through every main screen section — sidebar, Log Game, End Season, SeasonAtGlance, RecentActivity, WeeklySnapshot, StatHighlights, QuickEntryHub, Season Checklist, GameLog — each highlighted with the spotlight mechanism and a popup explaining what it does
-- [ ] **ONBD-02**: Existing user can re-trigger the tour at any time from a persistent `?` button or Settings entry point
+- [x] **ONBD-01**: After creating a new dynasty, the onboarding tour auto-launches on the dashboard and walks through every main screen section — sidebar, Log Game, End Season, SeasonAtGlance, RecentActivity, WeeklySnapshot, StatHighlights, QuickEntryHub, Season Checklist, GameLog — each highlighted with the spotlight mechanism and a popup explaining what it does
+- [x] **ONBD-02**: Existing user can re-trigger the tour at any time from a persistent `?` button or Settings entry point
 - [ ] **ONBD-03**: SetupWizard description text renders at readable opacity (remove `text-blue-300/60` dimming)
 
 ### Navigation
@@ -68,8 +68,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ONBD-01 | Phase 14 | Pending |
-| ONBD-02 | Phase 14 | Pending |
+| ONBD-01 | Phase 14 | Complete |
+| ONBD-02 | Phase 14 | Complete |
 | ONBD-03 | Phase 14 | Pending |
 | NAV-01 | Phase 15 | Pending |
 | NAV-02 | Phase 15 | Pending |

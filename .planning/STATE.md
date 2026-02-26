@@ -1,3 +1,16 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: UX/UI Polish
+status: unknown
+last_updated: "2026-02-26T02:02:35.022Z"
+progress:
+  total_phases: 4
+  completed_phases: 2
+  total_plans: 19
+  completed_plans: 17
+---
+
 # Project State
 
 ## Project Reference
@@ -9,12 +22,12 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 
 ## Current Position
 
-Phase: 14 — Onboarding Overhaul (not started)
-Plan: —
-Status: Roadmap created; ready to plan Phase 14
-Last activity: 2026-02-25 — v2.1 roadmap written (Phases 14–18, 12 requirements mapped)
+Phase: 14 — Onboarding Overhaul (In Progress)
+Plan: 01 complete
+Status: Plan 14-01 executed; tour expanded to 12 steps, auto-launch wired
+Last activity: 2026-02-26 — 14-01 complete (2 tasks, 10 files)
 
-Progress: [Phase 14 of 18] ░░░░░░░░░░░░░░░░░░░░ 0%
+Progress: [Phase 14 of 18] ██░░░░░░░░░░░░░░░░░░ 6%
 
 ## Performance Metrics
 
@@ -40,7 +53,7 @@ Progress: [Phase 14 of 18] ░░░░░░░░░░░░░░░░░�
 | 11-qol-wins | 6/6 | ~30 min | ~5 min | ✓ Complete |
 | 12-community-features | 6/7 | ~20 min | ~3.3 min | In Progress |
 | 13-ai-intelligence-layer | 0/TBD | — | — | Not started |
-| 14-onboarding-overhaul | 0/TBD | — | — | Not started |
+| 14-onboarding-overhaul | 1/TBD | 2 min | 2 min | In Progress |
 | 15-navigation | 0/TBD | — | — | Not started |
 | 16-tooltips-and-quick-entry | 0/TBD | — | — | Not started |
 | 17-data-display-and-page-audit | 0/TBD | — | — | Not started |
@@ -67,6 +80,7 @@ Progress: [Phase 14 of 18] ░░░░░░░░░░░░░░░░░�
 | Phase 12 P04 | 4 | 2 tasks | 7 files |
 | Phase 12 P05 | 2 | 2 tasks | 5 files |
 | Phase 12 P06 | 9 | 2 tasks | 7 files |
+| Phase 14 P01 | 2 | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -182,6 +196,8 @@ Recent decisions affecting current work:
 - [ea77417]: generateGameNarrative() — 400 token limit, cached per gameId+tone in aiCache; newspaper icon in GameLog opens inline recap section
 - [ea77417]: team-logo-service.ts getTeamLogoUrl() maps to ESPN CDN (NFL: abbreviation-based, CFB: numeric ID-based); returns null for unrecognized names — no broken images for custom teams
 - [ea77417]: cfb-espn-ids.ts — 120-team ESPN numeric ID lookup; NFL uses 3-letter abbreviation; onError fallback on <img> for clean degradation
+- [Phase 14-01]: pending-flag auto-launch: LauncherPage sets localStorage pending flag, App.tsx opens tour on activeDynasty change — decouples tour launch from navigation timing
+- [Phase 14-01]: All 12 TourOverlay STEPS use page:dashboard — roster step removed; TourOverlay no longer navigates away from dashboard during tour
 
 ### Phase 12 Decisions
 

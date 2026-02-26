@@ -191,7 +191,7 @@ v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 
 | 11. QOL Wins | v2.0 | 6/6 | Complete | 2026-02-25 |
 | 12. Community Features | v2.0 | 6/7 | In Progress | - |
 | 13. AI Intelligence Layer | v2.0 | 0/TBD | Not started | - |
-| 14. Onboarding Overhaul | v2.1 | 0/2 | Not started | - |
+| 14. Onboarding Overhaul | 1/2 | In Progress|  | - |
 | 15. Navigation | v2.1 | 0/TBD | Not started | - |
 | 16. Tooltips and Quick Entry | v2.1 | 0/TBD | Not started | - |
 | 17. Data Display and Page Audit | v2.1 | 0/TBD | Not started | - |
