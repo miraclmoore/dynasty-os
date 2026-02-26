@@ -9,5 +9,7 @@ target
 .env.*.local
 # Tauri generated files (schema, runtime artifacts)
 src-tauri/gen
-# Local-only docs
+# Local-only docs and planning
 docs/
+.planning/
+community/
