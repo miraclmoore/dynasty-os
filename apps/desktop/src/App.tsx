@@ -21,7 +21,6 @@ import { TrophyRoomPage } from './pages/TrophyRoomPage';
 import { CoachingResumePage } from './pages/CoachingResumePage';
 import { ScreenshotIngestionPage } from './pages/ScreenshotIngestionPage';
 import { MaddenSyncPage } from './pages/MaddenSyncPage';
-import { RosterHubPage } from './pages/RosterHubPage';
 import { CoachingStaffPage } from './pages/CoachingStaffPage';
 import { NilLedgerPage } from './pages/NilLedgerPage';
 import { FutureSchedulePage } from './pages/FutureSchedulePage';
@@ -71,8 +70,6 @@ function PageContent() {
       return <ScreenshotIngestionPage />;
     case 'madden-sync':
       return <MaddenSyncPage />;
-    case 'roster-hub':
-      return <RosterHubPage />;
     case 'coaching-staff':
       return <CoachingStaffPage />;
     case 'nil-ledger':

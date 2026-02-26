@@ -11,7 +11,10 @@ interface CreateDynastyModalProps {
 const SPORTS: { value: SportType; label: string }[] = [
   { value: 'cfb', label: 'College Football' },
   { value: 'madden', label: 'Madden NFL' },
+  { value: 'nfl2k', label: 'NFL 2K' },
 ];
+
+const CUSTOM_TEAM_VALUE = '__custom__';
 
 const CURRENT_YEAR = new Date().getFullYear();
 
@@ -21,6 +24,7 @@ export function CreateDynastyModal({ onClose, onCreated }: CreateDynastyModalPro
 
   const [sport, setSport] = useState<SportType>('cfb');
   const [teamName, setTeamName] = useState('');
+  const [customTeamName, setCustomTeamName] = useState('');
   const [coachName, setCoachName] = useState('');
   const [startYear, setStartYear] = useState(CURRENT_YEAR);
   const [gameVersion, setGameVersion] = useState('');
@@ -33,17 +37,19 @@ export function CreateDynastyModal({ onClose, onCreated }: CreateDynastyModalPro
   // Reset team and game version when sport changes
   useEffect(() => {
     setTeamName('');
+    setCustomTeamName('');
     setGameVersion(config.gameVersions[0] ?? '');
   }, [sport]);
 
   // Auto-fill dynasty name unless user has manually edited it
+  const resolvedTeamName = teamName === CUSTOM_TEAM_VALUE ? customTeamName : teamName;
   useEffect(() => {
-    if (!nameTouched && teamName) {
-      setDynastyName(`${teamName} Dynasty`);
-    } else if (!nameTouched && !teamName) {
+    if (!nameTouched && resolvedTeamName) {
+      setDynastyName(`${resolvedTeamName} Dynasty`);
+    } else if (!nameTouched && !resolvedTeamName) {
       setDynastyName('');
     }
-  }, [teamName, nameTouched]);
+  }, [resolvedTeamName, nameTouched]);
 
   // Sort teams alphabetically for the dropdown
   const sortedTeams = [...config.teams].sort((a, b) => a.name.localeCompare(b.name));
@@ -52,8 +58,8 @@ export function CreateDynastyModal({ onClose, onCreated }: CreateDynastyModalPro
     e.preventDefault();
     setError('');
 
-    if (!teamName) {
-      setError('Please select a team.');
+    if (!resolvedTeamName.trim()) {
+      setError('Please select or enter a team name.');
       return;
     }
     if (!coachName.trim()) {
@@ -76,7 +82,7 @@ export function CreateDynastyModal({ onClose, onCreated }: CreateDynastyModalPro
     try {
       await createDynasty({
         sport,
-        teamName,
+        teamName: resolvedTeamName.trim(),
         coachName: coachName.trim(),
         startYear,
         gameVersion,
@@ -146,7 +152,18 @@ export function CreateDynastyModal({ onClose, onCreated }: CreateDynastyModalPro
                   {t.name}
                 </option>
               ))}
+              <option value={CUSTOM_TEAM_VALUE}>Other / Custom School</option>
             </select>
+            {teamName === CUSTOM_TEAM_VALUE && (
+              <input
+                type="text"
+                className="mt-2 w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+                placeholder="Enter your school name"
+                value={customTeamName}
+                onChange={(e) => setCustomTeamName(e.target.value)}
+                autoFocus
+              />
+            )}
           </div>
 
           {/* Dynasty Name */}

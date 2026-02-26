@@ -17,11 +17,13 @@ export interface ScoreItem {
   statusText: string;
   isLive: boolean;
   isFinal: boolean;
+  url?: string;
 }
 
 export interface NewsItem {
   id: string;
   headline: string;
+  url?: string;
 }
 
 export interface TickerData {
@@ -42,7 +44,7 @@ export async function fetchScores(league: TickerLeague): Promise<ScoreItem[]> {
     const res = await fetch(`${base(league)}/scoreboard`);
     if (!res.ok) return [];
     const json = await res.json() as { events?: EspnEvent[] };
-    return (json.events ?? []).map(parseEvent).filter(Boolean) as ScoreItem[];
+    return (json.events ?? []).map((e) => parseEvent(e, league)).filter(Boolean) as ScoreItem[];
   } catch {
     return [];
   }
@@ -56,6 +58,7 @@ export async function fetchNews(league: TickerLeague): Promise<NewsItem[]> {
     return (json.articles ?? []).slice(0, 10).map((a, i) => ({
       id: String(i),
       headline: a.headline ?? '',
+      url: a.links?.web?.href,
     })).filter((n) => n.headline);
   } catch {
     return [];
@@ -92,9 +95,10 @@ interface EspnEvent {
 
 interface EspnArticle {
   headline?: string;
+  links?: { web?: { href?: string } };
 }
 
-function parseEvent(event: EspnEvent): ScoreItem | null {
+function parseEvent(event: EspnEvent, league: TickerLeague): ScoreItem | null {
   try {
     const comp = event.competitions?.[0];
     if (!comp?.competitors) return null;
@@ -122,8 +126,15 @@ function parseEvent(event: EspnEvent): ScoreItem | null {
       statusText = description || 'Scheduled';
     }
 
+    const gameId = event.id;
+    const url = gameId
+      ? league === 'nfl'
+        ? `https://www.espn.com/nfl/game/_/gameId/${gameId}`
+        : `https://www.espn.com/college-football/game/_/gameId/${gameId}`
+      : undefined;
+
     return {
-      id: event.id ?? `${away.team?.abbreviation}-${home.team?.abbreviation}`,
+      id: gameId ?? `${away.team?.abbreviation}-${home.team?.abbreviation}`,
       awayAbbr: away.team?.abbreviation ?? '???',
       homeAbbr: home.team?.abbreviation ?? '???',
       awayScore: away.score ?? '-',
@@ -131,6 +142,7 @@ function parseEvent(event: EspnEvent): ScoreItem | null {
       statusText,
       isLive,
       isFinal,
+      url,
     };
   } catch {
     return null;

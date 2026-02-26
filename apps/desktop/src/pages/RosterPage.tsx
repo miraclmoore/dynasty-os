@@ -10,6 +10,7 @@ import { LogPlayerSeasonModal } from '../components/LogPlayerSeasonModal';
 import { getSportConfig } from '@dynasty-os/sport-configs';
 import type { Player, PlayerStatus } from '@dynasty-os/core-types';
 import { exportTableToCsv } from '../lib/csv-export';
+import { AUTO_OPEN_ADD_PLAYER_KEY } from '../components/QuickEntryHub';
 
 const SPORT_BADGE: Record<string, { label: string; classes: string }> = {
   cfb: { label: 'CFB', classes: 'bg-orange-600 text-orange-100' },
@@ -60,7 +61,14 @@ export function RosterPage() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
   const { players, loading } = usePlayerStore();
 
-  const [addOpen, setAddOpen] = useState(false);
+  const [addOpen, setAddOpen] = useState(() => {
+    const flag = localStorage.getItem(AUTO_OPEN_ADD_PLAYER_KEY);
+    if (flag === 'true') {
+      localStorage.removeItem(AUTO_OPEN_ADD_PLAYER_KEY);
+      return true;
+    }
+    return false;
+  });
   const [editPlayer, setEditPlayer] = useState<Player | null>(null);
   const [logSeasonPlayer, setLogSeasonPlayer] = useState<Player | null>(null);
 
@@ -137,7 +145,7 @@ export function RosterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div data-tour-id="tour-roster" className="min-h-screen bg-gray-900 text-white">
       {/* Header */}
       <header className="border-b border-gray-800 px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
@@ -272,15 +280,20 @@ export function RosterPage() {
                 />
               </svg>
             </div>
-            <h2 className="text-gray-300 font-semibold text-lg mb-2">No Players Yet</h2>
-            <p className="text-gray-500 text-sm max-w-sm mb-6">
-              Add your first player to start building your roster.
+            <h2 className="text-gray-300 font-semibold text-lg mb-2">Your Roster is Empty</h2>
+            <p className="text-gray-500 text-sm max-w-sm mb-1">
+              Track every player in your program — position, class year, recruiting stars, and
+              season-by-season stats.
+            </p>
+            <p className="text-gray-600 text-xs max-w-sm mb-6">
+              Add players manually using the form. Long-tenured stars earn Legacy Cards with
+              AI-generated career blurbs.
             </p>
             <button
               onClick={() => setAddOpen(true)}
               className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-lg transition-colors"
             >
-              Add First Player
+              Add Your First Player →
             </button>
           </div>
         )}

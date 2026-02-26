@@ -247,7 +247,6 @@ export function DashboardPage() {
                 <NavLink label="Sync Franchise Save" onClick={() => nav.goToMaddenSync()} tooltip="Import your Madden franchise data automatically" />
               )}
               <NavLink label="Parse Screenshot" onClick={() => nav.goToScreenshotIngestion()} tooltip="Use AI to extract stats from in-game screenshots" />
-              <NavLink label="Community Rosters" onClick={() => nav.goToRosterHub()} tooltip="Browse and download community-created NFL rosters" />
             </NavSection>
           )}
         </nav>

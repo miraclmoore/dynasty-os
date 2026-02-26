@@ -18,7 +18,6 @@ type Page =
   | 'coaching-resume'
   | 'screenshot-ingestion'
   | 'madden-sync'
-  | 'roster-hub'
   | 'coaching-staff'
   | 'nil-ledger'
   | 'future-schedule'
@@ -51,7 +50,6 @@ interface NavigationActions {
   goToCoachingResume: () => void;
   goToScreenshotIngestion: () => void;
   goToMaddenSync: () => void;
-  goToRosterHub: () => void;
   goToCoachingStaff: () => void;
   goToNilLedger: () => void;
   goToFutureSchedule: () => void;
@@ -137,10 +135,6 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
 
   goToMaddenSync: () => {
     set({ currentPage: 'madden-sync', pageParams: {} });
-  },
-
-  goToRosterHub: () => {
-    set({ currentPage: 'roster-hub', pageParams: {} });
   },
 
   goToCoachingStaff: () => {

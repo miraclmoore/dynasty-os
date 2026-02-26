@@ -47,7 +47,13 @@ export async function updateDynasty(
 }
 
 export async function deleteDynasty(id: string): Promise<void> {
-  await db.transaction('rw', [db.dynasties, db.seasons, db.games, db.players, db.playerSeasons], async () => {
+  await db.transaction('rw', [
+    db.dynasties, db.seasons, db.games, db.players, db.playerSeasons,
+    db.recruitingClasses, db.recruits, db.transferPortalEntries,
+    db.draftPicks, db.prestigeRatings, db.rivals, db.scoutingNotes,
+    db.achievements, db.coachingStaff, db.nilEntries, db.futureGames,
+    db.playerLinks, db.aiCache,
+  ], async () => {
     // Get all seasons for this dynasty
     const seasons = await db.seasons.where('dynastyId').equals(id).toArray();
     const seasonIds = seasons.map((s) => s.id);
@@ -69,6 +75,21 @@ export async function deleteDynasty(id: string): Promise<void> {
     }
     // Also delete by dynastyId
     await db.games.where('dynastyId').equals(id).delete();
+
+    // Delete child tables by dynastyId
+    await db.recruits.where('dynastyId').equals(id).delete();
+    await db.recruitingClasses.where('dynastyId').equals(id).delete();
+    await db.transferPortalEntries.where('dynastyId').equals(id).delete();
+    await db.draftPicks.where('dynastyId').equals(id).delete();
+    await db.prestigeRatings.where('dynastyId').equals(id).delete();
+    await db.rivals.where('dynastyId').equals(id).delete();
+    await db.scoutingNotes.where('dynastyId').equals(id).delete();
+    await db.achievements.where('dynastyId').equals(id).delete();
+    await db.coachingStaff.where('dynastyId').equals(id).delete();
+    await db.nilEntries.where('dynastyId').equals(id).delete();
+    await db.futureGames.where('dynastyId').equals(id).delete();
+    await db.playerLinks.where('dynastyId').equals(id).delete();
+    await db.aiCache.where('dynastyId').equals(id).delete();
 
     // Delete seasons
     await db.seasons.where('dynastyId').equals(id).delete();

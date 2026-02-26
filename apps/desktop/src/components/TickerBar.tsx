@@ -1,11 +1,15 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
+import { open } from '@tauri-apps/plugin-shell';
 import { useTickerStore } from '../store/ticker-store';
 
 // ── Score item pill ───────────────────────────────────────────────────────────
 
-function ScorePill({ item }: { item: { awayAbbr: string; homeAbbr: string; awayScore: string; homeScore: string; statusText: string; isLive: boolean; isFinal: boolean } }) {
+function ScorePill({ item }: { item: { awayAbbr: string; homeAbbr: string; awayScore: string; homeScore: string; statusText: string; isLive: boolean; isFinal: boolean; url?: string } }) {
   return (
-    <span className="inline-flex items-center gap-1.5 px-3 whitespace-nowrap text-xs">
+    <span
+      className={`inline-flex items-center gap-1.5 px-3 whitespace-nowrap text-xs transition-colors${item.url ? ' cursor-pointer hover:text-gray-100' : ''}`}
+      onClick={item.url ? () => open(item.url!) : undefined}
+    >
       <span className="text-gray-300 font-medium">
         {item.awayAbbr} <span className={item.isFinal || item.isLive ? 'text-white font-bold' : 'text-gray-500'}>{item.awayScore}</span>
       </span>
@@ -23,9 +27,12 @@ function ScorePill({ item }: { item: { awayAbbr: string; homeAbbr: string; awayS
 
 // ── News item ─────────────────────────────────────────────────────────────────
 
-function NewsHeadline({ item }: { item: { id: string; headline: string } }) {
+function NewsHeadline({ item }: { item: { id: string; headline: string; url?: string } }) {
   return (
-    <span className="inline-flex items-center px-4 whitespace-nowrap text-xs text-gray-300">
+    <span
+      className={`inline-flex items-center px-4 whitespace-nowrap text-xs text-gray-300 transition-colors${item.url ? ' cursor-pointer hover:text-white hover:underline' : ''}`}
+      onClick={item.url ? () => open(item.url!) : undefined}
+    >
       {item.headline}
       <span className="text-gray-700 ml-4">·</span>
     </span>
@@ -35,26 +42,13 @@ function NewsHeadline({ item }: { item: { id: string; headline: string } }) {
 // ── Scrolling track ───────────────────────────────────────────────────────────
 
 function ScrollingTrack({ children }: { children: React.ReactNode }) {
-  const trackRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = trackRef.current;
-    if (!el) return;
-    // Duplicate children for seamless looping
-    const clone = el.cloneNode(true) as HTMLDivElement;
-    el.parentElement?.appendChild(clone);
-    return () => {
-      clone.remove();
-    };
-  }, [children]);
-
   return (
-    <div className="overflow-hidden flex-1 relative">
+    <div className="overflow-hidden flex-1 relative group">
       <div
-        className="flex"
+        className="flex group-hover:[animation-play-state:paused]"
         style={{ animation: 'ticker-scroll 40s linear infinite' }}
       >
-        <div ref={trackRef} className="flex shrink-0">
+        <div className="flex shrink-0">
           {children}
         </div>
         <div className="flex shrink-0" aria-hidden>

@@ -220,9 +220,18 @@ export function CoachingStaffPage() {
               </h2>
 
               {activeStaff.length === 0 ? (
-                <p className="text-sm text-gray-500 italic">
-                  No active coaches. Hire your first coach using the form.
-                </p>
+                <div className="py-6 text-center">
+                  <div className="w-12 h-12 rounded-full bg-gray-700/50 flex items-center justify-center mx-auto mb-3">
+                    <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <p className="text-sm font-medium text-gray-400 mb-1">No active coaches</p>
+                  <p className="text-xs text-gray-600 max-w-xs mx-auto">
+                    Track your coaching staff — roles, hire years, and scheme notes. Use the form
+                    to hire your first coach.
+                  </p>
+                </div>
               ) : (
                 <div className="flex flex-col gap-3">
                   {activeStaff.map((coach) => (

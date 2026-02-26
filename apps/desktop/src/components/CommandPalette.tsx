@@ -69,9 +69,6 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               {activeDynasty?.sport === 'madden' && (
                 <PaletteItem value="nav-trade-calculator" onSelect={() => select(() => nav.goToTradeCalculator())}>Trade Calculator</PaletteItem>
               )}
-              {(activeDynasty?.sport === 'madden' || activeDynasty?.sport === 'nfl2k') && (
-                <PaletteItem value="nav-roster-hub" onSelect={() => select(() => nav.goToRosterHub())}>Community Rosters</PaletteItem>
-              )}
             </Command.Group>
 
             {/* CFB group — only for cfb dynasties */}

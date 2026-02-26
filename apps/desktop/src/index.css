@@ -1,6 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ── Sport theme CSS variables ──────────────────────────────────────────────── */
+:root {
+  --sport-primary: 99 102 241;  /* indigo-500 — neutral launcher baseline */
+  --sport-accent:  129 140 248;
+}
+.theme-cfb    { --sport-primary: 234 88 12;  --sport-accent: 251 146 60; }  /* orange */
+.theme-madden { --sport-primary: 37  99 235; --sport-accent: 96  165 250; } /* blue */
+.theme-nfl2k  { --sport-primary: 124 58 237; --sport-accent: 167 139 250; } /* violet */
+
+/* ── Subtle field yard-line background ──────────────────────────────────────── */
+.bg-field-pattern {
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 59px,
+    rgba(255, 255, 255, 0.025) 59px,
+    rgba(255, 255, 255, 0.025) 60px
+  );
+}
 
 @keyframes ticker-scroll {
   0%   { transform: translateX(0); }
