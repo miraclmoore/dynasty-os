@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Toaster } from 'sonner';
 import { useDynastyStore } from './store';
 import { useNavigationStore } from './store/navigation-store';
-import { OnboardingModal } from './components/OnboardingModal';
+import { TourOverlay } from './components/TourOverlay';
 import { LauncherPage } from './pages/LauncherPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { RosterPage } from './pages/RosterPage';
@@ -118,6 +118,17 @@ function App() {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Auto-open tour for newly created dynasties
+  useEffect(() => {
+    if (!activeDynasty) return;
+    // Check if this is a fresh dynasty creation by looking for the pending flag
+    const pendingKey = 'dynasty-os-onboarding-pending';
+    if (localStorage.getItem(pendingKey) === 'true') {
+      localStorage.removeItem(pendingKey);
+      setOnboardingOpen(true);
+    }
+  }, [activeDynasty?.id]);
+
   return (
     <div className="pb-10">
       {/* Hidden input forces keyboard focus into document on Tauri cold launch */}
@@ -140,7 +151,7 @@ function App() {
       )}
       <PageContent />
       <CommandPalette open={commandPaletteOpen} onOpenChange={setCommandPaletteOpen} />
-      <OnboardingModal isOpen={onboardingOpen} onClose={() => setOnboardingOpen(false)} />
+      <TourOverlay isOpen={onboardingOpen} onClose={() => setOnboardingOpen(false)} />
       <TickerBar />
       <Toaster richColors position="bottom-right" />
     </div>
