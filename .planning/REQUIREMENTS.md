@@ -1,111 +1,91 @@
-# Requirements: Dynasty OS v2.0 — The Living Dynasty
+# Requirements: Dynasty OS
 
-**Defined:** 2026-02-24
-**Updated:** 2026-02-25 — Trimmed to v2.0 only; v1.0 requirements archived to `.planning/milestones/v1.0-REQUIREMENTS.md`
+**Defined:** 2026-02-25
 **Core Value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
 
-## v2.0 Requirements
+## v2.1 Requirements
 
-Requirements for Milestone v2.0. 32 user-facing requirements across 3 categories. Infrastructure (aiCache migration, async job queue, Dexie v6 schema) is handled as Phase 10 success criteria.
+Requirements for the UX/UI Polish milestone. Each maps to roadmap phases.
 
-### QOL Wins
+### Onboarding
 
-- [x] **QOL-01**: User receives a toast notification confirming every successful write operation (game log, player edit, stat entry)
-- [x] **QOL-02**: User can undo the last single destructive action (delete or edit) for games, players, and season stats
-- [x] **QOL-03**: All list and table filter selections persist across navigation within the same app session
-- [x] **QOL-04**: User can open a command palette (Ctrl+K / Cmd+K) to navigate to any page or trigger quick actions from any screen
-- [x] **QOL-05**: User can export any data table to a CSV file via the OS file save dialog
-- [x] **QOL-06**: New season year input auto-suggests previous season year + 1
-- [x] **QOL-07**: Log Game modal shows recently-used opponents as quick-select options
-- [x] **QOL-08**: User can add and edit a free-text note on any player record
-- [x] **QOL-09**: Dashboard season checklist tracks which annual tasks are complete for the active season
-- [x] **QOL-10**: Program Timeline includes a horizontal season scrubber for jumping to any dynasty year directly
+- [ ] **ONBD-01**: After creating a new dynasty, the onboarding tour auto-launches on the dashboard and walks through every main screen section — sidebar, Log Game, End Season, SeasonAtGlance, RecentActivity, WeeklySnapshot, StatHighlights, QuickEntryHub, Season Checklist, GameLog — each highlighted with the spotlight mechanism and a popup explaining what it does
+- [ ] **ONBD-02**: Existing user can re-trigger the tour at any time from a persistent `?` button or Settings entry point
+- [ ] **ONBD-03**: SetupWizard description text renders at readable opacity (remove `text-blue-300/60` dimming)
 
-### Community Features
+### Navigation
 
-- [x] **COMM-01**: User can track coaching staff lifecycle — hire, fire, promote roles with tenure dates and scheme notes
-- [x] **COMM-02**: User can link a CFB player record to their NFL/Madden career counterpart across dynasty types
-- [x] **COMM-03**: User can simulate a playoff bracket for the current season with customizable seedings
-- [x] **COMM-04**: CFB users can log NIL deals per player (amount, brand, duration) and view total spend by class and position
-- [x] **COMM-05**: User can build a multi-year future schedule and view projected bowl eligibility
-- [x] **COMM-06**: Madden users can calculate trade value for any player based on position, rating, age, and contract
-- [x] **COMM-07**: CFB users can compare recruiting class grades side-by-side across seasons or rival programs
-- [x] **COMM-08**: User can enable automatic background export of dynasty data to JSON/CSV on every save
-- [x] **COMM-09**: User can view a Historical Season Record Book showing all seasons, records, stats, and awards in one scrollable view
-- [x] **COMM-10**: User can view an expanded Rivalry Dashboard with series momentum, key moments log, and all-time context per rival
+- [ ] **NAV-01**: User can navigate back to the previous page from any non-root inner page via a back button or breadcrumb
+- [ ] **NAV-02**: User can see their current page context (page title + optional parent) without checking the sidebar
 
-### AI Intelligence Layer
+### Tooltips & Entry Surfaces
 
-- [ ] **AINT-01**: A Living Chronicle panel displays an AI running narrative of the current season that updates after each logged game
-- [ ] **AINT-02**: Dashboard displays a Hot Seat/Pressure Meter — AI-derived coaching pressure index based on results vs expectations
-- [ ] **AINT-03**: User can generate an AI Opponent Intelligence Dossier for any upcoming opponent
-- [ ] **AINT-04**: User can generate an AI Generational Player Arc narrative tracing a player's full career (distinct from Legacy Card blurb)
-- [ ] **AINT-05**: User can view an AI Rival Prophecy predicting rivalry trajectory based on current momentum
-- [ ] **AINT-06**: An AI Obituary Room entry auto-generates when a legendary player departs the program
-- [ ] **AINT-07**: The Journalist automatically generates a news-wire blurb after significant game events (upsets, ranked matchups, rivalry results)
-- [ ] **AINT-08**: User can view Cross-Dynasty Intelligence insights comparing patterns across up to 5 active dynasties
-- [ ] **AINT-09**: User can view a Momentum Heat Map showing AI-analyzed momentum shifts across all games in a season
-- [ ] **AINT-10**: User can run the What If Engine to explore an AI-generated alternate history for a key dynasty moment
-- [ ] **AINT-11**: User can activate Broadcast Booth mode for AI text-to-speech game recap fragments, with graceful fallback when no TTS voices are available
-- [ ] **AINT-12**: User can generate a DNA Report — AI analysis of program identity: play style, recruiting philosophy, coaching signature
+- [ ] **TIP-01**: Tooltips triggered from sidebar items do not overflow or clip at viewport edges
+- [ ] **TIP-02**: Tooltip placement auto-adjusts to the available side when the default placement lacks space
+- [ ] **ENTRY-01**: QuickEntryHub category labels are large enough to scan at a glance (increased font size)
+
+### Data Display
+
+- [ ] **DISP-01**: GameLog notes that exceed one line show an inline expand control to read the full note without opening a modal
+- [ ] **DISP-02**: All inner pages identified as sparse in a page audit have meaningful content structure and non-trivial empty states
+
+### Error States
+
+- [ ] **ERR-01**: Recap API errors display a human-readable message instead of a raw error string
+- [ ] **ERR-02**: Recap API error UI includes a specific actionable suggestion (check API key, verify connection, retry)
+
+## Future Requirements
+
+Features acknowledged but deferred beyond v2.1.
+
+### Onboarding
+
+- **ONBD-04**: Per-page contextual tips shown the first time a user visits a new inner page
+- **ONBD-05**: Interactive "try it" steps during tour (e.g. clicking Log Game during the tour step)
+
+### Navigation
+
+- **NAV-03**: Global search / jump-to-page from any screen (already partially covered by Cmd+K palette)
+
+### Data Display
+
+- **DISP-03**: Player profile page inline stat editing without navigating to a separate edit form
 
 ## Out of Scope
 
+Explicitly excluded from v2.1. Documented to prevent scope creep.
+
 | Feature | Reason |
 |---------|--------|
-| Mobile application | Separate lightweight companion tool, not a full app |
-| In-game overlay / game modification | Out of scope permanently — legal and technical risk |
-| Multi-user dynasty data merging | High complexity, no demand signal for V1 |
-| Cloud backup / account system | Local-first at V1; auth complexity incompatible with launch timeline |
-| Monetization (any form) | Free at launch — community trust building |
-| NBA 2K, MLB, FIFA support | No offline save parser; V3+ after community tooling matures |
-| Real-time multiplayer dynasty tracking | Different product category |
+| Redesigning existing page layouts | Polish pass only — layout changes belong in a dedicated design milestone |
+| New data entry forms or fields | Not a data model milestone |
+| AI-generated tooltips or tour copy | Would require prompt engineering iteration; not a v2.1 priority |
+| Mobile / responsive layout work | Desktop-only app; responsive work deferred to V3+ |
 
 ## Traceability
 
-### v2.0 Traceability
+Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| QOL-01 | Phase 11 | Complete |
-| QOL-02 | Phase 11 | Complete |
-| QOL-03 | Phase 11 | Complete |
-| QOL-04 | Phase 11 | Complete |
-| QOL-05 | Phase 11 | Complete |
-| QOL-06 | Phase 11 | Complete |
-| QOL-07 | Phase 11 | Complete |
-| QOL-08 | Phase 11 | Complete |
-| QOL-09 | Phase 11 | Complete |
-| QOL-10 | Phase 11 | Complete |
-| COMM-01 | Phase 12 | Complete |
-| COMM-02 | Phase 12 | Complete |
-| COMM-03 | Phase 12 | Complete |
-| COMM-04 | Phase 12 | Complete |
-| COMM-05 | Phase 12 | Complete |
-| COMM-06 | Phase 12 | Complete |
-| COMM-07 | Phase 12 | Complete |
-| COMM-08 | Phase 12 | Complete |
-| COMM-09 | Phase 12 | Complete |
-| COMM-10 | Phase 12 | Complete |
-| AINT-01 | Phase 13 | Pending |
-| AINT-02 | Phase 13 | Pending |
-| AINT-03 | Phase 13 | Pending |
-| AINT-04 | Phase 13 | Pending |
-| AINT-05 | Phase 13 | Pending |
-| AINT-06 | Phase 13 | Pending |
-| AINT-07 | Phase 13 | Pending |
-| AINT-08 | Phase 13 | Pending |
-| AINT-09 | Phase 13 | Pending |
-| AINT-10 | Phase 13 | Pending |
-| AINT-11 | Phase 13 | Pending |
-| AINT-12 | Phase 13 | Pending |
+| ONBD-01 | TBD | Pending |
+| ONBD-02 | TBD | Pending |
+| ONBD-03 | TBD | Pending |
+| NAV-01 | TBD | Pending |
+| NAV-02 | TBD | Pending |
+| TIP-01 | TBD | Pending |
+| TIP-02 | TBD | Pending |
+| ENTRY-01 | TBD | Pending |
+| DISP-01 | TBD | Pending |
+| DISP-02 | TBD | Pending |
+| ERR-01 | TBD | Pending |
+| ERR-02 | TBD | Pending |
 
-**v2.0 Coverage:**
-- v2.0 requirements: 32 total
-- QOL complete: 10/10
-- Community: 0/10 (Phase 12 pending)
-- AI Layer: 0/12 (Phase 13 pending)
+**Coverage:**
+- v2.1 requirements: 12 total
+- Mapped to phases: 0 (roadmap pending)
+- Unmapped: 12 ⚠️
 
 ---
-*Requirements defined: 2026-02-24*
-*Last updated: 2026-02-25 — v1.0 archived; trimmed to v2.0 scope only*
+*Requirements defined: 2026-02-25*
+*Last updated: 2026-02-25 after initial definition*
