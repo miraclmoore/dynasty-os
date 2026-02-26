@@ -125,6 +125,13 @@ export function TourOverlay({ isOpen, onClose }: TourOverlayProps) {
   useEffect(() => {
     if (!isOpen) return;
 
+    // If no target, show centered card immediately — no polling needed
+    if (!currentStep.targetId) {
+      setBounds(null);
+      setReady(true);
+      return;
+    }
+
     setReady(false);
     setBounds(null);
 
@@ -132,12 +139,6 @@ export function TourOverlay({ isOpen, onClose }: TourOverlayProps) {
     const nav = useNavigationStore.getState();
     if (currentStep.page === 'dashboard' && currentPage !== 'dashboard') {
       nav.navigate('dashboard');
-    }
-
-    // If no target, just show centered card immediately
-    if (!currentStep.targetId) {
-      setReady(true);
-      return;
     }
 
     // Poll for element with rAF (max ~600ms at 60fps = 36 frames)
@@ -261,7 +262,6 @@ export function TourOverlay({ isOpen, onClose }: TourOverlayProps) {
         /* Full dark backdrop when no target */
         <div
           style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.72)', zIndex: 9000 }}
-          onClick={dismiss}
         />
       )}
 
