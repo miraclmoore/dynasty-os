@@ -39,7 +39,7 @@ Full details: Phase Details — v2.0 section below.
 
 ### 🚧 v2.1 UX/UI Polish (In Progress)
 
-- [ ] **Phase 14: Onboarding Overhaul** - Tour auto-launches on dynasty creation, re-triggerable from persistent entry point, SetupWizard text legibility fix
+- [x] **Phase 14: Onboarding Overhaul** - Tour auto-launches on dynasty creation, re-triggerable from persistent entry point, SetupWizard text legibility fix
 - [ ] **Phase 15: Navigation** - Page headers with back navigation on all inner pages, visible page context at all times
 - [ ] **Phase 16: Tooltips and Quick Entry** - Sidebar tooltip overflow fix, auto-adjusting tooltip placement, QuickEntryHub label legibility
 - [ ] **Phase 17: Data Display and Page Audit** - GameLog inline note expansion, sparse inner pages fleshed out with content structure and empty states
@@ -131,8 +131,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 14-01-PLAN.md — Tour expansion: add data-tour-id to 7 missing widgets, expand TourOverlay to 12 steps, fix auto-launch to fire on dashboard (ONBD-01)
-- [ ] 14-02-PLAN.md — SetupWizard opacity fix + human verification of all 3 ONBD requirements (ONBD-02, ONBD-03)
+- [x] 14-01-PLAN.md — Tour expansion: add data-tour-id to 7 missing widgets, expand TourOverlay to 12 steps, fix auto-launch to fire on dashboard (ONBD-01)
+- [x] 14-02-PLAN.md — SetupWizard opacity fix + human verification of all 3 ONBD requirements (ONBD-02, ONBD-03)
 
 ### Phase 15: Navigation
 **Goal**: Users always know where they are and can get back without hunting for a sidebar link — every inner page feels like a complete, navigable screen.
@@ -191,7 +191,7 @@ v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 
 | 11. QOL Wins | v2.0 | 6/6 | Complete | 2026-02-25 |
 | 12. Community Features | v2.0 | 6/7 | In Progress | - |
 | 13. AI Intelligence Layer | v2.0 | 0/TBD | Not started | - |
-| 14. Onboarding Overhaul | 1/2 | In Progress|  | - |
+| 14. Onboarding Overhaul | v2.1 | 2/2 | Complete | 2026-02-26 |
 | 15. Navigation | v2.1 | 0/TBD | Not started | - |
 | 16. Tooltips and Quick Entry | v2.1 | 0/TBD | Not started | - |
 | 17. Data Display and Page Audit | v2.1 | 0/TBD | Not started | - |
