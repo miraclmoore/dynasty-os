@@ -154,7 +154,7 @@ export function DashboardPage() {
   return (
     <div className="flex h-[calc(100vh-40px)] bg-gray-900 text-white overflow-hidden">
       {/* ── LEFT SIDEBAR ───────────────────────────────────────────── */}
-      <aside data-tour-id="tour-sidebar" className="w-56 flex-shrink-0 flex flex-col border-r border-gray-800 bg-gray-900">
+      <aside data-tour-id="tour-sidebar" className="w-56 flex-shrink-0 flex flex-col border-r border-gray-800 bg-gray-900 overflow-visible">
         {/* Dynasty identity */}
         <div className="px-4 pt-4 pb-3 border-b border-gray-800">
           <div className="flex items-center gap-2 mb-1">
@@ -210,7 +210,7 @@ export function DashboardPage() {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto px-2 py-3 flex flex-col gap-4">
+        <nav className="flex-1 overflow-y-auto px-2 py-3 flex flex-col gap-4" style={{ overflowX: 'visible' }}>
           {activeSeason && (
             <NavSection title="Season">
               <NavLink label="Season Recap" onClick={() => nav.goToSeasonRecap(activeSeason.id)} />
