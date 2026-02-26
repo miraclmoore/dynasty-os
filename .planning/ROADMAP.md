@@ -128,7 +128,11 @@ Plans:
   1. After a user creates a new dynasty and lands on the dashboard, the onboarding tour launches automatically and cycles through every major section — sidebar, Log Game, End Season, SeasonAtGlance, RecentActivity, WeeklySnapshot, StatHighlights, QuickEntryHub, Season Checklist, GameLog — each with a spotlight highlight and an explanatory popup
   2. User can dismiss and later re-trigger the full tour at any time via a persistent `?` button visible on the dashboard (or equivalent Settings entry)
   3. SetupWizard description text is fully legible — no dimmed or low-opacity text on the wizard step descriptions
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 14-01-PLAN.md — Tour expansion: add data-tour-id to 7 missing widgets, expand TourOverlay to 12 steps, fix auto-launch to fire on dashboard (ONBD-01)
+- [ ] 14-02-PLAN.md — SetupWizard opacity fix + human verification of all 3 ONBD requirements (ONBD-02, ONBD-03)
 
 ### Phase 15: Navigation
 **Goal**: Users always know where they are and can get back without hunting for a sidebar link — every inner page feels like a complete, navigable screen.
@@ -187,7 +191,7 @@ v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 
 | 11. QOL Wins | v2.0 | 6/6 | Complete | 2026-02-25 |
 | 12. Community Features | v2.0 | 6/7 | In Progress | - |
 | 13. AI Intelligence Layer | v2.0 | 0/TBD | Not started | - |
-| 14. Onboarding Overhaul | v2.1 | 0/TBD | Not started | - |
+| 14. Onboarding Overhaul | v2.1 | 0/2 | Not started | - |
 | 15. Navigation | v2.1 | 0/TBD | Not started | - |
 | 16. Tooltips and Quick Entry | v2.1 | 0/TBD | Not started | - |
 | 17. Data Display and Page Audit | v2.1 | 0/TBD | Not started | - |
