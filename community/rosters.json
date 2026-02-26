@@ -1,0 +1,93 @@
+{
+  "lastUpdated": "2026-02-26",
+  "rosters": [
+    {
+      "id": "m26-opsp-release",
+      "sport": "madden",
+      "gameYear": 26,
+      "title": "Operation Sports Official Launch Roster",
+      "author": "Operation Sports Community",
+      "description": "The flagship OS community roster with corrected ratings, updated depth charts, and real-world accuracy. One of the most downloaded rosters each year.",
+      "version": "Launch Release",
+      "url": "https://www.operationsports.com/forums/madden-nfl-football-rosters/",
+      "tags": ["Realistic Ratings", "Updated Depth Charts", "Community Favorite"]
+    },
+    {
+      "id": "m26-promo-1",
+      "sport": "madden",
+      "gameYear": 26,
+      "title": "All-Madden Simulation Rosters",
+      "author": "All-Madden.com",
+      "description": "Focused on simulation gameplay with adjusted XP sliders and stat corrections. Best paired with All-Madden difficulty.",
+      "version": "v1.0",
+      "url": "https://www.allm.net/",
+      "tags": ["Simulation", "All-Madden", "XP Adjusted"]
+    },
+    {
+      "id": "m25-os-final",
+      "sport": "madden",
+      "gameYear": 25,
+      "title": "Operation Sports Final Season Roster",
+      "author": "Operation Sports Community",
+      "description": "Fully updated through the NFL regular season with accurate rosters, trades, and injury adjustments.",
+      "version": "Final Season Update",
+      "url": "https://www.operationsports.com/forums/madden-nfl-football-rosters/",
+      "tags": ["Final Release", "Trade Updated", "Realistic Ratings"]
+    },
+    {
+      "id": "m25-franchise-focused",
+      "sport": "madden",
+      "gameYear": 25,
+      "title": "Franchise Mode Starter Pack",
+      "author": "MaddenFranchiseMode.com Community",
+      "description": "Built specifically for franchise mode with adjusted development traits, realistic contract values, and corrected player ages.",
+      "version": "Franchise Edition",
+      "url": "https://www.reddit.com/r/Madden/",
+      "tags": ["Franchise Mode", "Dev Traits", "Contracts"]
+    },
+    {
+      "id": "m24-os-best",
+      "sport": "madden",
+      "gameYear": 24,
+      "title": "Operation Sports Best Roster (M24)",
+      "author": "Operation Sports Community",
+      "description": "The most widely used M24 roster with hundreds of community corrections and monthly updates throughout the season.",
+      "version": "Season Final",
+      "url": "https://www.operationsports.com/forums/madden-nfl-football-rosters/",
+      "tags": ["Realistic Ratings", "Monthly Updates", "Community Favorite"]
+    },
+    {
+      "id": "m24-sim-v2",
+      "sport": "madden",
+      "gameYear": 24,
+      "title": "Sim Nation Community Rosters",
+      "author": "Sim Nation Discord",
+      "description": "Ratings and attributes tuned for simulation gameplay. Includes historical accuracy corrections and balanced gameplay adjustments.",
+      "version": "v2.5",
+      "url": "https://discord.gg/",
+      "tags": ["Simulation", "Balanced", "Discord Community"]
+    },
+    {
+      "id": "cfb25-os-v1",
+      "sport": "cfb",
+      "gameYear": 25,
+      "title": "Operation Sports CFB 25 Community Roster",
+      "author": "Operation Sports Community",
+      "description": "Community-corrected roster for EA Sports College Football 25 with updated ratings, accurate depth charts, and real transfer portal moves reflected.",
+      "version": "Season Release",
+      "url": "https://www.operationsports.com/forums/ea-sports-college-football/",
+      "tags": ["Realistic Ratings", "Transfer Portal", "Community Favorite"]
+    },
+    {
+      "id": "cfb25-reddit-v1",
+      "sport": "cfb",
+      "gameYear": 25,
+      "title": "r/NCAAFBseries Community Roster Pack",
+      "author": "r/NCAAFBseries Community",
+      "description": "Crowd-sourced roster updates from the active r/NCAAFBseries subreddit. Covers all FBS programs with corrected player ratings and positions.",
+      "version": "v2.0",
+      "url": "https://www.reddit.com/r/NCAAFBseries/",
+      "tags": ["Community Maintained", "All FBS Teams"]
+    }
+  ]
+}
