@@ -30,6 +30,7 @@ import { RecruitingComparisonPage } from './pages/RecruitingComparisonPage';
 import { RecordBookPage } from './pages/RecordBookPage';
 import { TickerBar } from './components/TickerBar';
 import { CommandPalette } from './components/CommandPalette';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 function PageContent() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
@@ -146,7 +147,9 @@ function App() {
           ?
         </button>
       )}
-      <PageContent />
+      <ErrorBoundary>
+        <PageContent />
+      </ErrorBoundary>
       <CommandPalette open={commandPaletteOpen} onOpenChange={setCommandPaletteOpen} />
       <TourOverlay isOpen={onboardingOpen} onClose={() => setOnboardingOpen(false)} />
       <TickerBar />
