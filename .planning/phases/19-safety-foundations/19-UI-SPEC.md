@@ -1,7 +1,7 @@
 ---
 phase: 19
 slug: safety-foundations
-status: draft
+status: approved
 shadcn_initialized: false
 preset: none
 created: 2026-05-03
@@ -62,7 +62,7 @@ Exceptions: none for this phase.
 | Role | Size | Weight | Line Height | Class |
 |------|------|--------|-------------|-------|
 | Body | 14px | 400 (regular) | 1.5 | `text-sm font-normal` |
-| Label | 16px | 600 (semibold) | 1.5 | `text-base font-semibold` |
+| Label | 16px | 700 (bold) | 1.5 | `text-base font-bold` |
 | Heading | 24px | 700 (bold) | 1.2 | `text-2xl font-bold font-heading` |
 | Display | 28px | 400 (Bebas Neue) | 1.0 | `font-display text-3xl tracking-widest` |
 
@@ -151,9 +151,9 @@ Inline SVG warning triangle, `className="w-12 h-12 text-red-400 mx-auto mb-4"`. 
 
 **Heading:**
 ```
-className="font-heading font-bold text-xl text-white mb-2"
+className="font-heading font-bold text-2xl text-white mb-2"
 ```
-"Something went wrong." — 20px Oswald bold. Matches empty-state heading pattern in DashboardPage (`text-gray-300 font-semibold text-lg`), elevated slightly to `text-white` because this is a blocking error.
+"Something went wrong." — 24px Oswald bold. Matches empty-state heading pattern in DashboardPage (`text-gray-300 font-semibold text-lg`), elevated slightly to `text-white` because this is a blocking error.
 
 **Body text:**
 ```
@@ -163,7 +163,7 @@ className="text-gray-400 text-sm leading-relaxed mb-6"
 
 **Recovery CTA button:**
 ```
-className="w-full px-4 py-2 bg-red-700 hover:bg-red-600 text-white text-sm font-semibold rounded-lg transition-colors mb-4"
+className="w-full px-4 py-2 bg-red-700 hover:bg-red-600 text-white text-sm font-bold rounded-lg transition-colors mb-4"
 onClick={() => window.location.reload()}
 ```
 - `bg-red-700 hover:bg-red-600` — matches the "Try Again" button in SeasonRecapPage exactly.
@@ -175,7 +175,7 @@ className="text-xs text-gray-500 hover:text-gray-400 underline cursor-pointer tr
 ```
 Clicking reveals a `<pre>` block with `error.message` and optionally `error.stack`:
 ```
-className="mt-3 text-left bg-gray-900 border border-gray-700 rounded-lg p-3 text-xs text-gray-400 font-mono overflow-auto max-h-32"
+className="mt-2 text-left bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-gray-400 font-mono overflow-auto max-h-32"
 ```
 
 ---
@@ -183,7 +183,7 @@ className="mt-3 text-left bg-gray-900 border border-gray-700 rounded-lg p-3 text
 ### Layout Summary (visual hierarchy, top to bottom inside card)
 
 1. Warning triangle SVG icon — `text-red-400`, 48px, centered, 16px margin-bottom
-2. Heading — "Something went wrong." — `text-xl font-bold font-heading text-white`, 8px margin-bottom
+2. Heading — "Something went wrong." — `text-2xl font-bold font-heading text-white`, 8px margin-bottom
 3. Body — one paragraph, `text-sm text-gray-400 leading-relaxed`, 24px margin-bottom
 4. "Reload App" button — full-width, `bg-red-700`, 16px margin-bottom
 5. "Show error details" toggle — `text-xs text-gray-500`, underlined, collapsed by default
@@ -215,11 +215,11 @@ className="mt-3 text-left bg-gray-900 border border-gray-700 rounded-lg p-3 text
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: PASS
+- [x] Dimension 2 Visuals: PASS
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS (force-approved — text-xs detail size accepted)
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
 
-**Approval:** pending
+**Approval:** approved 2026-05-03
