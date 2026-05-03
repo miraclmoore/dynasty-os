@@ -196,7 +196,11 @@ Plans:
   2. Passing an invalid table name string to UndoStore produces a TypeScript compile-time error — `db as any` is gone from the undo path
   3. `zundo` does not appear in `package.json` and `pnpm install` does not download it
   4. The Records leaderboard loads all player data in two bulk queries (one for players, one for player seasons) rather than one query per player
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 19-01-PLAN.md — ErrorBoundary fallback (SAFE-01) + typed undo TABLE_MAP (SAFE-02)
+- [ ] 19-02-PLAN.md — Remove zundo dep (SAFE-03) + N+1 leaderboard fix via bulkGet (SAFE-04)
 
 ### Phase 20: Security
 **Goal**: No frontend code calls the Anthropic API directly — all requests route through a Tauri command — and the API key is stored in the OS-native plugin-store rather than localStorage.
