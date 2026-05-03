@@ -1,5 +1,5 @@
 import { db } from '@dynasty-os/db';
-import type { Season } from '@dynasty-os/core-types';
+import type { Player, Season } from '@dynasty-os/core-types';
 
 // Stats that should be averaged (weighted by gamesPlayed) rather than summed
 // Must stay in sync with career-stats.ts AVERAGED_STATS
@@ -48,15 +48,33 @@ export async function getSingleSeasonLeaders(
       .toArray();
   }
 
-  // Build entries for those with a non-zero stat value
-  const entries: LeaderboardEntry[] = [];
+  // Collect candidate playerIds (filter first to keep bulkGet payload minimal).
+  // Deduplicate so a player with the same stat across many seasons is fetched once.
+  const candidatePlayerIds = [...new Set(
+    playerSeasons
+      .filter((ps) => {
+        const value = ps.stats[statKey];
+        return value !== undefined && value !== 0;
+      })
+      .map((ps) => ps.playerId)
+  )];
 
+  // Single bulk query — Dexie returns (Player | undefined)[] in the order of input keys.
+  const playerResults = await db.players.bulkGet(candidatePlayerIds);
+
+  // Build Map<id, Player> for O(1) lookup inside the entries loop.
+  const playerMap = new Map<string, Player>();
+  for (const player of playerResults) {
+    if (player) playerMap.set(player.id, player);
+  }
+
+  // Build entries using the Map — zero additional DB calls.
+  const entries: LeaderboardEntry[] = [];
   for (const ps of playerSeasons) {
     const value = ps.stats[statKey];
     if (value === undefined || value === 0) continue;
 
-    // Fetch player for name/position
-    const player = await db.players.get(ps.playerId);
+    const player = playerMap.get(ps.playerId);
     if (!player) continue;
 
     entries.push({
@@ -100,6 +118,14 @@ export async function getCareerLeaders(
 
   const entries: LeaderboardEntry[] = [];
 
+  // Collect every grouped playerId in one pass, then fetch all of them in a single bulkGet.
+  const allPlayerIds = Array.from(byPlayer.keys());
+  const playerResults = await db.players.bulkGet(allPlayerIds);
+  const playerMap = new Map<string, Player>();
+  for (const player of playerResults) {
+    if (player) playerMap.set(player.id, player);
+  }
+
   for (const [playerId, seasons] of byPlayer) {
     let careerValue: number;
 
@@ -138,7 +164,7 @@ export async function getCareerLeaders(
       if (careerValue === 0) continue;
     }
 
-    const player = await db.players.get(playerId);
+    const player = playerMap.get(playerId);
     if (!player) continue;
 
     entries.push({
