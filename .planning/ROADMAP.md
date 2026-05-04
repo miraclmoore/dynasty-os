@@ -221,7 +221,16 @@ Plans:
   2. Ending a season via SeasonEndModal with a bowl opponent and key events saves both fields; `ProgramTimelinePage` renders them without any `(season as any)` TypeScript cast
   3. A player's dev trait (normal/star/superstar/xfactor) is selectable in AddPlayerModal and EditPlayerModal and displays as a colored badge on the roster and player profile pages
   4. A CFB roster player with a deal breaker set shows the deal breaker tag and an RS badge in EditPlayerModal and on the roster row; a committed recruit with all three motivation grades saved displays them correctly on the recruit card
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+**Wave 1**
+- [ ] 21-01-PLAN.md — Foundation: KeyMoment type + Player/Season/Recruit field extensions + Dexie v7 schema with keyMoments table (DMOD-01..05 types)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+- [ ] 21-02-PLAN.md — keyMoments service migration to Dexie + plugin-store migration helper + DynastyExport v3 with rivals + keyMoments (DMOD-01)
+- [ ] 21-03-PLAN.md — Player UI: Dev Trait selector (both sports) + Deal Breaker + Redshirt (CFB) in AddPlayerModal/EditPlayerModal; trait/DB/RS badges on roster + profile (DMOD-03, DMOD-04)
+- [ ] 21-04-PLAN.md — Season UI: Bowl Opponent (CFB) + Key Events in SeasonEndModal; remove (season as any) casts; Recruit motivations + visit week + row pills on RecruitingPage (DMOD-02, DMOD-05)
 
 ### Phase 22: Screenshot Pipeline
 **Goal**: Player stats screenshots are parsed, fuzzy-matched to the roster, and saved to the database; depth chart screenshots export as CSV; the recruiting-motivations screen type is selectable; and multiple images can be ingested in one session.
