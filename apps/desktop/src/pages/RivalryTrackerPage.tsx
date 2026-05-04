@@ -118,7 +118,7 @@ export function RivalryTrackerPage() {
   const handleAddMoment = async (rivalId: string) => {
     const form = getMomentForm(rivalId);
     const year = parseInt(form.year, 10);
-    if (!year || !form.description.trim()) return;
+    if (!year || isNaN(year) || year < 2000 || year > 2099 || !form.description.trim()) return;
     await addKeyMoment(rivalId, activeDynasty.id, { year, description: form.description.trim() });
     const fresh = await getKeyMoments(activeDynasty.id, rivalId);
     setKeyMomentsMap((prev) => ({ ...prev, [rivalId]: fresh }));
@@ -497,7 +497,7 @@ export function RivalryTrackerPage() {
                       />
                       <button
                         onClick={() => handleAddMoment(rival.id)}
-                        disabled={!momentForm.year || !momentForm.description.trim()}
+                        disabled={!momentForm.year || isNaN(parseInt(momentForm.year, 10)) || !momentForm.description.trim()}
                         className="px-2.5 py-1 text-xs bg-amber-600 hover:bg-amber-500 disabled:opacity-40 text-white font-semibold rounded transition-colors flex-shrink-0"
                       >
                         Add
