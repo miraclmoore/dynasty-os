@@ -11,6 +11,12 @@ import { getSportConfig } from '@dynasty-os/sport-configs';
 import type { Player, PlayerStatus } from '@dynasty-os/core-types';
 import { exportTableToCsv } from '../lib/csv-export';
 import { consumeAutoOpenAddPlayer } from '../components/QuickEntryHub';
+import {
+  DEV_TRAIT_BADGE,
+  DEV_TRAIT_LABEL,
+  type DevTrait,
+} from '../lib/cfb-categories';
+import { Tooltip } from '../components/Tooltip';
 
 const SPORT_BADGE: Record<string, { label: string; classes: string }> = {
   cfb: { label: 'CFB', classes: 'bg-orange-600 text-orange-100' },
@@ -329,9 +335,36 @@ export function RosterPage() {
                       {player.jerseyNumber !== undefined ? player.jerseyNumber : '—'}
                     </td>
                     <td className="px-4 py-3">
-                      <span className="text-white font-medium hover:text-blue-300 transition-colors">
-                        {player.firstName} {player.lastName}
-                      </span>
+                      <div className="flex flex-col">
+                        <span className="text-white font-medium hover:text-blue-300 transition-colors">
+                          {player.firstName} {player.lastName}
+                        </span>
+                        {(player.devTrait || (activeDynasty.sport === 'cfb' && (player.dealBreaker || player.isRedshirt))) && (
+                          <div className="flex items-center gap-1 mt-0.5">
+                            {player.devTrait && (
+                              <Tooltip content={`${DEV_TRAIT_LABEL[player.devTrait as DevTrait]} Development Trait`}>
+                                <span className={`inline-flex items-center px-1.5 py-0.5 rounded border text-xs font-semibold ${DEV_TRAIT_BADGE[player.devTrait as DevTrait]}`}>
+                                  {DEV_TRAIT_LABEL[player.devTrait as DevTrait]}
+                                </span>
+                              </Tooltip>
+                            )}
+                            {activeDynasty.sport === 'cfb' && player.dealBreaker && (
+                              <Tooltip content={`Deal Breaker: ${player.dealBreaker}`}>
+                                <span className="inline-flex items-center px-1.5 py-0.5 rounded border text-xs font-semibold bg-orange-900/40 text-orange-300 border-orange-700">
+                                  DB
+                                </span>
+                              </Tooltip>
+                            )}
+                            {activeDynasty.sport === 'cfb' && player.isRedshirt && (
+                              <Tooltip content="Redshirt">
+                                <span className="inline-flex items-center px-1.5 py-0.5 rounded border text-xs font-semibold bg-red-900/30 text-red-400 border-red-700/40">
+                                  RS
+                                </span>
+                              </Tooltip>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </td>
                     <td className="px-4 py-3">
                       <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-gray-700/50 text-gray-200 text-xs font-medium">
