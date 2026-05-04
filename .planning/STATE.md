@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v2.2
 milestone_name: Handoff Overhaul
 status: executing
-stopped_at: Phase 21 UI-SPEC approved
-last_updated: "2026-05-04T18:47:26.055Z"
-last_activity: 2026-05-04 -- Phase 21 execution started
+stopped_at: Completed 22-01-PLAN.md
+last_updated: "2026-05-04T20:35:04.208Z"
+last_activity: 2026-05-04
 progress:
   total_phases: 19
-  completed_phases: 5
-  total_plans: 28
-  completed_plans: 23
-  percent: 82
+  completed_phases: 6
+  total_plans: 33
+  completed_plans: 28
+  percent: 85
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-25)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** Phase 21 — data-model
+**Current focus:** Phase 22 — screenshot-pipeline
 
 ## Current Position
 
-Phase: 21 (data-model) — EXECUTING
-Plan: 1 of 4
-Status: Executing Phase 21
-Last activity: 2026-05-04 -- Phase 21 execution started
+Phase: 22 (screenshot-pipeline) — EXECUTING
+Plan: 2 of 5
+Status: Ready to execute
+Last activity: 2026-05-04
 
 ## Performance Metrics
 
@@ -94,6 +94,7 @@ Last activity: 2026-05-04 -- Phase 21 execution started
 | Phase 12 P05 | 2 | 2 tasks | 5 files |
 | Phase 12 P06 | 9 | 2 tasks | 7 files |
 | Phase 14 P01 | 2 | 2 tasks | 10 files |
+| Phase 22 P01 | 2 | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -211,6 +212,7 @@ Recent decisions affecting current work:
 - [ea77417]: cfb-espn-ids.ts — 120-team ESPN numeric ID lookup; NFL uses 3-letter abbreviation; onError fallback on <img> for clean degradation
 - [Phase 14-01]: pending-flag auto-launch: LauncherPage sets localStorage pending flag, App.tsx opens tour on activeDynasty change — decouples tour launch from navigation timing
 - [Phase 14-01]: All 12 TourOverlay STEPS use page:dashboard — roster step removed; TourOverlay no longer navigates away from dashboard during tour
+- [Phase ?]: [Phase 22-01]: No external fuzzy-match library — hand-rolled char-set overlap scoring; normalizeName strips apostrophes/hyphens/periods; 0.4 threshold in findBestPlayerMatch
 
 ### Phase 12 Decisions
 
@@ -267,9 +269,9 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-05-04T18:14:22.951Z
-Stopped at: Phase 21 UI-SPEC approved
-Resume file: .planning/phases/21-data-model/21-UI-SPEC.md
+Last session: 2026-05-04T20:35:04.200Z
+Stopped at: Completed 22-01-PLAN.md
+Resume file: None
 
 ### Work done since 12-06 (not tracked in any plan)
 

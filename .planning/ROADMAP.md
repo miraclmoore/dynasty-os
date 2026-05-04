@@ -241,7 +241,7 @@ Plans:
   2. After parsing a depth chart screenshot, a "Copy as CSV" button is visible and copies correctly formatted CSV to the clipboard; the "not saved in V1" notice is removed
   3. Selecting "recruiting-motivations" as the screen type in the CFB ingestion flow parses motivation grades and deal breaker and shows a Hard Sell recommendation inline
   4. Selecting multiple image files in the ingestion file picker processes them sequentially with a "Parsing X of Y" progress indicator and shows a combined confirm UI after all images are parsed
-**Plans**: TBD
+**Plans**: 5 plans
 **UI hint**: yes
 
 ### Phase 23: Madden Sync Upgrade
@@ -338,7 +338,7 @@ v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 
 | 19. Safety & Foundations | v2.2 | 2/2 | Complete    | 2026-05-04 |
 | 20. Security | v2.2 | 3/3 | Complete    | 2026-05-04 |
 | 21. Data Model | v2.2 | 4/4 | Complete   | 2026-05-04 |
-| 22. Screenshot Pipeline | v2.2 | 0/TBD | Not started | - |
+| 22. Screenshot Pipeline | v2.2 | 1/5 | In Progress|  |
 | 23. Madden Sync Upgrade | v2.2 | 0/TBD | Not started | - |
 | 24. Recruiting Tools | v2.2 | 0/TBD | Not started | - |
 | 25. AI Queue & Features | v2.2 | 0/TBD | Not started | - |
