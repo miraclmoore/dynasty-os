@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v2.2
 milestone_name: Handoff Overhaul
 status: executing
-stopped_at: Completed 22-02-PLAN.md
-last_updated: "2026-05-04T20:38:00Z"
+stopped_at: Completed 22-03-PLAN.md
+last_updated: "2026-05-04T20:42:23.236Z"
 last_activity: 2026-05-04
 progress:
   total_phases: 19
   completed_phases: 6
   total_plans: 33
-  completed_plans: 29
-  percent: 88
+  completed_plans: 30
+  percent: 91
 ---
 
 # Project State
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 ## Current Position
 
 Phase: 22 (screenshot-pipeline) — EXECUTING
-Plan: 3 of 5
+Plan: 4 of 5
 Status: Ready to execute
 Last activity: 2026-05-04
 
@@ -96,6 +96,7 @@ Last activity: 2026-05-04
 | Phase 14 P01 | 2 | 2 tasks | 10 files |
 | Phase 22 P01 | 2 | 1 tasks | 1 files |
 | Phase 22 P02 | 2 | 2 tasks | 1 files |
+| Phase 22 P03 | 3 | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -217,6 +218,7 @@ Recent decisions affecting current work:
 - [Phase 22-02]: normalizeStatKey with STAT_KEY_MAP maps raw screenshot stat labels to canonical PlayerSeason.stats keys; unmapped labels fall back to lowercase+underscore
 - [Phase 22-02]: PlayerSeason upsert in handleSaveStats: filter().first() check then merge-update or create — prevents duplicate PlayerSeason per player+season without compound index
 - [Phase 22-02]: Combobox 150ms onBlur delay before closing dropdown — ensures onMouseDown on list item fires before blur dismisses the list in WebView
+- [Phase ?]: [Phase 22-03]: navigator.clipboard.writeText used for depth chart CSV export — no Tauri permission required; csv-export.ts skipped (opens disk save dialog)
 
 ### Phase 12 Decisions
 
@@ -273,8 +275,8 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-05-04T20:35:04.200Z
-Stopped at: Completed 22-01-PLAN.md
+Last session: 2026-05-04T20:42:23.226Z
+Stopped at: Completed 22-03-PLAN.md
 Resume file: None
 
 ### Work done since 12-06 (not tracked in any plan)
