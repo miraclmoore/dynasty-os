@@ -108,13 +108,14 @@ function App() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
 
   useEffect(() => {
-    // D-01: Conditionally migrate the legacy API key from localStorage to plugin-store.
-    // migrateApiKey() checks for the legacy key internally and is a no-op when it's absent.
-    // Runs at most once per existing user; new users have nothing to migrate.
-    void prefs.migrateApiKey();
-    // D-06: Eagerly load all preferences from plugin-store into PrefsStore so
-    // sync getters (usePrefsStore.getState()) work for downstream code.
-    void prefs.loadAll();
+    // D-01: Migrate legacy API key, then D-06: load all prefs.
+    // migrateApiKey must complete before loadAll so that a migrated key is
+    // visible in the store when loadAll reads it (WR-01: race condition fix).
+    async function init() {
+      await prefs.migrateApiKey();
+      await prefs.loadAll();
+    }
+    void init();
   }, []);
 
   useEffect(() => {
