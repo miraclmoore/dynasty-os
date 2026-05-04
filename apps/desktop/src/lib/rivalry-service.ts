@@ -1,6 +1,8 @@
 import { db } from '@dynasty-os/db';
 import type { Rival } from '@dynasty-os/core-types';
 import { generateId } from './uuid';
+import { getRivalKeyMoments, setRivalKeyMoments } from './prefs-service';
+import type { KeyMoment } from '../store/prefs-store';
 
 export async function createRival(
   input: Omit<Rival, 'id' | 'createdAt' | 'updatedAt'>
@@ -61,32 +63,22 @@ export function calculateSeriesMomentum(
   return totalWeight > 0 ? Math.round((weighted / totalWeight) * 100) / 100 : 0;
 }
 
-// ─── Key Moments ───────────────────────────────────────────────────────────
+// ─── Key Moments (D-08: moved to plugin-store via prefs-service; Phase 21 will move to Dexie) ──
 
-const KEY_MOMENTS_KEY = (rivalId: string) => `dynasty-os-moments-${rivalId}`;
+export type { KeyMoment };
 
-export interface KeyMoment {
-  year: number;
-  description: string;
+export async function getKeyMoments(rivalId: string): Promise<KeyMoment[]> {
+  return getRivalKeyMoments(rivalId);
 }
 
-export function getKeyMoments(rivalId: string): KeyMoment[] {
-  try {
-    return JSON.parse(localStorage.getItem(KEY_MOMENTS_KEY(rivalId)) ?? '[]');
-  } catch {
-    return [];
-  }
-}
-
-export function addKeyMoment(rivalId: string, moment: KeyMoment): void {
-  const existing = getKeyMoments(rivalId);
+export async function addKeyMoment(rivalId: string, moment: KeyMoment): Promise<void> {
+  const existing = await getRivalKeyMoments(rivalId);
   const updated = [...existing, moment].sort((a, b) => b.year - a.year);
-  localStorage.setItem(KEY_MOMENTS_KEY(rivalId), JSON.stringify(updated));
+  await setRivalKeyMoments(rivalId, updated);
 }
 
-export function deleteKeyMoment(rivalId: string, year: number, description: string): void {
-  const existing = getKeyMoments(rivalId).filter(
-    (m) => !(m.year === year && m.description === description)
-  );
-  localStorage.setItem(KEY_MOMENTS_KEY(rivalId), JSON.stringify(existing));
+export async function deleteKeyMoment(rivalId: string, year: number, description: string): Promise<void> {
+  const existing = await getRivalKeyMoments(rivalId);
+  const filtered = existing.filter((m) => !(m.year === year && m.description === description));
+  await setRivalKeyMoments(rivalId, filtered);
 }

@@ -1,19 +1,15 @@
 import { appDataDir } from '@tauri-apps/api/path';
 import { writeTextFile, mkdir } from '@tauri-apps/plugin-fs';
 import { exportDynasty } from './export-import';
-
-const AUTO_EXPORT_KEY = (dynastyId: string) => `dynasty-os-autoexport-${dynastyId}`;
+import { setAutoExportEnabled as prefSetAutoExport } from './prefs-service';
+import { usePrefsStore } from '../store/prefs-store';
 
 export function isAutoExportEnabled(dynastyId: string): boolean {
-  return localStorage.getItem(AUTO_EXPORT_KEY(dynastyId)) === 'true';
+  return usePrefsStore.getState().autoExportEnabled[dynastyId] ?? false;
 }
 
-export function setAutoExportEnabled(dynastyId: string, enabled: boolean): void {
-  if (enabled) {
-    localStorage.setItem(AUTO_EXPORT_KEY(dynastyId), 'true');
-  } else {
-    localStorage.removeItem(AUTO_EXPORT_KEY(dynastyId));
-  }
+export async function setAutoExportEnabled(dynastyId: string, enabled: boolean): Promise<void> {
+  await prefSetAutoExport(dynastyId, enabled);
 }
 
 export async function autoExportIfEnabled(dynastyId: string, dynastyName: string): Promise<void> {

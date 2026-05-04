@@ -9,7 +9,7 @@ import {
   addKeyMoment,
   deleteKeyMoment,
 } from '../lib/rivalry-service';
-import type { KeyMoment } from '../lib/rivalry-service';
+import type { KeyMoment } from '../store/prefs-store';
 import { getHeadToHeadRecords } from '../lib/records-service';
 import type { HeadToHeadRecord } from '../lib/records-service';
 import type { Rival } from '@dynasty-os/core-types';
@@ -47,11 +47,15 @@ export function RivalryTrackerPage() {
 
   // Load key moments whenever rivals change
   useEffect(() => {
-    const map: Record<string, KeyMoment[]> = {};
-    rivals.forEach((r) => {
-      map[r.id] = getKeyMoments(r.id);
-    });
-    setKeyMomentsMap(map);
+    void (async () => {
+      const map: Record<string, KeyMoment[]> = {};
+      await Promise.all(
+        rivals.map(async (r) => {
+          map[r.id] = await getKeyMoments(r.id);
+        })
+      );
+      setKeyMomentsMap(map);
+    })();
   }, [rivals]);
 
   if (!activeDynasty) return null;
@@ -110,18 +114,20 @@ export function RivalryTrackerPage() {
     setMomentForms((prev) => ({ ...prev, [rivalId]: form }));
   };
 
-  const handleAddMoment = (rivalId: string) => {
+  const handleAddMoment = async (rivalId: string) => {
     const form = getMomentForm(rivalId);
     const year = parseInt(form.year, 10);
     if (!year || !form.description.trim()) return;
-    addKeyMoment(rivalId, { year, description: form.description.trim() });
-    setKeyMomentsMap((prev) => ({ ...prev, [rivalId]: getKeyMoments(rivalId) }));
+    await addKeyMoment(rivalId, { year, description: form.description.trim() });
+    const fresh = await getKeyMoments(rivalId);
+    setKeyMomentsMap((prev) => ({ ...prev, [rivalId]: fresh }));
     setMomentForm(rivalId, { year: '', description: '' });
   };
 
-  const handleDeleteMoment = (rivalId: string, moment: KeyMoment) => {
-    deleteKeyMoment(rivalId, moment.year, moment.description);
-    setKeyMomentsMap((prev) => ({ ...prev, [rivalId]: getKeyMoments(rivalId) }));
+  const handleDeleteMoment = async (rivalId: string, moment: KeyMoment) => {
+    await deleteKeyMoment(rivalId, moment.year, moment.description);
+    const fresh = await getKeyMoments(rivalId);
+    setKeyMomentsMap((prev) => ({ ...prev, [rivalId]: fresh }));
   };
 
   const getMomentumLabel = (score: number): string => {
