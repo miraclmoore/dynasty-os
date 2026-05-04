@@ -1,7 +1,8 @@
 import { db } from '@dynasty-os/db';
 import type { Dynasty, Season, Game } from '@dynasty-os/core-types';
 import { getSportConfig } from '@dynasty-os/sport-configs';
-import { getApiKey } from './legacy-card-service';
+import { usePrefsStore } from '../store/prefs-store';
+import { callAnthropic } from './ai-bridge';
 import { getGamesBySeason } from './game-service';
 import { getPlayerSeasonsBySeason } from './player-season-service';
 import { getAiCache, setAiCache, deleteAiCache } from './ai-cache-service';
@@ -312,31 +313,15 @@ async function callClaudeApi(
   userMessage: string,
   maxTokens: number
 ): Promise<string | null> {
-  const apiKey = getApiKey();
-  if (!apiKey) return null;
+  if (!usePrefsStore.getState().hasApiKey) return null;
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'content-type': 'application/json',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: maxTokens,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: userMessage }],
-    }),
+  const data = await callAnthropic({
+    model: 'claude-sonnet-4-6',
+    max_tokens: maxTokens,
+    system: systemPrompt,
+    messages: [{ role: 'user', content: userMessage }],
   });
-
-  if (!response.ok) {
-    console.warn(`[NarrativeService] Claude API returned ${response.status}: ${response.statusText}`);
-    return null;
-  }
-
-  const data = await response.json();
+  if (!data) return null;
   const rawText: string | undefined = data?.content?.[0]?.text;
   if (!rawText) {
     console.warn('[NarrativeService] Claude API response missing text content');
@@ -391,7 +376,7 @@ export async function generateSeasonNarrative(
     if (cached) return cached;
   }
 
-  if (!getApiKey()) return null;
+  if (!usePrefsStore.getState().hasApiKey) return null;
 
   try {
     const ctx = await buildNarrativeContext(dynasty, season);
@@ -427,7 +412,7 @@ export async function generateGameNarrative(
     if (cached) return cached;
   }
 
-  if (!getApiKey()) return null;
+  if (!usePrefsStore.getState().hasApiKey) return null;
 
   try {
     const conference = resolveConference(dynasty);

@@ -1,4 +1,5 @@
-import { getApiKey } from './legacy-card-service';
+import { usePrefsStore } from '../store/prefs-store';
+import { callAnthropic } from './ai-bridge';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -148,8 +149,7 @@ export async function parseScreenshot(
   imageBase64: string,
   dynastyContext: { teamName: string; season: string; gameVersion?: string }
 ): Promise<ParsedScreenData | null> {
-  const apiKey = getApiKey();
-  if (!apiKey) {
+  if (!usePrefsStore.getState().hasApiKey) {
     return null;
   }
 
@@ -163,48 +163,31 @@ export async function parseScreenshot(
     .replace(/\{gameVersion\}/g, dynastyContext.gameVersion ?? 'NFL');
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1000,
-        system: systemPrompt,
-        messages: [
-          {
-            role: 'user',
-            content: [
-              {
-                type: 'image',
-                source: {
-                  type: 'base64',
-                  media_type: 'image/png',
-                  data: base64Data,
-                },
+    const data = await callAnthropic({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1000,
+      system: systemPrompt,
+      messages: [
+        {
+          role: 'user',
+          content: [
+            {
+              type: 'image',
+              source: {
+                type: 'base64',
+                media_type: 'image/png',
+                data: base64Data,
               },
-              {
-                type: 'text',
-                text: 'Parse this screenshot.',
-              },
-            ],
-          },
-        ],
-      }),
+            },
+            {
+              type: 'text',
+              text: 'Parse this screenshot.',
+            },
+          ],
+        },
+      ],
     });
-
-    if (!response.ok) {
-      console.warn(
-        `[ScreenshotService] Claude API returned ${response.status}: ${response.statusText}`
-      );
-      return null;
-    }
-
-    const data = await response.json();
+    if (!data) return null;
     const rawText: string | undefined = data?.content?.[0]?.text;
     if (!rawText) {
       console.warn('[ScreenshotService] Claude API response missing text content');

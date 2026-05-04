@@ -3,7 +3,8 @@ import { useDynastyStore } from '../store';
 import { useSeasonStore } from '../store/season-store';
 import { useNarrativeStore } from '../store/narrative-store';
 import { useNavigationStore } from '../store/navigation-store';
-import { getApiKey, setApiKey } from '../lib/legacy-card-service';
+import { usePrefsStore } from '../store/prefs-store';
+import * as prefs from '../lib/prefs-service';
 import { getTeamLogoUrl } from '../lib/team-logo-service';
 import type { NarrativeTone } from '../lib/narrative-service';
 
@@ -61,7 +62,7 @@ export function SeasonRecapPage() {
 
   const [selectedTone, setSelectedTone] = useState<NarrativeTone>('espn');
   const [apiKeyInput, setApiKeyInput] = useState('');
-  const [hasApiKey, setHasApiKey] = useState<boolean>(() => Boolean(getApiKey()));
+  const hasApiKey = usePrefsStore((s) => s.hasApiKey);
   const [apiKeySaving, setApiKeySaving] = useState(false);
 
   // Resolve the season from pageParams.seasonId
@@ -96,12 +97,11 @@ export function SeasonRecapPage() {
 
   // ── API key setup prompt ────────────────────────────────────────────────
 
-  const handleSaveApiKey = () => {
+  const handleSaveApiKey = async () => {
     const trimmed = apiKeyInput.trim();
     if (!trimmed) return;
     setApiKeySaving(true);
-    setApiKey(trimmed);
-    setHasApiKey(true);
+    await prefs.setApiKey(trimmed);
     setApiKeyInput('');
     setApiKeySaving(false);
   };
@@ -177,7 +177,7 @@ export function SeasonRecapPage() {
                 placeholder="sk-ant-..."
                 value={apiKeyInput}
                 onChange={(e) => setApiKeyInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSaveApiKey()}
+                onKeyDown={(e) => { if (e.key === 'Enter') void handleSaveApiKey(); }}
                 className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
               />
               <button

@@ -15,10 +15,9 @@ import {
   generateLegacyBlurb,
   getCachedBlurb,
   setCachedBlurb,
-  getApiKey,
-  setApiKey,
-  clearApiKey,
 } from '../lib/legacy-card-service';
+import { usePrefsStore } from '../store/prefs-store';
+import * as prefs from '../lib/prefs-service';
 import { usePlayerLinkStore } from '../store/player-link-store';
 
 const STATUS_LABEL: Record<PlayerStatus, string> = {
@@ -100,7 +99,7 @@ export function PlayerProfilePage() {
   // API key settings state
   const [apiKeyInput, setApiKeyInput] = useState('');
   const [apiKeyStatus, setApiKeyStatus] = useState<'idle' | 'saved' | 'cleared'>('idle');
-  const currentApiKey = getApiKey();
+  const hasApiKey = usePrefsStore((s) => s.hasApiKey);
 
   // Player link state
   const { link: playerLink, loadLink, setLink, removeLink } = usePlayerLinkStore();
@@ -197,9 +196,9 @@ export function PlayerProfilePage() {
     setBlurbLoading(false);
   }
 
-  function handleSaveApiKey() {
+  async function handleSaveApiKey() {
     if (apiKeyInput.trim()) {
-      setApiKey(apiKeyInput.trim());
+      await prefs.setApiKey(apiKeyInput.trim());
       setApiKeyInput('');
       setApiKeyStatus('saved');
       setTimeout(() => setApiKeyStatus('idle'), 2000);
@@ -207,7 +206,7 @@ export function PlayerProfilePage() {
   }
 
   function handleClearApiKey() {
-    clearApiKey();
+    void prefs.clearApiKey();
     setApiKeyStatus('cleared');
     setTimeout(() => setApiKeyStatus('idle'), 2000);
   }
@@ -375,9 +374,9 @@ export function PlayerProfilePage() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleRegenerateBlurb}
-                  disabled={blurbLoading || !getApiKey()}
+                  disabled={blurbLoading || !hasApiKey}
                   className="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed text-gray-300 text-xs rounded-lg transition-colors"
-                  title={!getApiKey() ? 'Set an API key below to generate blurbs' : 'Regenerate AI blurb'}
+                  title={!hasApiKey ? 'Set an API key below to generate blurbs' : 'Regenerate AI blurb'}
                 >
                   {blurbLoading ? 'Generating...' : 'Regenerate Blurb'}
                 </button>
@@ -393,7 +392,7 @@ export function PlayerProfilePage() {
             <div className="mt-5 pt-4 border-t border-gray-700">
               <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Claude API Key</p>
               <p className="text-xs text-gray-500 mb-3">
-                {currentApiKey
+                {hasApiKey
                   ? 'API key configured — AI blurbs are enabled.'
                   : 'No API key set — blurbs will be skipped. Add your Anthropic key below.'}
               </p>
@@ -403,7 +402,7 @@ export function PlayerProfilePage() {
                   placeholder="sk-ant-..."
                   value={apiKeyInput}
                   onChange={(e) => setApiKeyInput(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSaveApiKey()}
+                  onKeyDown={(e) => { if (e.key === 'Enter') void handleSaveApiKey(); }}
                   className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-1.5 text-white text-sm focus:outline-none focus:border-amber-500 max-w-xs"
                 />
                 <button
@@ -413,7 +412,7 @@ export function PlayerProfilePage() {
                 >
                   {apiKeyStatus === 'saved' ? 'Saved!' : 'Save Key'}
                 </button>
-                {currentApiKey && (
+                {hasApiKey && (
                   <button
                     onClick={handleClearApiKey}
                     className="px-3 py-1.5 bg-gray-700 hover:bg-red-800 text-gray-300 text-xs rounded-lg transition-colors"
