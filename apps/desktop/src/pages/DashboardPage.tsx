@@ -22,6 +22,8 @@ import { getTeamLogoUrl } from '../lib/team-logo-service';
 import * as prefs from '../lib/prefs-service';
 import type { GameResult } from '@dynasty-os/core-types';
 
+const EMPTY_CHECKLIST: Record<string, boolean> = {};
+
 const SPORT_BADGE: Record<string, { label: string; classes: string }> = {
   cfb: { label: 'CFB', classes: 'bg-orange-600 text-orange-100' },
   madden: { label: 'NFL', classes: 'bg-green-700 text-green-100' },
@@ -69,8 +71,10 @@ export function DashboardPage() {
   const [verified, setVerified] = useState<Record<string, boolean>>({});
 
   // Checklist state from PrefsStore (keyed by seasonId, lazy-warmed on season change)
+  // EMPTY_CHECKLIST is a stable module-level ref to avoid a new {} on every render
+  // which would cause Zustand's Object.is check to always see a "change" → infinite loop.
   const checklist = usePrefsStore((s) =>
-    activeSeason ? (s.checklistState[activeSeason.id] ?? {}) : {}
+    activeSeason ? (s.checklistState[activeSeason.id] ?? EMPTY_CHECKLIST) : EMPTY_CHECKLIST
   );
 
   useEffect(() => {
@@ -84,9 +88,12 @@ export function DashboardPage() {
     useGameStore.getState().loadGames(activeSeason.id);
   }, [activeSeason?.id]);
 
-  // Lazy-warm checklist from plugin-store when activeSeason changes
+  // Lazy-warm checklist from plugin-store when season changes.
+  // Guard: skip if already loaded — remounting the page must not overwrite
+  // in-memory state that was updated but not yet flushed to disk.
   useEffect(() => {
     if (!activeSeason) return;
+    if (usePrefsStore.getState().checklistState[activeSeason.id] !== undefined) return;
     void (async () => {
       const fresh = await prefs.getChecklistState(activeSeason.id);
       usePrefsStore.getState().setChecklistState(activeSeason.id, fresh);
