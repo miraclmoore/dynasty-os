@@ -37,8 +37,9 @@ export const useRivalryStore = create<RivalryStore>((set) => ({
     try {
       const rivals = await getRivalsByDynasty(dynastyId);
       set({ rivals, loading: false });
-    } catch {
+    } catch (err) {
       set({ loading: false });
+      console.error('[rivalry-store] loadRivals failed:', err);
     }
   },
 
@@ -48,8 +49,10 @@ export const useRivalryStore = create<RivalryStore>((set) => ({
       await createRival(input);
       const rivals = await getRivalsByDynasty(dynastyId);
       set({ rivals, loading: false });
-    } catch {
+    } catch (err) {
       set({ loading: false });
+      console.error('[rivalry-store] addRival failed:', err);
+      throw err; // allow call site to show a toast
     }
   },
 
@@ -59,8 +62,10 @@ export const useRivalryStore = create<RivalryStore>((set) => ({
       await updateRival(id, updates);
       const rivals = await getRivalsByDynasty(dynastyId);
       set({ rivals, loading: false });
-    } catch {
+    } catch (err) {
       set({ loading: false });
+      console.error('[rivalry-store] editRival failed:', err);
+      throw err; // allow call site to show a toast
     }
   },
 
@@ -70,8 +75,10 @@ export const useRivalryStore = create<RivalryStore>((set) => ({
       await deleteRival(id);
       const rivals = await getRivalsByDynasty(dynastyId);
       set({ rivals, loading: false });
-    } catch {
+    } catch (err) {
       set({ loading: false });
+      console.error('[rivalry-store] removeRival failed:', err);
+      throw err; // allow call site to show a toast
     }
   },
 }));
