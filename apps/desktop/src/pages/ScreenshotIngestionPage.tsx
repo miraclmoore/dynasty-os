@@ -4,7 +4,8 @@ import { readFile } from '@tauri-apps/plugin-fs';
 import { useDynastyStore, useSeasonStore } from '../store';
 import { useNavigationStore } from '../store/navigation-store';
 import { parseScreenshot, ScreenType, ParsedScreenData, SCREEN_TYPE_LABELS } from '../lib/screenshot-service';
-import { getApiKey, setApiKey } from '../lib/legacy-card-service';
+import { usePrefsStore } from '../store/prefs-store';
+import * as prefs from '../lib/prefs-service';
 import { createGame } from '../lib/game-service';
 import { createRecruitingClass, addRecruit } from '../lib/recruiting-service';
 import type {
@@ -125,8 +126,7 @@ export function ScreenshotIngestionPage() {
 
   async function handleParse() {
     if (!imageBase64 || !screenType || !activeDynasty) return;
-    const apiKey = getApiKey();
-    if (!apiKey) {
+    if (!usePrefsStore.getState().hasApiKey) {
       setApiKeyMissing(true);
       return;
     }
@@ -824,7 +824,7 @@ export function ScreenshotIngestionPage() {
                 <button
                   onClick={() => {
                     if (enteredKey.trim()) {
-                      setApiKey(enteredKey.trim());
+                      void prefs.setApiKey(enteredKey.trim());
                       setApiKeyMissing(false);
                       setEnteredKey('');
                     }
