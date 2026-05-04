@@ -13,6 +13,7 @@ let _onboardingPending = false;
 export function signalOnboardingPending(): void {
   _onboardingPending = true;
 }
+import { migrateKeyMomentsFromPrefsStore } from './lib/key-moments-migration';
 import { TourOverlay } from './components/TourOverlay';
 import { LauncherPage } from './pages/LauncherPage';
 import { DashboardPage } from './pages/DashboardPage';
@@ -114,6 +115,7 @@ function App() {
     async function init() {
       await prefs.migrateApiKey();
       await prefs.loadAll();
+      void migrateKeyMomentsFromPrefsStore();
     }
     void init();
   }, []);

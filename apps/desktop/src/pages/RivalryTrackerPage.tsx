@@ -9,7 +9,7 @@ import {
   addKeyMoment,
   deleteKeyMoment,
 } from '../lib/rivalry-service';
-import type { KeyMoment } from '../store/prefs-store';
+import type { KeyMoment } from '../lib/rivalry-service';
 import { getHeadToHeadRecords } from '../lib/records-service';
 import type { HeadToHeadRecord } from '../lib/records-service';
 import type { Rival } from '@dynasty-os/core-types';
@@ -118,7 +118,7 @@ export function RivalryTrackerPage() {
     const form = getMomentForm(rivalId);
     const year = parseInt(form.year, 10);
     if (!year || !form.description.trim()) return;
-    await addKeyMoment(rivalId, { year, description: form.description.trim() });
+    await addKeyMoment(rivalId, activeDynasty.id, { year, description: form.description.trim() });
     const fresh = await getKeyMoments(rivalId);
     setKeyMomentsMap((prev) => ({ ...prev, [rivalId]: fresh }));
     setMomentForm(rivalId, { year: '', description: '' });
