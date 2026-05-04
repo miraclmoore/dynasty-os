@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { open } from '@tauri-apps/plugin-dialog';
 import { readFile } from '@tauri-apps/plugin-fs';
 import { useDynastyStore, useSeasonStore } from '../store';
@@ -8,6 +8,10 @@ import { usePrefsStore } from '../store/prefs-store';
 import * as prefs from '../lib/prefs-service';
 import { createGame } from '../lib/game-service';
 import { createRecruitingClass, addRecruit } from '../lib/recruiting-service';
+import { usePlayerStore } from '../store/player-store';
+import { createPlayerSeason, updatePlayerSeason } from '../lib/player-season-service';
+import { db } from '@dynasty-os/db';
+import { findBestPlayerMatch } from '../lib/fuzzy-match';
 import type {
   ScheduleParsedData,
   PlayerStatsParsedData,
@@ -71,12 +75,63 @@ function mapGameType(raw: string): GameType {
   return 'regular';
 }
 
+/**
+ * Converts raw screenshot stat labels to canonical PlayerSeason.stats keys.
+ * Keys must match sport-configs/src/cfb.ts statCategories exactly so stats
+ * appear in getSingleSeasonLeaders() in records-service.ts.
+ * Keys not in this map are lowercased+underscored as a fallback.
+ */
+const STAT_KEY_MAP: Record<string, string> = {
+  // Passing (keys from cfb.ts + nfl.ts statCategories)
+  YDS: 'passingYards',
+  ATT: 'attempts',
+  CMP: 'completions',
+  TD: 'passingTDs',
+  INT: 'interceptions',
+  RTG: 'passerRating',
+  // Rushing
+  'RUSH YDS': 'rushingYards',
+  'RUSH ATT': 'rushingAttempts',
+  'RUSH TD': 'rushingTDs',
+  CAR: 'rushingAttempts',
+  // Receiving
+  REC: 'receptions',
+  'REC YDS': 'receivingYards',
+  'REC TD': 'receivingTDs',
+  RECS: 'receptions',
+  // Defense
+  TKL: 'tackles',
+  SACK: 'sacks',
+  'INT DEF': 'defenseInterceptions',
+  FF: 'forcedFumbles',
+  PD: 'passDeflections',
+  // Kicking / Punting
+  FGM: 'fgMade',
+  FGA: 'fgAttempted',
+  PUNTS: 'punts',
+  AVG: 'puntAverage',
+  'PUNT AVG': 'puntAverage',
+  // General
+  GP: 'gamesPlayed',
+};
+
+function normalizeStatKey(raw: string): string {
+  return STAT_KEY_MAP[raw.toUpperCase().trim()] ?? raw.toLowerCase().replace(/\s+/g, '_');
+}
+
 // ── Main Component ────────────────────────────────────────────────────────────
 
 export function ScreenshotIngestionPage() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
   const { activeSeason } = useSeasonStore();
-  const { goToDashboard, goToRoster } = useNavigationStore();
+  const { goToDashboard } = useNavigationStore();
+
+  // Load roster so fuzzy match has data
+  useEffect(() => {
+    if (activeDynasty) {
+      void usePlayerStore.getState().loadPlayers(activeDynasty.id);
+    }
+  }, [activeDynasty?.id]);
 
   // Core state
   const [screenType, setScreenType] = useState<ScreenType | ''>('');
@@ -96,6 +151,14 @@ export function ScreenshotIngestionPage() {
   const [classRank, setClassRank] = useState('');
   const [totalCommits, setTotalCommits] = useState('');
   const [depthEntries, setDepthEntries] = useState<EditableDepthEntry[]>([]);
+
+  const players = usePlayerStore((s) => s.players);
+  // matchedPlayerIds[i] = player.id for row i, or '' if unmatched
+  const [matchedPlayerIds, setMatchedPlayerIds] = useState<string[]>([]);
+  // combobox input text per row (separate from matched ID so user can keep typing)
+  const [playerSearchTerms, setPlayerSearchTerms] = useState<string[]>([]);
+  // which row's dropdown is open
+  const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(null);
 
   if (!activeDynasty) return null;
 
@@ -176,6 +239,16 @@ export function ScreenshotIngestionPage() {
           ),
         }))
       );
+      // Auto-match each parsed player name against the roster
+      const ids: string[] = [];
+      const terms: string[] = [];
+      for (const p of (d.players ?? [])) {
+        const match = findBestPlayerMatch(p.name ?? '', players);
+        ids.push(match?.player.id ?? '');
+        terms.push(match ? `${match.player.firstName} ${match.player.lastName}` : (p.name ?? ''));
+      }
+      setMatchedPlayerIds(ids);
+      setPlayerSearchTerms(terms);
     } else if (data.screenType === 'recruiting') {
       const d = data as RecruitingParsedData;
       setClassRank(String(d.classRank ?? ''));
@@ -268,6 +341,55 @@ export function ScreenshotIngestionPage() {
       goToDashboard();
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to save recruiting class');
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleSaveStats() {
+    if (!activeSeason || !activeDynasty) return;
+    setSaving(true);
+    try {
+      for (let i = 0; i < playerRows.length; i++) {
+        const playerId = matchedPlayerIds[i];
+        if (!playerId) continue; // unmatched — skip
+        const row = playerRows[i];
+
+        // Convert string stats to number, normalize keys, skip NaN and 0
+        const stats: Record<string, number> = {};
+        for (const [rawKey, rawVal] of Object.entries(row.stats)) {
+          const num = parseFloat(rawVal);
+          if (!isNaN(num) && num !== 0) {
+            stats[normalizeStatKey(rawKey)] = num;
+          }
+        }
+        if (Object.keys(stats).length === 0) continue;
+
+        // Check for an existing PlayerSeason for this player+season (no compound index)
+        const existing = await db.playerSeasons
+          .where('playerId')
+          .equals(playerId)
+          .filter((ps) => ps.seasonId === activeSeason.id)
+          .first();
+
+        if (existing) {
+          // Merge: incoming stats overwrite matching keys, existing keys preserved
+          await updatePlayerSeason(existing.id, {
+            stats: { ...existing.stats, ...stats },
+          });
+        } else {
+          await createPlayerSeason({
+            playerId,
+            dynastyId: activeDynasty.id,
+            seasonId: activeSeason.id,
+            year: activeSeason.year,
+            stats,
+          });
+        }
+      }
+      goToDashboard();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to save stats');
     } finally {
       setSaving(false);
     }
@@ -438,86 +560,145 @@ export function ScreenshotIngestionPage() {
           {SCREEN_TYPE_LABELS['player-stats']}
         </h2>
         {renderThumbnail()}
-        <div className="bg-amber-900/10 border border-amber-600/30 rounded-lg p-4 mb-4">
-          <p className="text-amber-300 text-sm">
-            Review parsed player data below. To log stats, go to the Roster and select each player.
-          </p>
-        </div>
         <div className="flex flex-col gap-4">
-          {playerRows.map((row, i) => (
-            <div
-              key={i}
-              className="bg-gray-800 rounded-lg p-4 border border-gray-700"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="flex-1">
-                  <label className="text-xs text-gray-400 mb-1 block">Name</label>
-                  <input
-                    type="text"
-                    value={row.name}
-                    onChange={(e) => {
-                      const updated = [...playerRows];
-                      updated[i] = { ...updated[i], name: e.target.value };
-                      setPlayerRows(updated);
-                    }}
-                    className={`${BASE_INPUT} ${AMBER_INPUT}`}
-                  />
-                </div>
-                <div className="w-24">
-                  <label className="text-xs text-gray-400 mb-1 block">Position</label>
-                  <input
-                    type="text"
-                    value={row.position}
-                    onChange={(e) => {
-                      const updated = [...playerRows];
-                      updated[i] = { ...updated[i], position: e.target.value };
-                      setPlayerRows(updated);
-                    }}
-                    className={`${BASE_INPUT} ${AMBER_INPUT}`}
-                  />
-                </div>
-                <button
-                  onClick={() => setPlayerRows(playerRows.filter((_, idx) => idx !== i))}
-                  className="text-red-400 hover:text-red-300 text-xs mt-5 px-2 py-1"
-                >
-                  Del
-                </button>
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                {Object.entries(row.stats).map(([key, val]) => (
-                  <div key={key}>
-                    <label className="text-xs text-gray-400 mb-1 block">{key}</label>
+          {playerRows.map((row, i) => {
+            // Filtered roster for this row's combobox
+            const searchTerm = playerSearchTerms[i] ?? '';
+            const filteredPlayers = searchTerm.trim().length >= 1
+              ? players.filter((p) => {
+                  const full = `${p.firstName} ${p.lastName}`.toLowerCase();
+                  return full.includes(searchTerm.toLowerCase());
+                })
+              : players.slice(0, 8); // show first 8 when input is empty
+
+            return (
+              <div key={i} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                <div className="flex items-start gap-3 mb-3">
+                  {/* Fuzzy-match combobox */}
+                  <div className="flex-1 relative">
+                    <label className="text-xs text-gray-400 mb-1 block">
+                      Matched Roster Player
+                    </label>
                     <input
                       type="text"
-                      value={val}
+                      value={searchTerm}
                       onChange={(e) => {
-                        const updated = [...playerRows];
-                        updated[i] = {
-                          ...updated[i],
-                          stats: { ...updated[i].stats, [key]: e.target.value },
-                        };
-                        setPlayerRows(updated);
+                        const updated = [...playerSearchTerms];
+                        updated[i] = e.target.value;
+                        setPlayerSearchTerms(updated);
+                        // Clear the matched ID when user edits manually
+                        const ids = [...matchedPlayerIds];
+                        ids[i] = '';
+                        setMatchedPlayerIds(ids);
+                        setOpenDropdownIndex(i);
                       }}
-                      className={`${BASE_INPUT} ${AMBER_INPUT}`}
+                      onFocus={() => setOpenDropdownIndex(i)}
+                      onBlur={() => {
+                        // 150ms delay so onMouseDown on option fires first
+                        setTimeout(() => setOpenDropdownIndex(null), 150);
+                      }}
+                      placeholder="Search roster…"
+                      className={`${BASE_INPUT} ${
+                        matchedPlayerIds[i]
+                          ? 'bg-green-900/20 border-green-600/50'
+                          : AMBER_INPUT
+                      }`}
+                    />
+                    {openDropdownIndex === i && filteredPlayers.length > 0 && (
+                      <ul className="absolute z-10 mt-1 w-full bg-gray-800 border border-gray-600 rounded-lg shadow-xl max-h-48 overflow-y-auto">
+                        {filteredPlayers.map((p) => (
+                          <li
+                            key={p.id}
+                            onMouseDown={() => {
+                              // onMouseDown fires before onBlur
+                              const ids = [...matchedPlayerIds];
+                              ids[i] = p.id;
+                              setMatchedPlayerIds(ids);
+                              const terms = [...playerSearchTerms];
+                              terms[i] = `${p.firstName} ${p.lastName}`;
+                              setPlayerSearchTerms(terms);
+                              setOpenDropdownIndex(null);
+                            }}
+                            className="px-3 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer"
+                          >
+                            {p.firstName} {p.lastName}
+                            <span className="ml-2 text-xs text-gray-400">{p.position}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+
+                  {/* Position (read-only display) */}
+                  <div className="w-20">
+                    <label className="text-xs text-gray-400 mb-1 block">Pos (parsed)</label>
+                    <input
+                      type="text"
+                      value={row.position}
+                      readOnly
+                      className={`${BASE_INPUT} bg-gray-700/50 border-gray-600 cursor-default`}
                     />
                   </div>
-                ))}
+
+                  <button
+                    onClick={() => {
+                      setPlayerRows(playerRows.filter((_, idx) => idx !== i));
+                      setMatchedPlayerIds(matchedPlayerIds.filter((_, idx) => idx !== i));
+                      setPlayerSearchTerms(playerSearchTerms.filter((_, idx) => idx !== i));
+                    }}
+                    className="text-red-400 hover:text-red-300 text-xs mt-5 px-2 py-1"
+                  >
+                    Del
+                  </button>
+                </div>
+
+                {/* Stat fields */}
+                <div className="grid grid-cols-3 gap-2">
+                  {Object.entries(row.stats).map(([key, val]) => (
+                    <div key={key}>
+                      <label className="text-xs text-gray-400 mb-1 block">{key}</label>
+                      <input
+                        type="text"
+                        value={val}
+                        onChange={(e) => {
+                          const updated = [...playerRows];
+                          updated[i] = {
+                            ...updated[i],
+                            stats: { ...updated[i].stats, [key]: e.target.value },
+                          };
+                          setPlayerRows(updated);
+                        }}
+                        className={`${BASE_INPUT} ${AMBER_INPUT}`}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Match status badge */}
+                <p className="mt-2 text-xs text-gray-500">
+                  {matchedPlayerIds[i]
+                    ? <span className="text-green-400">Matched — will save stats on confirm</span>
+                    : <span className="text-amber-400">No match — select a roster player above to save</span>
+                  }
+                </p>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
+
         <div className="flex gap-3 mt-6">
           <button
             onClick={goToDashboard}
             className="px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg"
           >
-            Return to Dashboard
+            Discard
           </button>
           <button
-            onClick={goToRoster}
-            className="px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold rounded-lg"
+            onClick={handleSaveStats}
+            disabled={saving || matchedPlayerIds.every((id) => !id)}
+            className="px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold rounded-lg disabled:opacity-50"
           >
-            Go to Roster
+            {saving ? 'Saving…' : 'Save Stats'}
           </button>
         </div>
       </div>
