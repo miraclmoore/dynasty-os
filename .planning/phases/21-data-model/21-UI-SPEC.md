@@ -41,7 +41,7 @@ Declared values (must be multiples of 4):
 | 2xl | 48px | Major section breaks between form groups |
 | 3xl | 64px | Page-level vertical spacing |
 
-Exceptions: Badge height 24px (`h-6`) and width 36px (`w-9`) for OvrBadge — preserves existing roster badge dimensions. Touch-target minimum 40px height for all select/button rows (`py-2` on `text-sm` inputs = 38px — acceptable for desktop-only Tauri app).
+Exceptions: Badge height 24px (`h-6`) and width 36px (`w-9`) for OvrBadge — preserves existing roster badge dimensions (component dimension, not a spacing token). Touch-target minimum 40px height for all select/button rows (`py-2` on `text-sm` inputs = 38px — acceptable for desktop-only Tauri app).
 
 Source: codebase scan of `RosterPage.tsx`, `AddPlayerModal.tsx`, `EditPlayerModal.tsx`.
 
@@ -54,13 +54,14 @@ Source: codebase scan of `RosterPage.tsx`, `AddPlayerModal.tsx`, `EditPlayerModa
 | Body | 14px (`text-sm`) | 400 (regular) | 1.5 |
 | Label | 12px (`text-xs`) | 400 (regular) | 1.4 |
 | Heading | 18px (`text-lg`) | 600 (semibold) | 1.2 |
-| Display | 20px (`text-xl`) | 700 (bold) | 1.2 |
+| Display | 20px (`text-xl`) | 600 (semibold) | 1.2 |
 
 Notes:
 - All modal form labels use `text-sm text-gray-400` (14px, weight 400) — source: `AddPlayerModal.tsx`, `EditPlayerModal.tsx`.
 - Modal headers use `text-lg font-semibold text-white` (18px, weight 600).
-- Page headers use `text-xl font-bold` (20px, weight 700).
-- Badge/tag text uses `text-xs font-medium` (12px, weight 500) — consistent across `STATUS_BADGE`, `OvrBadge`, position chip.
+- Page headers use `text-xl font-semibold` (20px, weight 600).
+- Badge/tag text uses `text-xs font-semibold` (12px, weight 600) — consistent across `STATUS_BADGE`, `OvrBadge`, position chip. Visual difference from `font-medium` is negligible at 12px.
+- Two weights only: 400 (regular) for body/labels, 600 (semibold) for all emphasis: headings, display, badges, CTAs.
 
 ---
 
@@ -162,7 +163,7 @@ Source: `RosterPage.tsx` STATUS_BADGE, OvrBadge, `RecruitingPage.tsx` gradeColor
 ### New visual indicators on roster rows (DMOD-03, DMOD-04)
 
 **Dev Trait Badge**
-- Pattern: Matches `OvrBadge` pattern — `inline-flex items-center justify-center rounded border text-xs font-bold`
+- Pattern: Matches `OvrBadge` pattern — `inline-flex items-center justify-center rounded border text-xs font-semibold`
 - Size: `px-1.5 py-0.5` (not fixed width — label length varies)
 - Placement: In the Status column alongside the status badge, separated by `gap-1` — OR as a new "Trait" column; prefer injecting into Name cell as a sub-label badge to avoid adding a new table column
 - Specific placement: Render as a small badge on the second line below the player name inside the Name cell — `<div className="flex items-center gap-1 mt-0.5">` containing the dev trait badge
@@ -170,20 +171,20 @@ Source: `RosterPage.tsx` STATUS_BADGE, OvrBadge, `RecruitingPage.tsx` gradeColor
 - Normal trait: render badge only if explicitly set (not implied by absence)
 
 **Deal Breaker Tag (CFB only)**
-- Pattern: `inline-flex items-center px-1.5 py-0.5 rounded border text-xs font-medium bg-orange-900/40 text-orange-300 border-orange-700`
+- Pattern: `inline-flex items-center px-1.5 py-0.5 rounded border text-xs font-semibold bg-orange-900/40 text-orange-300 border-orange-700`
 - Label: `"DB"` (abbreviated to avoid column width impact)
 - Placement: Alongside dev trait badge in the Name cell sub-line, CFB-only
 - Tooltip on hover: "Deal Breaker: {category}" — use existing `Tooltip.tsx` component pattern
 
 **Redshirt Badge (CFB only)**
-- Pattern: `inline-flex items-center px-1.5 py-0.5 rounded border text-xs font-medium bg-red-900/30 text-red-400 border-red-700/40`
+- Pattern: `inline-flex items-center px-1.5 py-0.5 rounded border text-xs font-semibold bg-red-900/30 text-red-400 border-red-700/40`
 - Label: `"RS"`
 - Placement: Alongside dev trait and deal breaker badges in the Name cell sub-line
 
 ### Motivation grades on recruit card (DMOD-05)
 
 **Motivation Grade Pills**
-- Pattern: Reuse `gradeColor()` from `RecruitingPage.tsx` — `inline-flex items-center px-2 py-0.5 rounded border text-xs font-medium`
+- Pattern: Reuse `gradeColor()` from `RecruitingPage.tsx` — `inline-flex items-center px-2 py-0.5 rounded border text-xs font-semibold`
 - Render: Three grade pills in a row (`flex gap-1`) labeled `M1`, `M2`, `M3` — only render if the corresponding field is set
 - Placement: Below the recruit's name/position/stars line, above any action buttons
 - Deal breaker motivation: Render as a fourth pill with label `DB` in orange (`bg-orange-900/40 text-orange-300 border-orange-700`) when set
@@ -237,7 +238,7 @@ No new top-level page. Rivalry key moments are stored in Dexie and surfaced in t
 | Trait badge tooltip | "{devTrait} Development Trait" (e.g. "Superstar Development Trait") |
 | Empty state — no dev trait set | (no badge rendered; field simply absent) |
 | Error — required field missing | "First name, last name, and position are required." (unchanged existing copy) |
-| Error — save failure | "Failed to save changes. Please try again." |
+| Error — save failure | "Failed to save changes. Check your connection and try again." |
 
 ### CFB 26 Deal Breaker / Motivation Categories (canonical list for both selectors)
 
