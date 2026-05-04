@@ -13,7 +13,7 @@ findings:
   warning: 6
   info: 2
   total: 11
-status: issues_found
+status: fixed
 ---
 
 # Phase 22: Code Review Report
@@ -46,6 +46,8 @@ const result: GameResult =
 ```
 If `GameResult` does not include `'T'`, add a guard and skip or surface an error for tied scores rather than misclassifying them.
 
+**Status:** Fixed — commit b262a8f
+
 ---
 
 ### CR-02: `matchedPlayerIds` and `playerSearchTerms` accumulate stale data across re-parses
@@ -69,6 +71,8 @@ setMatchedPlayerIds(allMatchedIds);
 setPlayerSearchTerms(allSearchTerms);
 ```
 Also, `handleFileOpen` does not clear `matchedPlayerIds` / `playerSearchTerms` when a new file is selected (only `parsedData` and `error` are reset at lines 211–212), so the same misalignment can occur if a user picks new files without refreshing the page.
+
+**Status:** Fixed — commit 3618fa0
 
 ---
 
@@ -100,6 +104,8 @@ if (!isValidParsedShape(screenType, parsed)) {
 }
 ```
 
+**Status:** Fixed — commit 1ec1ae8
+
 ---
 
 ## Warnings
@@ -111,6 +117,8 @@ if (!isValidParsedShape(screenType, parsed)) {
 **Issue:** `initEditableState` is a 60-line function that populates all editable state arrays from a `ParsedScreenData` object. It is never called anywhere. All actual initialization happens inline inside `handleParse`. As logic evolves, this dead function will silently drift from the real initialization path, becoming a maintenance trap (copy-paste edits will miss one of the two paths).
 
 **Fix:** Delete `initEditableState` entirely. If a single-parse initialization path is needed, consolidate the initialization logic into one shared function and call it from `handleParse`.
+
+**Status:** Fixed — commit 6b62523
 
 ---
 
@@ -135,6 +143,8 @@ const base64 = btoa(
 // Or, for Tauri, prefer the file-path-based API and let the Rust side handle b64
 ```
 A safer option is to chunk the conversion into segments of 65535 bytes and use `String.fromCharCode.apply`.
+
+**Status:** Fixed — commit 4e6cde4
 
 ---
 
@@ -167,6 +177,8 @@ if (!/^[\[{]/.test(jsonText.trim())) {
 }
 ```
 
+**Status:** Fixed — commit 59fd874
+
 ---
 
 ### WR-04: Re-parsing does not reset stale editable form state from prior parse
@@ -192,6 +204,8 @@ setPlayerSearchTerms([]);
 setClassRank('');
 setTotalCommits('');
 ```
+
+**Status:** Fixed — commit 7feec3b
 
 ---
 
@@ -219,6 +233,8 @@ export function getHardSellRecommendation(
 }
 ```
 
+**Status:** Fixed — commit 17c8e5a
+
 ---
 
 ### WR-06: Character-set similarity allows false matches between short and long names
@@ -233,6 +249,8 @@ export function getHardSellRecommendation(
 if (na.length <= 2 || nb.length <= 2) return 0;
 ```
 This prevents 1–2 character fragments from reaching the set-overlap path.
+
+**Status:** Fixed — commit 747fa46
 
 ---
 
