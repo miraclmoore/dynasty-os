@@ -104,21 +104,10 @@ export async function addKeyMoment(
 }
 
 /**
- * Deletes the matching moment by year + description (multiple moments may share
- * the same year; description is the discriminator). Falls back to a no-op when
- * no matching row is found — matches the prior plugin-store behavior.
+ * Deletes a key moment by its unique ID. Using the row's primary key prevents
+ * accidental bulk-deletion when two identical entries (same year + description)
+ * exist — only the specifically targeted row is removed.
  */
-export async function deleteKeyMoment(
-  rivalId: string,
-  year: number,
-  description: string
-): Promise<void> {
-  const matches = await db.keyMoments
-    .where('rivalId')
-    .equals(rivalId)
-    .and((m) => m.year === year && m.description === description)
-    .toArray();
-  if (matches.length > 0) {
-    await db.keyMoments.bulkDelete(matches.map((m) => m.id));
-  }
+export async function deleteKeyMoment(id: string): Promise<void> {
+  await db.keyMoments.delete(id);
 }

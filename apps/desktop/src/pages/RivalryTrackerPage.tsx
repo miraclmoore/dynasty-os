@@ -125,7 +125,7 @@ export function RivalryTrackerPage() {
   };
 
   const handleDeleteMoment = async (rivalId: string, moment: KeyMoment) => {
-    await deleteKeyMoment(rivalId, moment.year, moment.description);
+    await deleteKeyMoment(moment.id);
     const fresh = await getKeyMoments(rivalId);
     setKeyMomentsMap((prev) => ({ ...prev, [rivalId]: fresh }));
   };
