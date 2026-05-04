@@ -24,7 +24,18 @@ async fn call_anthropic(
         .await
         .map_err(|e| e.to_string())?;
 
+    let status = response.status();
     let json: Value = response.json().await.map_err(|e| e.to_string())?;
+    if !status.is_success() {
+        return Err(format!(
+            "Anthropic API error {}: {}",
+            status.as_u16(),
+            json.get("error")
+                .and_then(|e| e.get("message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("unknown error")
+        ));
+    }
     Ok(json)
 }
 
