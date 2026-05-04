@@ -241,7 +241,7 @@ Plans:
   2. After parsing a depth chart screenshot, a "Copy as CSV" button is visible and copies correctly formatted CSV to the clipboard; the "not saved in V1" notice is removed
   3. Selecting "recruiting-motivations" as the screen type in the CFB ingestion flow parses motivation grades and deal breaker and shows a Hard Sell recommendation inline
   4. Selecting multiple image files in the ingestion file picker processes them sequentially with a "Parsing X of Y" progress indicator and shows a combined confirm UI after all images are parsed
-**Plans**: 5 plans
+**Plans**: 5 plans (2/5 complete — 22-01 fuzzy-match lib, 22-02 player-stats save)
 **UI hint**: yes
 
 ### Phase 23: Madden Sync Upgrade

@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v2.2
 milestone_name: Handoff Overhaul
 status: executing
-stopped_at: Completed 22-01-PLAN.md
-last_updated: "2026-05-04T20:35:04.208Z"
+stopped_at: Completed 22-02-PLAN.md
+last_updated: "2026-05-04T20:38:00Z"
 last_activity: 2026-05-04
 progress:
   total_phases: 19
   completed_phases: 6
   total_plans: 33
-  completed_plans: 28
-  percent: 85
+  completed_plans: 29
+  percent: 88
 ---
 
 # Project State
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 ## Current Position
 
 Phase: 22 (screenshot-pipeline) — EXECUTING
-Plan: 2 of 5
+Plan: 3 of 5
 Status: Ready to execute
 Last activity: 2026-05-04
 
@@ -95,6 +95,7 @@ Last activity: 2026-05-04
 | Phase 12 P06 | 9 | 2 tasks | 7 files |
 | Phase 14 P01 | 2 | 2 tasks | 10 files |
 | Phase 22 P01 | 2 | 1 tasks | 1 files |
+| Phase 22 P02 | 2 | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -213,6 +214,9 @@ Recent decisions affecting current work:
 - [Phase 14-01]: pending-flag auto-launch: LauncherPage sets localStorage pending flag, App.tsx opens tour on activeDynasty change — decouples tour launch from navigation timing
 - [Phase 14-01]: All 12 TourOverlay STEPS use page:dashboard — roster step removed; TourOverlay no longer navigates away from dashboard during tour
 - [Phase ?]: [Phase 22-01]: No external fuzzy-match library — hand-rolled char-set overlap scoring; normalizeName strips apostrophes/hyphens/periods; 0.4 threshold in findBestPlayerMatch
+- [Phase 22-02]: normalizeStatKey with STAT_KEY_MAP maps raw screenshot stat labels to canonical PlayerSeason.stats keys; unmapped labels fall back to lowercase+underscore
+- [Phase 22-02]: PlayerSeason upsert in handleSaveStats: filter().first() check then merge-update or create — prevents duplicate PlayerSeason per player+season without compound index
+- [Phase 22-02]: Combobox 150ms onBlur delay before closing dropdown — ensures onMouseDown on list item fires before blur dismisses the list in WebView
 
 ### Phase 12 Decisions
 
