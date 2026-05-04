@@ -59,11 +59,13 @@ The memory layer, narrative engine, and legacy vault that sports games never bui
 <!-- v2.0 QOL Wins — shipped (Phase 11, 2026-02-25) -->
 - ✓ QOL Wins (QOL-01–10) — Toast notifications, undo, persistent filters, Cmd+K palette, CSV export, year auto-suggest, recent opponents, player notes, season checklist, timeline scrubber — Phase 11 — v2.0
 
+<!-- v2.2 Safety + Security — shipped (Phases 19–20) -->
+- ✓ Safety (SAFE-01–04) — ErrorBoundary fallback UI, typed undo store, zundo removal, N+1 leaderboard query elimination — Phase 19 — v2.2
+- ✓ Security (SEC-01–03) — Rust `call_anthropic` Tauri command (API key never exposed to WebView), all 4 AI callsites migrated to invoke via ai-bridge.ts, all localStorage migrated to tauri-plugin-store with Zustand PrefsStore mirror and prefs-service.ts async wrapper — Phase 20 — v2.2
+
 ### Active
 
 <!-- v2.2 Handoff Overhaul -->
-- [ ] Safety: error boundary, undo type safety, remove zundo dep, fix N+1 leaderboard queries
-- [ ] Security: route Anthropic API through Tauri command, API key in plugin-store, migrate all localStorage to plugin-store
 - [ ] Data model: keyMoments Dexie table, Season bowlOpponent/keyEvents, Player devTrait/dealBreaker/redshirt, Recruit motivation fields
 - [ ] Screenshot pipeline: player stats → match → save to DB; depth chart CSV; recruiting-motivations type; multi-image import
 - [ ] Madden sync: extract PlayerStats table; auto-detect save file paths
@@ -119,8 +121,9 @@ The memory layer, narrative engine, and legacy vault that sports games never bui
 - **Frontend:** React 18 + TypeScript, Tailwind CSS, Zustand state management, Vite bundler
 - **Monorepo:** Turborepo + pnpm workspaces; shared packages for core-types, db, sport-configs, ui-components
 - **Database:** Dexie v6 + IndexedDB — local-first; 18 tables after v2.0 schema migration (5 new in Phase 10: coachingStaff, nilEntries, futureGames, playerLinks, aiCache)
-- **AI:** Claude Haiku for short-form (blurbs, class grades, screenshot parsing); Claude Sonnet 4.6 for long-form (season recaps). All AI content cached in Dexie aiCache (migrated from localStorage in Phase 10).
-- **State:** Zustand stores: dynasty, season, game, player, narrative, achievement, prestige + ToastStore, FilterStore, UndoStore, AiQueueStore (added Phase 10–11)
+- **AI:** Claude Haiku for short-form (blurbs, class grades, screenshot parsing); Claude Sonnet 4.6 for long-form (season recaps). All AI requests routed through Rust `call_anthropic` Tauri command (Phase 20); API key stored in tauri-plugin-store (dynasty-os.bin), never exposed to the WebView. All AI content cached in Dexie aiCache.
+- **State:** Zustand stores: dynasty, season, game, player, narrative, achievement, prestige + ToastStore, FilterStore, UndoStore, AiQueueStore (added Phase 10–11) + PrefsStore (added Phase 20, in-memory mirror of tauri-plugin-store)
+- **Storage:** tauri-plugin-store (dynasty-os.bin) is the canonical store for all user preferences and the Anthropic API key (Phase 20). prefs-service.ts provides a 21-function async wrapper with loadAll() and one-time migrateApiKey() from legacy localStorage. Zero localStorage references outside that migration path.
 - **Madden sync:** madden-franchise npm library (bep713) — direct save file parsing. **Risk:** Madden 26 schema support in-progress at launch. Version-check guard + graceful fallback live.
 - **CFB ingestion:** Console-only game; data enters via manual entry + Claude Vision API screenshot parsing.
 - **Codebase:** ~15,600 TypeScript LOC across phases 1–11. Build exits 0 on all platform checks.
@@ -152,7 +155,9 @@ The memory layer, narrative engine, and legacy vault that sports games never bui
 | Dexie aiCache replaces localStorage | localStorage has no LRU, no indexing, pollutes storage namespace | ✓ Good — migrated in Phase 10; LRU at 100 entries |
 | Zustand UndoStore DB-level descriptors | zundo state snapshots risk DB/store inconsistency from side effects | ✓ Good — clean undo for game/player/season |
 | cmdk for command palette | Headless, accessible, well-maintained — fits Tailwind + TypeScript stack | ✓ Good — 18-page palette shipped in Phase 11 |
+| API key in tauri-plugin-store, routed via Rust command | WebView has no safe credential storage; Rust process boundary prevents key leakage to renderer | ✓ Good — SEC-01/02/03 grep gates pass; zero localStorage refs outside migration path (Phase 20) |
+| Zustand PrefsStore as in-memory mirror of plugin-store | Async plugin-store reads cannot be called synchronously in React render; mirror enables reactive reads | ✓ Good — prefs-service.ts loadAll() hydrates mirror at app start (Phase 20) |
 
 ---
 
-*Last updated: 2026-05-03 — Phase 19 complete: ErrorBoundary fallback UI (SAFE-01), typed undo store (SAFE-02), zundo removal (SAFE-03), N+1 leaderboard query elimination (SAFE-04)*
+*Last updated: 2026-05-03 — Phase 20 complete: Rust call_anthropic Tauri command (SEC-01), all 4 AI callsites migrated to invoke via ai-bridge.ts (SEC-02), all localStorage migrated to tauri-plugin-store with PrefsStore mirror and prefs-service.ts async wrapper (SEC-03)*
