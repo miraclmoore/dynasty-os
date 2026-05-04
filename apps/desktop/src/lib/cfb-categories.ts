@@ -1,11 +1,13 @@
 /**
- * CFB 26 deal breaker / motivation categories.
- * These are the exact strings used in EA Sports CFB 26 and are stored verbatim
- * in the Recruit.motivation1/2/3 and Recruit.dealBreakerMotivation fields.
+ * The 14 CFB 26 motivation / deal-breaker categories. These exact strings are
+ * stored in Player.dealBreaker, Recruit.motivation1/2/3, and
+ * Recruit.dealBreakerMotivation. Source: .planning/phases/21-data-model/21-UI-SPEC.md
  *
- * Also re-exported from here for use in Player.dealBreaker (DMOD-04).
+ * DO NOT REORDER, RENAME, or LOCALIZE — these strings are the storage values
+ * and must match exactly between the writer (forms) and any reader (Hard Sell
+ * calculator in Phase 24, recruiting screenshot parser in Phase 22).
  */
-export const CFB_DEAL_BREAKER_CATEGORIES: readonly string[] = [
+export const CFB_DEAL_BREAKER_CATEGORIES = [
   'Academics',
   'Campus Lifestyle',
   'Closer to Home',
@@ -22,15 +24,17 @@ export const CFB_DEAL_BREAKER_CATEGORIES: readonly string[] = [
   'Weather',
 ] as const;
 
-/** Dev trait display labels for Player.devTrait. */
-export const DEV_TRAITS: readonly string[] = [
-  'normal',
-  'star',
-  'superstar',
-  'xfactor',
-] as const;
+export type CfbDealBreakerCategory = (typeof CFB_DEAL_BREAKER_CATEGORIES)[number];
 
-export const DEV_TRAIT_LABEL: Record<string, string> = {
+/**
+ * Dev trait values stored on Player.devTrait. The same union is duplicated in
+ * @dynasty-os/core-types/src/player.ts (Plan 21-01). Centralized here for UI
+ * use (selector options, badge map keys).
+ */
+export const DEV_TRAITS = ['normal', 'star', 'superstar', 'xfactor'] as const;
+export type DevTrait = (typeof DEV_TRAITS)[number];
+
+export const DEV_TRAIT_LABEL: Record<DevTrait, string> = {
   normal: 'Normal',
   star: 'Star',
   superstar: 'Superstar',
@@ -38,20 +42,12 @@ export const DEV_TRAIT_LABEL: Record<string, string> = {
 };
 
 /**
- * Tailwind class string for dev trait badge backgrounds/text/borders.
- * Returns empty string for unknown traits.
+ * Tailwind class strings for the dev trait badge (from UI-SPEC §Color).
+ * Used by RosterPage, PlayerProfilePage, and any future trait-aware UI.
  */
-export function DEV_TRAIT_BADGE(trait: string): string {
-  switch (trait) {
-    case 'normal':
-      return 'bg-gray-700/60 text-gray-300 border-gray-600';
-    case 'star':
-      return 'bg-blue-900/40 text-blue-300 border-blue-700';
-    case 'superstar':
-      return 'bg-purple-900/40 text-purple-300 border-purple-700';
-    case 'xfactor':
-      return 'bg-yellow-900/40 text-yellow-300 border-yellow-600';
-    default:
-      return 'bg-gray-700/60 text-gray-300 border-gray-600';
-  }
-}
+export const DEV_TRAIT_BADGE: Record<DevTrait, string> = {
+  normal: 'bg-gray-700/60 text-gray-300 border-gray-600',
+  star: 'bg-blue-900/40 text-blue-300 border-blue-700',
+  superstar: 'bg-purple-900/40 text-purple-300 border-purple-700',
+  xfactor: 'bg-yellow-900/40 text-yellow-300 border-yellow-600',
+};

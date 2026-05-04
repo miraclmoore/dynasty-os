@@ -19,6 +19,11 @@ import {
 import { usePrefsStore } from '../store/prefs-store';
 import * as prefs from '../lib/prefs-service';
 import { usePlayerLinkStore } from '../store/player-link-store';
+import {
+  DEV_TRAIT_BADGE,
+  DEV_TRAIT_LABEL,
+  type DevTrait,
+} from '../lib/cfb-categories';
 
 const STATUS_LABEL: Record<PlayerStatus, string> = {
   active: 'Active',
@@ -328,6 +333,14 @@ export function PlayerProfilePage() {
               <div>
                 <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Weight</p>
                 <p className="text-white">{player.weight} lbs</p>
+              </div>
+            )}
+            {player.devTrait && (
+              <div>
+                <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Dev Trait</p>
+                <span className={`inline-flex items-center px-2 py-0.5 rounded border text-xs font-semibold ${DEV_TRAIT_BADGE[player.devTrait as DevTrait]}`}>
+                  {DEV_TRAIT_LABEL[player.devTrait as DevTrait]}
+                </span>
               </div>
             )}
           </div>

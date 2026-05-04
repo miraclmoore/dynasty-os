@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import type { Player, SportType, PlayerStatus } from '@dynasty-os/core-types';
 import { getSportConfig } from '@dynasty-os/sport-configs';
 import { usePlayerStore } from '../store/player-store';
+import {
+  CFB_DEAL_BREAKER_CATEGORIES,
+  DEV_TRAITS,
+  DEV_TRAIT_LABEL,
+  type DevTrait,
+} from '../lib/cfb-categories';
 
 interface EditPlayerModalProps {
   isOpen: boolean;
@@ -41,6 +47,9 @@ export function EditPlayerModal({ isOpen, onClose, player, sport }: EditPlayerMo
   );
   const [status, setStatus] = useState<PlayerStatus>(player.status);
   const [notes, setNotes] = useState(player.notes ?? '');
+  const [devTrait, setDevTrait] = useState<'' | DevTrait>(player.devTrait ?? '');
+  const [dealBreaker, setDealBreaker] = useState<string>(player.dealBreaker ?? '');
+  const [isRedshirt, setIsRedshirt] = useState<boolean>(player.isRedshirt ?? false);
   const [error, setError] = useState('');
 
   // Sync form when player prop changes
@@ -57,6 +66,9 @@ export function EditPlayerModal({ isOpen, onClose, player, sport }: EditPlayerMo
     setWeight(player.weight !== undefined ? String(player.weight) : '');
     setStatus(player.status);
     setNotes(player.notes ?? '');
+    setDevTrait(player.devTrait ?? '');
+    setDealBreaker(player.dealBreaker ?? '');
+    setIsRedshirt(player.isRedshirt ?? false);
     setError('');
   }, [player]);
 
@@ -85,6 +97,9 @@ export function EditPlayerModal({ isOpen, onClose, player, sport }: EditPlayerMo
         height: height.trim() || undefined,
         weight: weight !== '' ? parseInt(weight, 10) : undefined,
         notes: notes.trim() || undefined,
+        devTrait: devTrait === '' ? undefined : devTrait,
+        dealBreaker: sport === 'cfb' ? (dealBreaker || undefined) : undefined,
+        isRedshirt: sport === 'cfb' ? isRedshirt : undefined,
       });
       onClose();
     } catch (err) {
@@ -196,6 +211,59 @@ export function EditPlayerModal({ isOpen, onClose, player, sport }: EditPlayerMo
               ))}
             </select>
           </div>
+
+          {/* Dev Trait (DMOD-03) — both sports */}
+          <div>
+            <label className="block text-sm text-gray-400 mb-1">
+              Dev Trait <span className="text-gray-600 text-xs">(optional)</span>
+            </label>
+            <select
+              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+              value={devTrait}
+              onChange={(e) => setDevTrait(e.target.value as '' | DevTrait)}
+            >
+              <option value="">— (optional)</option>
+              {DEV_TRAITS.map((t) => (
+                <option key={t} value={t}>
+                  {DEV_TRAIT_LABEL[t]}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Deal Breaker + Redshirt — CFB only (DMOD-04) */}
+          {sport === 'cfb' && (
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">
+                  Deal Breaker <span className="text-gray-600 text-xs">(optional)</span>
+                </label>
+                <select
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+                  value={dealBreaker}
+                  onChange={(e) => setDealBreaker(e.target.value)}
+                >
+                  <option value="">— (none)</option>
+                  {CFB_DEAL_BREAKER_CATEGORIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex items-end">
+                <label className="flex items-center gap-2 cursor-pointer pb-2">
+                  <input
+                    type="checkbox"
+                    className="accent-red-500 w-4 h-4"
+                    checked={isRedshirt}
+                    onChange={(e) => setIsRedshirt(e.target.checked)}
+                  />
+                  <span className="text-sm text-gray-300">Redshirt</span>
+                </label>
+              </div>
+            </div>
+          )}
 
           {/* Class Year + Recruiting Stars */}
           <div className="grid grid-cols-2 gap-3">
