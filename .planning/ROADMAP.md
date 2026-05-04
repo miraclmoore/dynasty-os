@@ -225,7 +225,7 @@ Plans:
 
 Plans:
 **Wave 1**
-- [ ] 21-01-PLAN.md — Foundation: KeyMoment type + Player/Season/Recruit field extensions + Dexie v7 schema with keyMoments table (DMOD-01..05 types)
+- [x] 21-01-PLAN.md — Foundation: KeyMoment type + Player/Season/Recruit field extensions + Dexie v7 schema with keyMoments table (DMOD-01..05 types)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 - [ ] 21-02-PLAN.md — keyMoments service migration to Dexie + plugin-store migration helper + DynastyExport v3 with rivals + keyMoments (DMOD-01)
@@ -337,7 +337,7 @@ v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 
 | 18. Error States | v2.1 | 0/TBD | Not started | - |
 | 19. Safety & Foundations | v2.2 | 2/2 | Complete    | 2026-05-04 |
 | 20. Security | v2.2 | 3/3 | Complete    | 2026-05-04 |
-| 21. Data Model | v2.2 | 0/TBD | Not started | - |
+| 21. Data Model | v2.2 | 1/4 | In Progress|  |
 | 22. Screenshot Pipeline | v2.2 | 0/TBD | Not started | - |
 | 23. Madden Sync Upgrade | v2.2 | 0/TBD | Not started | - |
 | 24. Recruiting Tools | v2.2 | 0/TBD | Not started | - |
