@@ -235,6 +235,17 @@ export function ScreenshotIngestionPage() {
     setLoading(true);
     setError(null);
 
+    // Reset all editable form state so a re-parse on a different screen type
+    // doesn't leave stale rows from the prior parse in state.
+    setGameRows([]);
+    setPlayerRows([]);
+    setRecruitRows([]);
+    setDepthEntries([]);
+    setMatchedPlayerIds([]);
+    setPlayerSearchTerms([]);
+    setClassRank('');
+    setTotalCommits('');
+
     // Accumulator arrays — merged from all images
     const mergedGameRows: EditableGameRow[] = [];
     const mergedPlayerRows: EditablePlayerRow[] = [];
