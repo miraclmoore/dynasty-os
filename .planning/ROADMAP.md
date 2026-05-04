@@ -50,7 +50,7 @@ Full details: Phase Details — v2.0 section below.
 
 - [x] **Phase 19: Safety & Foundations** - Error boundary, undo type safety, remove zundo dep, fix N+1 leaderboard queries (completed 2026-05-03)
 - [x] **Phase 20: Security** - Anthropic API via Tauri command, API key to plugin-store, localStorage migration (completed 2026-05-04)
-- [ ] **Phase 21: Data Model** - keyMoments table, Season fields, Player devTrait/dealBreaker, Recruit motivations
+- [x] **Phase 21: Data Model** - keyMoments table, Season fields, Player devTrait/dealBreaker, Recruit motivations (completed 2026-05-04)
 - [ ] **Phase 22: Screenshot Pipeline** - Player stats → DB, depth chart CSV, recruiting-motivations type, multi-image
 - [ ] **Phase 23: Madden Sync Upgrade** - PlayerStats extraction, auto-detect save path
 - [ ] **Phase 24: Recruiting Tools** - Hard Sell calculator, transfer risk, recruit→roster, draft pick→status
@@ -228,9 +228,9 @@ Plans:
 - [x] 21-01-PLAN.md — Foundation: KeyMoment type + Player/Season/Recruit field extensions + Dexie v7 schema with keyMoments table (DMOD-01..05 types)
 
 **Wave 2** *(blocked on Wave 1 completion)*
-- [ ] 21-02-PLAN.md — keyMoments service migration to Dexie + plugin-store migration helper + DynastyExport v3 with rivals + keyMoments (DMOD-01)
-- [ ] 21-03-PLAN.md — Player UI: Dev Trait selector (both sports) + Deal Breaker + Redshirt (CFB) in AddPlayerModal/EditPlayerModal; trait/DB/RS badges on roster + profile (DMOD-03, DMOD-04)
-- [ ] 21-04-PLAN.md — Season UI: Bowl Opponent (CFB) + Key Events in SeasonEndModal; remove (season as any) casts; Recruit motivations + visit week + row pills on RecruitingPage (DMOD-02, DMOD-05)
+- [x] 21-02-PLAN.md — keyMoments service migration to Dexie + plugin-store migration helper + DynastyExport v3 with rivals + keyMoments (DMOD-01)
+- [x] 21-03-PLAN.md — Player UI: Dev Trait selector (both sports) + Deal Breaker + Redshirt (CFB) in AddPlayerModal/EditPlayerModal; trait/DB/RS badges on roster + profile (DMOD-03, DMOD-04)
+- [x] 21-04-PLAN.md — Season UI: Bowl Opponent (CFB) + Key Events in SeasonEndModal; remove (season as any) casts; Recruit motivations + visit week + row pills on RecruitingPage (DMOD-02, DMOD-05)
 
 ### Phase 22: Screenshot Pipeline
 **Goal**: Player stats screenshots are parsed, fuzzy-matched to the roster, and saved to the database; depth chart screenshots export as CSV; the recruiting-motivations screen type is selectable; and multiple images can be ingested in one session.
@@ -337,7 +337,7 @@ v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 
 | 18. Error States | v2.1 | 0/TBD | Not started | - |
 | 19. Safety & Foundations | v2.2 | 2/2 | Complete    | 2026-05-04 |
 | 20. Security | v2.2 | 3/3 | Complete    | 2026-05-04 |
-| 21. Data Model | v2.2 | 1/4 | In Progress|  |
+| 21. Data Model | v2.2 | 4/4 | Complete   | 2026-05-04 |
 | 22. Screenshot Pipeline | v2.2 | 0/TBD | Not started | - |
 | 23. Madden Sync Upgrade | v2.2 | 0/TBD | Not started | - |
 | 24. Recruiting Tools | v2.2 | 0/TBD | Not started | - |
