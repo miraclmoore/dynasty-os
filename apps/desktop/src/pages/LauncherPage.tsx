@@ -6,6 +6,7 @@ import { DynastyCard } from '../components/DynastyCard';
 import { CreateDynastyModal } from '../components/CreateDynastyModal';
 import { ExportImportControls } from '../components/ExportImportControls';
 import type { Dynasty } from '@dynasty-os/core-types';
+import { signalOnboardingPending } from '../App';
 
 const SPORT_CHIPS = [
   { key: 'cfb',    label: '🏈 CFB',    active: 'bg-orange-600 text-white', inactive: 'text-orange-400 border border-orange-800 hover:bg-orange-900/40' },
@@ -229,8 +230,9 @@ export function LauncherPage() {
         <CreateDynastyModal
           onClose={() => setShowCreate(false)}
           onCreated={() => {
-            // Set pending flag — App.tsx watches activeDynasty and opens tour when it sees this
-            localStorage.setItem('dynasty-os-onboarding-pending', 'true');
+            // Signal via module variable (D-09: ephemeral, no persistence) —
+            // App.tsx watches activeDynasty and opens tour when it sees this flag
+            signalOnboardingPending();
           }}
         />
       )}

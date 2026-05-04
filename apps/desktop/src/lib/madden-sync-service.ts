@@ -5,12 +5,17 @@ import { createPlayer, getPlayersByDynasty } from './player-service';
 import { createPlayerSeason, getPlayerSeasonsByDynasty } from './player-season-service';
 import { createDraftPick } from './draft-service';
 import type { GameResult, HomeAway, GameType } from '@dynasty-os/core-types';
+import {
+  getMaddenSavePath,
+  setMaddenSavePath as prefSetSavePath,
+  clearMaddenSavePath as prefClearSavePath,
+  getMaddenWatcherEnabled,
+  setMaddenWatcherEnabled as prefSetWatcher,
+} from './prefs-service';
 
 // ── SIDECAR KEY ───────────────────────────────────────────────────────────────
 
 const SIDECAR = 'binaries/madden-reader';
-const STORAGE_KEY_SAVE_PATH = 'dynasty-os-madden-save-path';
-const STORAGE_KEY_WATCHER = 'dynasty-os-madden-watcher-enabled';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -91,30 +96,26 @@ export interface SyncDiff {
   gameYear: number | null;
 }
 
-// ── Save file path storage ────────────────────────────────────────────────────
+// ── Save file path storage (D-10: now backed by prefs-service plugin-store) ──
 
-export function getStoredSavePath(): string | null {
-  return localStorage.getItem(STORAGE_KEY_SAVE_PATH);
+export async function getStoredSavePath(): Promise<string | null> {
+  return getMaddenSavePath();
 }
 
-export function storeSavePath(path: string): void {
-  localStorage.setItem(STORAGE_KEY_SAVE_PATH, path);
+export async function storeSavePath(path: string): Promise<void> {
+  await prefSetSavePath(path);
 }
 
-export function clearSavePath(): void {
-  localStorage.removeItem(STORAGE_KEY_SAVE_PATH);
+export async function clearSavePath(): Promise<void> {
+  await prefClearSavePath();
 }
 
-export function isWatcherEnabled(): boolean {
-  return localStorage.getItem(STORAGE_KEY_WATCHER) === 'true';
+export async function isWatcherEnabled(): Promise<boolean> {
+  return getMaddenWatcherEnabled();
 }
 
-export function setWatcherEnabled(enabled: boolean): void {
-  if (enabled) {
-    localStorage.setItem(STORAGE_KEY_WATCHER, 'true');
-  } else {
-    localStorage.removeItem(STORAGE_KEY_WATCHER);
-  }
+export async function setWatcherEnabled(enabled: boolean): Promise<void> {
+  await prefSetWatcher(enabled);
 }
 
 // ── File picker ───────────────────────────────────────────────────────────────

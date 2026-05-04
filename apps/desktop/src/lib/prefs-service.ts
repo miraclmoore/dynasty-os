@@ -201,5 +201,20 @@ export async function loadAll(): Promise<void> {
       tourComplete: Boolean(tourComplete),
       onboardingComplete: Boolean(onboardingComplete),
     });
+
+    // auto-export flags are keyed by dynastyId and must be eager because
+    // isAutoExportEnabled() is a sync call. Enumerate all auto-export-* keys now.
+    // (T-20-20: malformed values are coerced to false via Boolean())
+    try {
+      const allEntries = await store.entries();
+      const autoExportMap: Record<string, boolean> = {};
+      for (const [key, val] of allEntries) {
+        if (key.startsWith('auto-export-')) {
+          const dynastyId = key.slice('auto-export-'.length);
+          autoExportMap[dynastyId] = Boolean(val);
+        }
+      }
+      usePrefsStore.setState({ autoExportEnabled: autoExportMap });
+    } catch {}
   } catch {}
 }

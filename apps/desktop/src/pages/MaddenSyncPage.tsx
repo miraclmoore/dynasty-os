@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useDynastyStore } from '../store';
 import { useSeasonStore } from '../store/season-store';
 import { useNavigationStore } from '../store/navigation-store';
+import { usePrefsStore } from '../store/prefs-store';
 import {
   pickSaveFile,
   validateSaveFile,
@@ -81,14 +82,18 @@ export function MaddenSyncPage() {
   const { activeSeason } = useSeasonStore();
   const goToDashboard = useNavigationStore((s) => s.goToDashboard);
 
+  // Read initial values from PrefsStore (populated at startup by prefs.loadAll())
+  const savedPath = usePrefsStore((s) => s.maddenSavePath);
+  const watcherEnabled = usePrefsStore((s) => s.maddenWatcherEnabled);
+
   const [syncState, setSyncState] = useState<SyncState>('idle');
-  const [savePath, setSavePath] = useState<string | null>(getStoredSavePath);
+  const [savePath, setSavePath] = useState<string | null>(savedPath);
   const [validation, setValidation] = useState<ValidateResult | null>(null);
   const [extracted, setExtracted] = useState<ExtractResult | null>(null);
   const [diff, setDiff] = useState<SyncDiff | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [countdown, setCountdown] = useState(AUTO_CONFIRM_SECONDS);
-  const [watcherOn, setWatcherOn] = useState(isWatcherEnabled);
+  const [watcherOn, setWatcherOn] = useState(watcherEnabled);
   const [watcherPrompt, setWatcherPrompt] = useState(false);
   const [commitResult, setCommitResult] = useState<{
     gamesAdded: number;
@@ -102,11 +107,18 @@ export function MaddenSyncPage() {
 
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Load seasons on mount
+  // Load seasons on mount; also lazy-load save path from plugin-store if
+  // PrefsStore wasn't populated yet (e.g. first render before loadAll completes)
   useEffect(() => {
     if (activeDynasty) {
       useSeasonStore.getState().loadSeasons(activeDynasty.id);
     }
+    void (async () => {
+      const path = await getStoredSavePath();
+      if (path) setSavePath(path);
+      const watcher = await isWatcherEnabled();
+      setWatcherOn(watcher);
+    })();
   }, [activeDynasty?.id]);
 
   // Start/stop background file watcher based on toggle + save path
@@ -163,7 +175,7 @@ export function MaddenSyncPage() {
     const path = await pickSaveFile();
     if (!path) return;
     setSavePath(path);
-    storeSavePath(path);
+    await storeSavePath(path);
     setValidation(null);
     setExtracted(null);
     setDiff(null);
@@ -235,13 +247,13 @@ export function MaddenSyncPage() {
     setSyncState('idle');
   };
 
-  const handleToggleWatcher = (enabled: boolean) => {
-    setWatcherEnabled(enabled);
+  const handleToggleWatcher = async (enabled: boolean) => {
+    await setWatcherEnabled(enabled);
     setWatcherOn(enabled);
   };
 
-  const handleClearSavePath = () => {
-    clearSavePath();
+  const handleClearSavePath = async () => {
+    await clearSavePath();
     setSavePath(null);
     handleReset();
   };
