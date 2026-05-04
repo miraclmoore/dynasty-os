@@ -402,7 +402,7 @@ export function ScreenshotIngestionPage() {
         if (!row.opponent || row.teamScore === '' || row.opponentScore === '') continue;
         const tScore = Number(row.teamScore);
         const oScore = Number(row.opponentScore);
-        const result: GameResult = tScore > oScore ? 'W' : 'L';
+        const result: GameResult = tScore > oScore ? 'W' : oScore > tScore ? 'L' : 'T';
         await createGame({
           dynastyId: activeDynasty.id,
           seasonId: activeSeason.id,
