@@ -1,5 +1,6 @@
 import { usePrefsStore } from '../store/prefs-store';
 import { callAnthropic } from './ai-bridge';
+import { CFB_DEAL_BREAKER_CATEGORIES } from './cfb-categories';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -8,6 +9,7 @@ export type ScreenType =
   | 'player-stats'
   | 'recruiting'
   | 'depth-chart'
+  | 'recruiting-motivations'
   | 'nfl-schedule'
   | 'nfl-player-stats'
   | 'nfl-depth-chart';
@@ -17,6 +19,7 @@ export const SCREEN_TYPE_LABELS: Record<ScreenType, string> = {
   'player-stats': 'Player Stats',
   'recruiting': 'Recruiting Class',
   'depth-chart': 'Depth Chart',
+  'recruiting-motivations': 'Recruit Pitch Screen',
   'nfl-schedule': 'Schedule / Game Results',
   'nfl-player-stats': 'Player Stats',
   'nfl-depth-chart': 'Depth Chart',
@@ -68,6 +71,20 @@ export interface DepthChartParsedData {
   }>;
 }
 
+export interface RecruitingMotivationsParsedData {
+  screenType: 'recruiting-motivations';
+  recruits: Array<{
+    name?: string | null;
+    motivation1?: string | null;
+    motivation1Grade?: string | null;
+    motivation2?: string | null;
+    motivation2Grade?: string | null;
+    motivation3?: string | null;
+    motivation3Grade?: string | null;
+    dealBreaker?: string | null;
+  }>;
+}
+
 export interface NflScheduleParsedData {
   screenType: 'nfl-schedule';
   games: Array<{
@@ -104,6 +121,7 @@ export type ParsedScreenData =
   | PlayerStatsParsedData
   | RecruitingParsedData
   | DepthChartParsedData
+  | RecruitingMotivationsParsedData
   | NflScheduleParsedData
   | NflPlayerStatsParsedData
   | NflDepthChartParsedData;
@@ -122,6 +140,8 @@ const SCREEN_TYPE_PROMPTS: Record<ScreenType, string> = {
 
   'depth-chart':
     'You are parsing a CFB 25 depth chart screen. Extract each position and its starters/backups: position abbreviation, player name, and depth number (1=starter, 2=backup, etc.). Team context: {teamName} ({season} season). Return ONLY valid JSON matching: {"entries": [{"position": string|null, "playerName": string|null, "depth": number|null}]}. No explanation — JSON only.',
+
+  'recruiting-motivations': `You are parsing a CFB 26 recruit pitch/motivations screen. The 14 possible motivation categories are: ${CFB_DEAL_BREAKER_CATEGORIES.join(', ')}. Extract the recruit name, their three motivations and each motivation's letter grade (A+/A/A-/B+/B/B-/C+/C/C-/D+/D/D-/F), and which motivation is the deal breaker (marked with a star or special indicator). Team context: {teamName} ({season} season). Return ONLY valid JSON: {"recruits": [{"name": string|null, "motivation1": string|null, "motivation1Grade": string|null, "motivation2": string|null, "motivation2Grade": string|null, "motivation3": string|null, "motivation3Grade": string|null, "dealBreaker": string|null}]}. No explanation — JSON only.`,
 
   'nfl-schedule':
     'You are parsing a {gameVersion} in-game schedule screen. Extract each visible game row: week number, opponent team name, home/away/neutral indicator, team score, opponent score, win/loss result, and game type (regular, playoff, exhibition). Team context: {teamName} ({season} season). Return ONLY valid JSON matching: {"games": [{"week": number|null, "opponent": string|null, "homeAway": "Home"|"Away"|"Neutral"|null, "teamScore": number|null, "opponentScore": number|null, "result": "W"|"L"|null, "gameType": string|null}]}. Leave fields null if not visible. No explanation — JSON only.',
