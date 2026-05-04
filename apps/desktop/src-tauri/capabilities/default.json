@@ -16,6 +16,11 @@
     "shell:allow-open",
     "fs:allow-watch",
     "fs:allow-mkdir",
-    "fs:scope-appdata-recursive"
+    "fs:scope-appdata-recursive",
+    "store:default",
+    "store:allow-load",
+    "store:allow-get",
+    "store:allow-set",
+    "store:allow-delete"
   ]
 }
