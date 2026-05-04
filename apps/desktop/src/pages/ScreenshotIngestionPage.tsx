@@ -198,11 +198,18 @@ export function ScreenshotIngestionPage() {
     setImagePaths(paths);
     setImagePath(paths[0]); // keep single-image alias for thumbnail
 
-    // Read all files to base64 upfront before showing the parse button
+    // Read all files to base64 upfront before showing the parse button.
+    // Chunk the byte-to-char conversion in segments of 65535 to avoid
+    // "Maximum call stack size exceeded" on large images (e.g. 4K screenshots).
     const base64List: string[] = [];
     for (const p of paths) {
       const bytes = await readFile(p);
-      const binary = Array.from(bytes).map((b) => String.fromCharCode(b)).join('');
+      const uint8 = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+      const CHUNK = 65535;
+      let binary = '';
+      for (let i = 0; i < uint8.length; i += CHUNK) {
+        binary += String.fromCharCode.apply(null, uint8.subarray(i, i + CHUNK) as unknown as number[]);
+      }
       base64List.push(btoa(binary));
     }
     setImageQueue(base64List);
