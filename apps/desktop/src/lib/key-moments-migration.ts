@@ -78,9 +78,15 @@ export async function migrateKeyMomentsFromPrefsStore(): Promise<void> {
       await db.keyMoments.bulkAdd(newRows);
     }
 
-    // Delete legacy plugin-store entries AFTER successful Dexie write
+    // Delete legacy plugin-store entries AFTER successful Dexie write.
+    // Deletions are best-effort — the flag is set even if some fail. The Dexie
+    // table is the source of truth; stale plugin-store entries are inert.
     for (const k of migratedKeys) {
-      try { await store.delete(k); } catch {}
+      try {
+        await store.delete(k);
+      } catch (err) {
+        console.warn(`[key-moments-migration] failed to delete legacy key "${k}":`, err);
+      }
     }
 
     await store.set(MIGRATION_FLAG, true);
