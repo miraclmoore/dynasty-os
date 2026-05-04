@@ -23,7 +23,10 @@ export async function setApiKey(key: string): Promise<void> {
     const store = await getStore();
     await store.set('anthropic-api-key', key);
     usePrefsStore.getState().setHasApiKey(true);
-  } catch {}
+  } catch (err) {
+    console.error('[prefs] setApiKey failed:', err);
+    throw err;
+  }
 }
 
 export async function clearApiKey(): Promise<void> {
@@ -31,7 +34,10 @@ export async function clearApiKey(): Promise<void> {
     const store = await getStore();
     await store.delete('anthropic-api-key');
     usePrefsStore.getState().setHasApiKey(false);
-  } catch {}
+  } catch (err) {
+    console.error('[prefs] clearApiKey failed:', err);
+    throw err;
+  }
 }
 
 // ── Migration (D-01) ────────────────────────────────────────────────────────
@@ -59,7 +65,10 @@ export async function setMaddenSavePath(path: string): Promise<void> {
     const store = await getStore();
     await store.set('madden-save-path', path);
     usePrefsStore.getState().setMaddenSavePath(path);
-  } catch {}
+  } catch (err) {
+    console.error('[prefs] setMaddenSavePath failed:', err);
+    throw err;
+  }
 }
 export async function clearMaddenSavePath(): Promise<void> {
   try {
@@ -82,7 +91,10 @@ export async function setMaddenWatcherEnabled(enabled: boolean): Promise<void> {
     const store = await getStore();
     await store.set('madden-watcher-enabled', enabled);
     usePrefsStore.getState().setMaddenWatcherEnabled(enabled);
-  } catch {}
+  } catch (err) {
+    console.error('[prefs] setMaddenWatcherEnabled failed:', err);
+    throw err;
+  }
 }
 
 // ── Auto-export (D-10, keyed by dynastyId) ─────────────────────────────────
@@ -98,7 +110,10 @@ export async function setAutoExportEnabled(dynastyId: string, enabled: boolean):
     const store = await getStore();
     await store.set(`auto-export-${dynastyId}`, enabled);
     usePrefsStore.getState().setAutoExportEnabled(dynastyId, enabled);
-  } catch {}
+  } catch (err) {
+    console.error('[prefs] setAutoExportEnabled failed:', err);
+    throw err;
+  }
 }
 
 // ── Setup Wizard State (D-10, keyed by dynastyId) ─────────────────────────
@@ -114,7 +129,10 @@ export async function setSetupWizardState(dynastyId: string, state: WizardState)
     const store = await getStore();
     await store.set(`setup-wizard-${dynastyId}`, state);
     usePrefsStore.getState().setSetupWizardState(dynastyId, state);
-  } catch {}
+  } catch (err) {
+    console.error('[prefs] setSetupWizardState failed:', err);
+    throw err;
+  }
 }
 
 // ── Tour Complete (D-10) ───────────────────────────────────────────────────
@@ -130,7 +148,10 @@ export async function setTourComplete(v: boolean): Promise<void> {
     const store = await getStore();
     await store.set('tour-complete', v);
     usePrefsStore.getState().setTourComplete(v);
-  } catch {}
+  } catch (err) {
+    console.error('[prefs] setTourComplete failed:', err);
+    throw err;
+  }
 }
 
 // ── Onboarding Complete (D-10) ─────────────────────────────────────────────
@@ -146,7 +167,10 @@ export async function setOnboardingComplete(v: boolean): Promise<void> {
     const store = await getStore();
     await store.set('onboarding-complete', v);
     usePrefsStore.getState().setOnboardingComplete(v);
-  } catch {}
+  } catch (err) {
+    console.error('[prefs] setOnboardingComplete failed:', err);
+    throw err;
+  }
 }
 
 // ── Checklist (D-10, keyed by seasonId) ────────────────────────────────────
@@ -162,7 +186,10 @@ export async function setChecklistState(seasonId: string, state: Record<string, 
     const store = await getStore();
     await store.set(`checklist-${seasonId}`, state);
     usePrefsStore.getState().setChecklistState(seasonId, state);
-  } catch {}
+  } catch (err) {
+    console.error('[prefs] setChecklistState failed:', err);
+    throw err;
+  }
 }
 
 // ── Rival Key Moments (D-08, keyed by rivalId) ─────────────────────────────
@@ -178,7 +205,10 @@ export async function setRivalKeyMoments(rivalId: string, moments: KeyMoment[]):
     const store = await getStore();
     await store.set(`rival-moments-${rivalId}`, moments);
     usePrefsStore.getState().setRivalKeyMoments(rivalId, moments);
-  } catch {}
+  } catch (err) {
+    console.error('[prefs] setRivalKeyMoments failed:', err);
+    throw err;
+  }
 }
 
 // ── Eager bootstrap at App.tsx startup (D-06) ─────────────────────────────
