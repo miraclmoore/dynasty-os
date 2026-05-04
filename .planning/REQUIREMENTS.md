@@ -11,10 +11,10 @@ Requirements for the Handoff Overhaul milestone. 40 tasks across 10 phases. Sour
 
 ### Safety & Foundations
 
-- [ ] **SAFE-01**: App renders a styled error UI instead of a blank screen when a fatal render error occurs anywhere in the tree
-- [ ] **SAFE-02**: UndoStore undo operations use a typed `TABLE_MAP` constant instead of `db as any` — invalid table names produce compile-time errors
-- [ ] **SAFE-03**: `zundo` package is removed from `package.json` and is not imported anywhere in the codebase
-- [ ] **SAFE-04**: `getCareerLeaders()` and `getSingleSeasonLeaders()` each fetch all players in a single bulk query, not per-player inside a loop
+- [x] **SAFE-01**: App renders a styled error UI instead of a blank screen when a fatal render error occurs anywhere in the tree
+- [x] **SAFE-02**: UndoStore undo operations use a typed `TABLE_MAP` constant instead of `db as any` — invalid table names produce compile-time errors
+- [x] **SAFE-03**: `zundo` package is removed from `package.json` and is not imported anywhere in the codebase
+- [x] **SAFE-04**: `getCareerLeaders()` and `getSingleSeasonLeaders()` each fetch all players in a single bulk query, not per-player inside a loop
 
 ### Security
 
@@ -123,10 +123,10 @@ Which phases cover which requirements.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SAFE-01 | Phase 19 | Pending |
-| SAFE-02 | Phase 19 | Pending |
-| SAFE-03 | Phase 19 | Pending |
-| SAFE-04 | Phase 19 | Pending |
+| SAFE-01 | Phase 19 | Complete |
+| SAFE-02 | Phase 19 | Complete |
+| SAFE-03 | Phase 19 | Complete |
+| SAFE-04 | Phase 19 | Complete |
 | SEC-01 | Phase 20 | Pending |
 | SEC-02 | Phase 20 | Pending |
 | SEC-03 | Phase 20 | Pending |
