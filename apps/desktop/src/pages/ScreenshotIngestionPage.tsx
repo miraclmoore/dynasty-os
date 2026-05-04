@@ -9,6 +9,7 @@ import * as prefs from '../lib/prefs-service';
 import { createGame } from '../lib/game-service';
 import { createRecruitingClass, addRecruit } from '../lib/recruiting-service';
 import { usePlayerStore } from '../store/player-store';
+import { createPlayer } from '../lib/player-service';
 import { createPlayerSeason, updatePlayerSeason } from '../lib/player-season-service';
 import { db } from '@dynasty-os/db';
 import { findBestPlayerMatch } from '../lib/fuzzy-match';
@@ -18,9 +19,11 @@ import type {
   RecruitingParsedData,
   DepthChartParsedData,
   RecruitingMotivationsParsedData,
+  RosterParsedData,
   NflScheduleParsedData,
   NflPlayerStatsParsedData,
   NflDepthChartParsedData,
+  NflRosterParsedData,
 } from '../lib/screenshot-service';
 import { getHardSellRecommendation } from '../lib/recruiting-calculator';
 import type { GameType, GameResult, HomeAway } from '@dynasty-os/core-types';
@@ -54,6 +57,15 @@ interface EditableDepthEntry {
   position: string;
   playerName: string;
   depth: string;
+}
+
+interface EditableRosterRow {
+  firstName: string;
+  lastName: string;
+  position: string;
+  jerseyNumber: string;
+  classYear: string;
+  devTrait: string;
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -154,6 +166,7 @@ export function ScreenshotIngestionPage() {
   const [totalCommits, setTotalCommits] = useState('');
   const [depthEntries, setDepthEntries] = useState<EditableDepthEntry[]>([]);
   const [depthCsvCopied, setDepthCsvCopied] = useState(false);
+  const [rosterRows, setRosterRows] = useState<EditableRosterRow[]>([]);
 
   const players = usePlayerStore((s) => s.players);
   // matchedPlayerIds[i] = player.id for row i, or '' if unmatched
@@ -170,13 +183,14 @@ export function ScreenshotIngestionPage() {
 
   if (!activeDynasty) return null;
 
-  const NFL_SCREEN_TYPES: ScreenType[] = ['nfl-schedule', 'nfl-player-stats', 'nfl-depth-chart'];
+  const NFL_SCREEN_TYPES: ScreenType[] = ['nfl-schedule', 'nfl-player-stats', 'nfl-depth-chart', 'nfl-roster'];
   const CFB_SCREEN_TYPES: ScreenType[] = [
     'schedule',
     'player-stats',
     'recruiting',
     'depth-chart',
     'recruiting-motivations',
+    'roster',
   ];
   const availableScreenTypes = activeDynasty.sport === 'cfb' ? CFB_SCREEN_TYPES : NFL_SCREEN_TYPES;
 
@@ -241,6 +255,7 @@ export function ScreenshotIngestionPage() {
     setPlayerRows([]);
     setRecruitRows([]);
     setDepthEntries([]);
+    setRosterRows([]);
     setMatchedPlayerIds([]);
     setPlayerSearchTerms([]);
     setClassRank('');
@@ -251,6 +266,7 @@ export function ScreenshotIngestionPage() {
     const mergedPlayerRows: EditablePlayerRow[] = [];
     const mergedRecruitRows: EditableRecruitRow[] = [];
     const mergedDepthEntries: EditableDepthEntry[] = [];
+    const mergedRosterRows: EditableRosterRow[] = [];
     // Local accumulators for player match state (avoids stale-append via functional updaters)
     const allMatchedIds: string[] = [];
     const allSearchTerms: string[] = [];
@@ -326,6 +342,18 @@ export function ScreenshotIngestionPage() {
               depth: String(e.depth ?? ''),
             }))
           );
+        } else if (result.screenType === 'roster' || result.screenType === 'nfl-roster') {
+          const d = result as RosterParsedData | NflRosterParsedData;
+          mergedRosterRows.push(
+            ...(d.players ?? []).map((p) => ({
+              firstName: p.firstName ?? '',
+              lastName: p.lastName ?? '',
+              position: p.position ?? '',
+              jerseyNumber: p.jerseyNumber != null ? String(p.jerseyNumber) : '',
+              classYear: ('classYear' in p ? p.classYear : '') ?? '',
+              devTrait: p.devTrait ?? '',
+            }))
+          );
         }
         // recruiting-motivations: lastParsedResult captures the last one for display
       }
@@ -343,6 +371,7 @@ export function ScreenshotIngestionPage() {
         setTotalCommits(lastRecruitMeta.totalCommits);
       }
       if (mergedDepthEntries.length > 0) setDepthEntries(mergedDepthEntries);
+      if (mergedRosterRows.length > 0) setRosterRows(mergedRosterRows);
 
       // Set parsedData to the last result for type dispatch in renderConfirmationForm()
       setParsedData(lastParsedResult);
@@ -487,6 +516,47 @@ export function ScreenshotIngestionPage() {
     await navigator.clipboard.writeText(csv);
     setDepthCsvCopied(true);
     setTimeout(() => setDepthCsvCopied(false), 2000);
+  }
+
+  function normalizeDevTrait(raw: string): 'normal' | 'star' | 'superstar' | 'xfactor' | undefined {
+    const key = raw.toLowerCase().replace(/[-\s]/g, '');
+    if (key === 'normal') return 'normal';
+    if (key === 'star') return 'star';
+    if (key === 'superstar') return 'superstar';
+    if (key === 'xfactor') return 'xfactor';
+    return undefined;
+  }
+
+  function isAlreadyInRoster(firstName: string, lastName: string): boolean {
+    const full = `${firstName} ${lastName}`.toLowerCase().trim();
+    return players.some((p) => `${p.firstName} ${p.lastName}`.toLowerCase() === full);
+  }
+
+  async function handleSaveRoster() {
+    if (!activeDynasty) return;
+    setSaving(true);
+    try {
+      for (const row of rosterRows) {
+        if (!row.firstName || !row.lastName || !row.position) continue;
+        if (isAlreadyInRoster(row.firstName, row.lastName)) continue;
+        await createPlayer({
+          dynastyId: activeDynasty.id,
+          firstName: row.firstName,
+          lastName: row.lastName,
+          position: row.position,
+          jerseyNumber: row.jerseyNumber ? Number(row.jerseyNumber) : undefined,
+          classYear: row.classYear || undefined,
+          devTrait: normalizeDevTrait(row.devTrait),
+          status: 'active',
+        });
+      }
+      await usePlayerStore.getState().loadPlayers(activeDynasty.id);
+      goToDashboard();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to save roster');
+    } finally {
+      setSaving(false);
+    }
   }
 
   // ── Render helpers ─────────────────────────────────────────────────────────
@@ -1133,6 +1203,161 @@ export function ScreenshotIngestionPage() {
     );
   }
 
+  function renderRosterForm() {
+    const isCfb = parsedData?.screenType === 'roster';
+    const newCount = rosterRows.filter(
+      (r) => r.firstName && r.lastName && r.position && !isAlreadyInRoster(r.firstName, r.lastName)
+    ).length;
+
+    return (
+      <div>
+        <h2 className="text-lg font-semibold text-white mb-1">Roster Import</h2>
+        <p className="text-sm text-gray-400 mb-4">
+          {newCount} new player{newCount !== 1 ? 's' : ''} will be added.
+          Rows already in your roster are skipped automatically.
+        </p>
+        {renderThumbnail()}
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left">
+            <thead>
+              <tr className="text-gray-400 border-b border-gray-700">
+                <th className="pb-2 pr-2">First</th>
+                <th className="pb-2 pr-2">Last</th>
+                <th className="pb-2 pr-2">Pos</th>
+                <th className="pb-2 pr-2">#</th>
+                {isCfb && <th className="pb-2 pr-2">Year</th>}
+                <th className="pb-2 pr-2">Dev</th>
+                <th className="pb-2 pr-2">Status</th>
+                <th className="pb-2"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {rosterRows.map((row, i) => {
+                const duplicate = row.firstName && row.lastName
+                  ? isAlreadyInRoster(row.firstName, row.lastName)
+                  : false;
+                return (
+                  <tr key={i} className={`border-b border-gray-800 ${duplicate ? 'opacity-40' : ''}`}>
+                    <td className="py-1 pr-2">
+                      <input
+                        type="text"
+                        value={row.firstName}
+                        onChange={(e) => {
+                          const updated = [...rosterRows];
+                          updated[i] = { ...updated[i], firstName: e.target.value };
+                          setRosterRows(updated);
+                        }}
+                        className={`${BASE_INPUT} ${AMBER_INPUT}`}
+                      />
+                    </td>
+                    <td className="py-1 pr-2">
+                      <input
+                        type="text"
+                        value={row.lastName}
+                        onChange={(e) => {
+                          const updated = [...rosterRows];
+                          updated[i] = { ...updated[i], lastName: e.target.value };
+                          setRosterRows(updated);
+                        }}
+                        className={`${BASE_INPUT} ${AMBER_INPUT}`}
+                      />
+                    </td>
+                    <td className="py-1 pr-2 w-20">
+                      <input
+                        type="text"
+                        value={row.position}
+                        onChange={(e) => {
+                          const updated = [...rosterRows];
+                          updated[i] = { ...updated[i], position: e.target.value };
+                          setRosterRows(updated);
+                        }}
+                        className={`${BASE_INPUT} ${AMBER_INPUT}`}
+                      />
+                    </td>
+                    <td className="py-1 pr-2 w-16">
+                      <input
+                        type="number"
+                        min={0}
+                        max={99}
+                        value={row.jerseyNumber}
+                        onChange={(e) => {
+                          const updated = [...rosterRows];
+                          updated[i] = { ...updated[i], jerseyNumber: e.target.value };
+                          setRosterRows(updated);
+                        }}
+                        className={`${BASE_INPUT} ${AMBER_INPUT}`}
+                      />
+                    </td>
+                    {isCfb && (
+                      <td className="py-1 pr-2 w-24">
+                        <input
+                          type="text"
+                          value={row.classYear}
+                          onChange={(e) => {
+                            const updated = [...rosterRows];
+                            updated[i] = { ...updated[i], classYear: e.target.value };
+                            setRosterRows(updated);
+                          }}
+                          className={`${BASE_INPUT} ${AMBER_INPUT}`}
+                        />
+                      </td>
+                    )}
+                    <td className="py-1 pr-2 w-32">
+                      <select
+                        value={row.devTrait}
+                        onChange={(e) => {
+                          const updated = [...rosterRows];
+                          updated[i] = { ...updated[i], devTrait: e.target.value };
+                          setRosterRows(updated);
+                        }}
+                        className={`${BASE_INPUT} ${AMBER_INPUT}`}
+                      >
+                        <option value="">—</option>
+                        <option value="normal">Normal</option>
+                        <option value="star">Star</option>
+                        <option value="superstar">Superstar</option>
+                        <option value="xfactor">X-Factor</option>
+                      </select>
+                    </td>
+                    <td className="py-1 pr-2 whitespace-nowrap">
+                      {duplicate
+                        ? <span className="text-xs text-gray-500">Already in roster</span>
+                        : <span className="text-xs text-green-400">New</span>
+                      }
+                    </td>
+                    <td className="py-1">
+                      <button
+                        onClick={() => setRosterRows(rosterRows.filter((_, idx) => idx !== i))}
+                        className="text-red-400 hover:text-red-300 text-xs px-2 py-1"
+                      >
+                        Del
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <div className="flex gap-3 mt-6">
+          <button
+            onClick={goToDashboard}
+            className="px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg"
+          >
+            Discard
+          </button>
+          <button
+            onClick={() => { void handleSaveRoster(); }}
+            disabled={saving || newCount === 0}
+            className="px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold rounded-lg disabled:opacity-50"
+          >
+            {saving ? 'Saving…' : `Add ${newCount} Player${newCount !== 1 ? 's' : ''}`}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   function renderConfirmationForm() {
     if (!parsedData) return null;
     switch (parsedData.screenType) {
@@ -1149,6 +1374,9 @@ export function ScreenshotIngestionPage() {
         return renderDepthChartForm();
       case 'recruiting-motivations':
         return renderRecruitingMotivationsForm();
+      case 'roster':
+      case 'nfl-roster':
+        return renderRosterForm();
       default:
         return null;
     }

@@ -10,9 +10,11 @@ export type ScreenType =
   | 'recruiting'
   | 'depth-chart'
   | 'recruiting-motivations'
+  | 'roster'
   | 'nfl-schedule'
   | 'nfl-player-stats'
-  | 'nfl-depth-chart';
+  | 'nfl-depth-chart'
+  | 'nfl-roster';
 
 export const SCREEN_TYPE_LABELS: Record<ScreenType, string> = {
   'schedule': 'Schedule / Game Results',
@@ -20,9 +22,11 @@ export const SCREEN_TYPE_LABELS: Record<ScreenType, string> = {
   'recruiting': 'Recruiting Class',
   'depth-chart': 'Depth Chart',
   'recruiting-motivations': 'Recruit Pitch Screen',
+  'roster': 'Roster Import',
   'nfl-schedule': 'Schedule / Game Results',
   'nfl-player-stats': 'Player Stats',
   'nfl-depth-chart': 'Depth Chart',
+  'nfl-roster': 'Roster Import',
 };
 
 // ── Parsed Data Shapes ────────────────────────────────────────────────────────
@@ -85,6 +89,29 @@ export interface RecruitingMotivationsParsedData {
   }>;
 }
 
+export interface RosterParsedData {
+  screenType: 'roster';
+  players: Array<{
+    firstName?: string | null;
+    lastName?: string | null;
+    position?: string | null;
+    jerseyNumber?: number | null;
+    classYear?: string | null;
+    devTrait?: string | null;
+  }>;
+}
+
+export interface NflRosterParsedData {
+  screenType: 'nfl-roster';
+  players: Array<{
+    firstName?: string | null;
+    lastName?: string | null;
+    position?: string | null;
+    jerseyNumber?: number | null;
+    devTrait?: string | null;
+  }>;
+}
+
 export interface NflScheduleParsedData {
   screenType: 'nfl-schedule';
   games: Array<{
@@ -122,9 +149,11 @@ export type ParsedScreenData =
   | RecruitingParsedData
   | DepthChartParsedData
   | RecruitingMotivationsParsedData
+  | RosterParsedData
   | NflScheduleParsedData
   | NflPlayerStatsParsedData
-  | NflDepthChartParsedData;
+  | NflDepthChartParsedData
+  | NflRosterParsedData;
 
 // ── Vision API Prompts ────────────────────────────────────────────────────────
 
@@ -142,6 +171,12 @@ const SCREEN_TYPE_PROMPTS: Record<ScreenType, string> = {
     'You are parsing a CFB 25 depth chart screen. Extract each position and its starters/backups: position abbreviation, player name, and depth number (1=starter, 2=backup, etc.). Team context: {teamName} ({season} season). Return ONLY valid JSON matching: {"entries": [{"position": string|null, "playerName": string|null, "depth": number|null}]}. No explanation — JSON only.',
 
   'recruiting-motivations': `You are parsing a CFB 26 recruit pitch/motivations screen. The 14 possible motivation categories are: ${CFB_DEAL_BREAKER_CATEGORIES.join(', ')}. Extract the recruit name, their three motivations and each motivation's letter grade (A+/A/A-/B+/B/B-/C+/C/C-/D+/D/D-/F), and which motivation is the deal breaker (marked with a star or special indicator). Team context: {teamName} ({season} season). Return ONLY valid JSON: {"recruits": [{"name": string|null, "motivation1": string|null, "motivation1Grade": string|null, "motivation2": string|null, "motivation2Grade": string|null, "motivation3": string|null, "motivation3Grade": string|null, "dealBreaker": string|null}]}. No explanation — JSON only.`,
+
+  'roster':
+    'You are parsing a CFB 25/26 team roster screen. Extract each visible player row: first name, last name, jersey number (#), position abbreviation, class year (Fr/So/Jr/Sr or RS Fr/RS So/RS Jr), and development trait. Normalize devTrait to one of: "normal", "star", "superstar", "xfactor". Team context: {teamName} ({season} season). Return ONLY valid JSON: {"players": [{"firstName": string|null, "lastName": string|null, "position": string|null, "jerseyNumber": number|null, "classYear": string|null, "devTrait": "normal"|"star"|"superstar"|"xfactor"|null}]}. No explanation — JSON only.',
+
+  'nfl-roster':
+    'You are parsing a {gameVersion} team roster screen. Extract each visible player row: first name, last name, jersey number (#), position abbreviation, and development trait. Normalize devTrait to one of: "normal", "star", "superstar", "xfactor". Team context: {teamName} ({season} season). Return ONLY valid JSON: {"players": [{"firstName": string|null, "lastName": string|null, "position": string|null, "jerseyNumber": number|null, "devTrait": "normal"|"star"|"superstar"|"xfactor"|null}]}. No explanation — JSON only.',
 
   'nfl-schedule':
     'You are parsing a {gameVersion} in-game schedule screen. Extract each visible game row: week number, opponent team name, home/away/neutral indicator, team score, opponent score, win/loss result, and game type (regular, playoff, exhibition). Team context: {teamName} ({season} season). Return ONLY valid JSON matching: {"games": [{"week": number|null, "opponent": string|null, "homeAway": "Home"|"Away"|"Neutral"|null, "teamScore": number|null, "opponentScore": number|null, "result": "W"|"L"|null, "gameType": string|null}]}. Leave fields null if not visible. No explanation — JSON only.',
@@ -167,6 +202,7 @@ function isValidParsedShape(screenType: ScreenType, obj: Record<string, unknown>
   if (screenType === 'recruiting') return Array.isArray(obj.recruits);
   if (screenType === 'depth-chart' || screenType === 'nfl-depth-chart') return Array.isArray(obj.entries);
   if (screenType === 'recruiting-motivations') return Array.isArray(obj.recruits);
+  if (screenType === 'roster' || screenType === 'nfl-roster') return Array.isArray(obj.players);
   return false;
 }
 
