@@ -163,6 +163,11 @@ export function ScreenshotIngestionPage() {
   // which row's dropdown is open
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(null);
 
+  // Multi-image progress tracking
+  const [imageQueue, setImageQueue] = useState<string[]>([]); // base64 strings
+  const [imagePaths, setImagePaths] = useState<string[]>([]); // for display
+  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
+
   if (!activeDynasty) return null;
 
   const NFL_SCREEN_TYPES: ScreenType[] = ['nfl-schedule', 'nfl-player-stats', 'nfl-depth-chart'];
@@ -180,16 +185,29 @@ export function ScreenshotIngestionPage() {
   async function handleFileOpen() {
     const selected = await open({
       filters: [{ name: 'Images', extensions: ['png', 'jpg', 'jpeg', 'webp'] }],
-      multiple: false,
+      multiple: true,
     });
-    if (!selected || typeof selected !== 'string') return;
-    setImagePath(selected);
-    // Read file bytes and convert to base64
-    const bytes = await readFile(selected);
-    const binary = Array.from(bytes).map((b) => String.fromCharCode(b)).join('');
-    const base64 = btoa(binary);
-    setImageBase64(base64);
-    // Reset any previous parse state
+    // open() with multiple:true returns string[] | null (or string | null for single pick)
+    const paths = Array.isArray(selected)
+      ? selected
+      : selected
+      ? [selected]
+      : [];
+    if (paths.length === 0) return;
+
+    setImagePaths(paths);
+    setImagePath(paths[0]); // keep single-image alias for thumbnail
+
+    // Read all files to base64 upfront before showing the parse button
+    const base64List: string[] = [];
+    for (const p of paths) {
+      const bytes = await readFile(p);
+      const binary = Array.from(bytes).map((b) => String.fromCharCode(b)).join('');
+      base64List.push(btoa(binary));
+    }
+    setImageQueue(base64List);
+    setImageBase64(base64List[0] ?? null); // keep single-image alias
+    setCurrentImageIndex(0);
     setParsedData(null);
     setError(null);
   }
@@ -197,26 +215,115 @@ export function ScreenshotIngestionPage() {
   // ── Parse ──────────────────────────────────────────────────────────────────
 
   async function handleParse() {
-    if (!imageBase64 || !screenType || !activeDynasty) return;
+    const queue = imageQueue.length > 0 ? imageQueue : (imageBase64 ? [imageBase64] : []);
+    if (queue.length === 0 || !screenType || !activeDynasty) return;
     if (!usePrefsStore.getState().hasApiKey) {
       setApiKeyMissing(true);
       return;
     }
+
+    const total = queue.length;
     setLoading(true);
     setError(null);
+
+    // Accumulator arrays — merged from all images
+    const mergedGameRows: EditableGameRow[] = [];
+    const mergedPlayerRows: EditablePlayerRow[] = [];
+    const mergedRecruitRows: EditableRecruitRow[] = [];
+    const mergedDepthEntries: EditableDepthEntry[] = [];
+    let lastRecruitMeta = { classRank: '', totalCommits: '' };
+    // For display-only types (depth-chart, recruiting-motivations), store last result
+    let lastParsedResult: ParsedScreenData | null = null;
+
     try {
-      const result = await parseScreenshot(
-        screenType as ScreenType,
-        imageBase64,
-        {
-          teamName: activeDynasty.teamName,
-          season: String(activeSeason?.year ?? ''),
-          gameVersion: activeDynasty.gameVersion,
+      for (let idx = 0; idx < total; idx++) {
+        setCurrentImageIndex(idx);
+        const result = await parseScreenshot(
+          screenType as ScreenType,
+          queue[idx],
+          {
+            teamName: activeDynasty.teamName,
+            season: String(activeSeason?.year ?? ''),
+            gameVersion: activeDynasty.gameVersion,
+          }
+        );
+        if (!result) throw new Error(`Vision API returned no data for image ${idx + 1}`);
+        lastParsedResult = result;
+
+        // Accumulate into merged arrays
+        if (result.screenType === 'schedule' || result.screenType === 'nfl-schedule') {
+          const d = result as ScheduleParsedData | NflScheduleParsedData;
+          mergedGameRows.push(
+            ...(d.games ?? []).map((g) => ({
+              week: String(g.week ?? ''),
+              opponent: g.opponent ?? '',
+              homeAway: g.homeAway ?? 'Home',
+              teamScore: String(g.teamScore ?? ''),
+              opponentScore: String(g.opponentScore ?? ''),
+              gameType: g.gameType ?? 'regular',
+            }))
+          );
+        } else if (result.screenType === 'player-stats' || result.screenType === 'nfl-player-stats') {
+          const d = result as PlayerStatsParsedData | NflPlayerStatsParsedData;
+          const newRows = (d.players ?? []).map((p) => ({
+            name: p.name ?? '',
+            position: p.position ?? '',
+            stats: Object.fromEntries(
+              Object.entries(p.stats ?? {}).map(([k, v]) => [k, String(v)])
+            ),
+          }));
+          mergedPlayerRows.push(...newRows);
+          // Auto-match new rows against roster — append to existing matched IDs
+          const newIds: string[] = [];
+          const newTerms: string[] = [];
+          for (const p of (d.players ?? [])) {
+            const match = findBestPlayerMatch(p.name ?? '', players);
+            newIds.push(match?.player.id ?? '');
+            newTerms.push(match ? `${match.player.firstName} ${match.player.lastName}` : (p.name ?? ''));
+          }
+          setMatchedPlayerIds((prev) => [...prev, ...newIds]);
+          setPlayerSearchTerms((prev) => [...prev, ...newTerms]);
+        } else if (result.screenType === 'recruiting') {
+          const d = result as RecruitingParsedData;
+          lastRecruitMeta = {
+            classRank: String(d.classRank ?? ''),
+            totalCommits: String(d.totalCommits ?? ''),
+          };
+          mergedRecruitRows.push(
+            ...(d.recruits ?? []).map((r) => ({
+              name: r.name ?? '',
+              position: r.position ?? '',
+              stars: String(r.stars ?? ''),
+              state: r.state ?? '',
+              nationalRank: String(r.nationalRank ?? ''),
+            }))
+          );
+        } else if (result.screenType === 'depth-chart' || result.screenType === 'nfl-depth-chart') {
+          const d = result as DepthChartParsedData | NflDepthChartParsedData;
+          mergedDepthEntries.push(
+            ...(d.entries ?? []).map((e) => ({
+              position: e.position ?? '',
+              playerName: e.playerName ?? '',
+              depth: String(e.depth ?? ''),
+            }))
+          );
         }
-      );
-      if (!result) throw new Error('Vision API returned no data');
-      setParsedData(result);
-      initEditableState(result);
+        // recruiting-motivations: lastParsedResult captures the last one for display
+      }
+
+      // Commit all merged state at once
+      if (mergedGameRows.length > 0) setGameRows(mergedGameRows);
+      if (mergedPlayerRows.length > 0) setPlayerRows(mergedPlayerRows);
+      if (mergedRecruitRows.length > 0) {
+        setRecruitRows(mergedRecruitRows);
+        setClassRank(lastRecruitMeta.classRank);
+        setTotalCommits(lastRecruitMeta.totalCommits);
+      }
+      if (mergedDepthEntries.length > 0) setDepthEntries(mergedDepthEntries);
+
+      // Set parsedData to the last result for type dispatch in renderConfirmationForm()
+      setParsedData(lastParsedResult);
+
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to parse screenshot');
     } finally {
@@ -1156,7 +1263,11 @@ export function ScreenshotIngestionPage() {
         {loading && (
           <div className="flex flex-col items-center gap-4 py-16">
             <div className="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
-            <p className="text-gray-400">Parsing screenshot...</p>
+            <p className="text-gray-400">
+              {imageQueue.length > 1
+                ? `Parsing ${currentImageIndex + 1} of ${imageQueue.length}…`
+                : 'Parsing screenshot…'}
+            </p>
           </div>
         )}
 
@@ -1174,7 +1285,7 @@ export function ScreenshotIngestionPage() {
         )}
 
         {/* Step 1 + 2: Screen Type + File Selection (pre-parse) */}
-        {!parsedData && !loading && !apiKeyMissing && (
+        {!parsedData && imagePaths.length === 0 && !loading && !apiKeyMissing && (
           <div className="bg-gray-800 rounded-lg p-6 space-y-6">
             {/* Step 1: Screen Type */}
             <div>
@@ -1205,21 +1316,30 @@ export function ScreenshotIngestionPage() {
                   !screenType ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
               >
-                Choose Image File
+                Choose Image File(s)
               </button>
             </div>
+          </div>
+        )}
 
-            {/* Step 3: Image Preview + Parse */}
-            {imagePath && (
+        {/* Step 3: Image Preview + Parse (shown after file selection, before parse) */}
+        {!parsedData && imagePaths.length > 0 && !loading && !apiKeyMissing && (
+          <div className="bg-gray-800 rounded-lg p-6 space-y-6">
+            {imagePaths.length > 0 && (
               <div>
                 <label className="block text-sm font-semibold text-gray-300 mb-2">
                   3. Preview &amp; Parse
                 </label>
                 <img
-                  src={imagePath}
+                  src={imagePaths[0]}
                   alt="Screenshot preview"
-                  className="w-full max-h-96 object-contain rounded-lg border border-gray-700 mb-4"
+                  className="w-full max-h-96 object-contain rounded-lg border border-gray-700 mb-2"
                 />
+                {imagePaths.length > 1 && (
+                  <p className="text-xs text-gray-400 mb-4">
+                    +{imagePaths.length - 1} more image{imagePaths.length > 2 ? 's' : ''} selected
+                  </p>
+                )}
                 <div className="flex gap-3">
                   <button
                     onClick={goToDashboard}
@@ -1231,7 +1351,9 @@ export function ScreenshotIngestionPage() {
                     onClick={handleParse}
                     className="px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold rounded-lg"
                   >
-                    Parse Screenshot
+                    {imagePaths.length > 1
+                      ? `Parse ${imagePaths.length} Screenshots`
+                      : 'Parse Screenshot'}
                   </button>
                 </div>
               </div>
