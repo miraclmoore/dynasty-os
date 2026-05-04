@@ -45,9 +45,9 @@ export async function getTimelineNodes(dynastyId: string): Promise<TimelineNode[
         finalRanking: season.finalRanking ?? null,
         bowlGame: season.bowlGame ?? null,
         bowlResult: season.bowlResult ?? null,
-        bowlOpponent: (season as any).bowlOpponent ?? null,
+        bowlOpponent: season.bowlOpponent ?? null,
         tagline,
-        keyEvents: (season as any).keyEvents ?? [],
+        keyEvents: season.keyEvents ?? [],
       };
     })
   );
