@@ -18,8 +18,9 @@ export function gradeToPoints(grade: string): number {
 export type HardSellResult = 'Hard Sell' | 'Send the House' | null;
 
 /**
- * Returns Hard Sell recommendation when all 3 grades are present.
- * Returns null if any grade is missing (guard against partial parse).
+ * Returns Hard Sell recommendation when all 3 grades are present and recognized.
+ * Returns null if any grade is missing or unrecognized (guard against partial
+ * or invalid parses — gradeToPoints returns 0 for unknown grade strings).
  */
 export function getHardSellRecommendation(
   grade1: string | null | undefined,
@@ -27,6 +28,12 @@ export function getHardSellRecommendation(
   grade3: string | null | undefined,
 ): HardSellResult {
   if (!grade1 || !grade2 || !grade3) return null;
-  const total = gradeToPoints(grade1) + gradeToPoints(grade2) + gradeToPoints(grade3);
+  const p1 = gradeToPoints(grade1);
+  const p2 = gradeToPoints(grade2);
+  const p3 = gradeToPoints(grade3);
+  // Treat any unrecognized grade (0 points) as missing data to avoid a
+  // spurious 'Send the House' recommendation (0+0+0=0 < 19).
+  if (p1 === 0 || p2 === 0 || p3 === 0) return null;
+  const total = p1 + p2 + p3;
   return total >= 19 ? 'Hard Sell' : 'Send the House';
 }
