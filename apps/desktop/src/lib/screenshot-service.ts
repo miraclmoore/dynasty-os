@@ -231,8 +231,18 @@ export async function parseScreenshot(
       return null;
     }
 
-    // Strip markdown code fences if present (model may wrap JSON in ```json ... ```)
-    const jsonText = rawText.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '');
+    // Strip markdown code fences if present (model may wrap JSON in ```json ... ```).
+    // The trailing replace uses [\s\S]*$ so it also removes any text the model
+    // appends after the closing fence (a known Claude behavior on partial compliance).
+    const jsonText = rawText.trim()
+      .replace(/^```(?:json)?\s*/im, '')
+      .replace(/\s*```[\s\S]*$/i, '');
+
+    // Guard: if the cleaned text doesn't look like JSON, log and bail out early
+    if (!/^[\[{]/.test(jsonText.trim())) {
+      console.warn('[ScreenshotService] Response does not look like JSON:', rawText.slice(0, 200));
+      return null;
+    }
 
     const parsed = JSON.parse(jsonText) as Record<string, unknown>;
 
