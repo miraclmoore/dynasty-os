@@ -29,7 +29,11 @@ export async function updateRival(
 }
 
 export async function deleteRival(id: string): Promise<void> {
-  await db.rivals.delete(id);
+  await db.transaction('rw', [db.rivals, db.keyMoments], async () => {
+    await db.rivals.delete(id);
+    // Cascade: remove all key moments for this rival to prevent orphaned rows
+    await db.keyMoments.where('rivalId').equals(id).delete();
+  });
 }
 
 /**
