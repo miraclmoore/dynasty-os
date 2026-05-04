@@ -47,11 +47,12 @@ export function RivalryTrackerPage() {
 
   // Load key moments whenever rivals change
   useEffect(() => {
+    if (!activeDynasty) return;
     void (async () => {
       const map: Record<string, KeyMoment[]> = {};
       await Promise.all(
         rivals.map(async (r) => {
-          map[r.id] = await getKeyMoments(r.id);
+          map[r.id] = await getKeyMoments(activeDynasty.id, r.id);
         })
       );
       setKeyMomentsMap(map);
@@ -119,14 +120,14 @@ export function RivalryTrackerPage() {
     const year = parseInt(form.year, 10);
     if (!year || !form.description.trim()) return;
     await addKeyMoment(rivalId, activeDynasty.id, { year, description: form.description.trim() });
-    const fresh = await getKeyMoments(rivalId);
+    const fresh = await getKeyMoments(activeDynasty.id, rivalId);
     setKeyMomentsMap((prev) => ({ ...prev, [rivalId]: fresh }));
     setMomentForm(rivalId, { year: '', description: '' });
   };
 
   const handleDeleteMoment = async (rivalId: string, moment: KeyMoment) => {
     await deleteKeyMoment(moment.id);
-    const fresh = await getKeyMoments(rivalId);
+    const fresh = await getKeyMoments(activeDynasty.id, rivalId);
     setKeyMomentsMap((prev) => ({ ...prev, [rivalId]: fresh }));
   };
 

@@ -72,11 +72,14 @@ export type { KeyMoment };
 
 /**
  * Returns key moments for a rival, sorted by year descending (most recent first).
- * Scoped to the rival's dynasty via the [dynastyId+rivalId] compound index — never
- * leaks moments across dynasties.
+ * Scoped via the [dynastyId+rivalId] compound index to prevent cross-dynasty
+ * leakage if rival IDs were ever shortened or reused.
  */
-export async function getKeyMoments(rivalId: string): Promise<KeyMoment[]> {
-  const moments = await db.keyMoments.where('rivalId').equals(rivalId).toArray();
+export async function getKeyMoments(dynastyId: string, rivalId: string): Promise<KeyMoment[]> {
+  const moments = await db.keyMoments
+    .where('[dynastyId+rivalId]')
+    .equals([dynastyId, rivalId])
+    .toArray();
   return moments.sort((a, b) => b.year - a.year);
 }
 
