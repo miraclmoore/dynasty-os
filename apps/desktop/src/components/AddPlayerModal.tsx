@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { SportType, PlayerStatus } from '@dynasty-os/core-types';
 import { getSportConfig } from '@dynasty-os/sport-configs';
 import { usePlayerStore } from '../store/player-store';
+import { DEV_TRAITS, DEV_TRAIT_LABEL, type DevTrait } from '../lib/cfb-categories';
 
 interface AddPlayerModalProps {
   isOpen: boolean;
@@ -24,6 +25,7 @@ export function AddPlayerModal({ isOpen, onClose, dynastyId, sport }: AddPlayerM
   const [classYear, setClassYear] = useState('');
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
+  const [devTrait, setDevTrait] = useState<'' | DevTrait>('');
   const [error, setError] = useState('');
 
   const isValid = firstName.trim() !== '' && lastName.trim() !== '' && position !== '';
@@ -39,6 +41,7 @@ export function AddPlayerModal({ isOpen, onClose, dynastyId, sport }: AddPlayerM
     setClassYear('');
     setHeight('');
     setWeight('');
+    setDevTrait('');
     setError('');
   }
 
@@ -65,6 +68,7 @@ export function AddPlayerModal({ isOpen, onClose, dynastyId, sport }: AddPlayerM
         classYear: classYear || undefined,
         height: height.trim() || undefined,
         weight: weight !== '' ? parseInt(weight, 10) : undefined,
+        devTrait: devTrait === '' ? undefined : devTrait,
       });
       resetForm();
       onClose();
@@ -165,6 +169,25 @@ export function AddPlayerModal({ isOpen, onClose, dynastyId, sport }: AddPlayerM
                 ))}
               </select>
             </div>
+          </div>
+
+          {/* Dev Trait — full width, both sports (DMOD-03) */}
+          <div>
+            <label className="block text-sm text-gray-400 mb-1">
+              Dev Trait <span className="text-gray-600 text-xs">(optional)</span>
+            </label>
+            <select
+              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+              value={devTrait}
+              onChange={(e) => setDevTrait(e.target.value as '' | DevTrait)}
+            >
+              <option value="">— (optional)</option>
+              {DEV_TRAITS.map((t) => (
+                <option key={t} value={t}>
+                  {DEV_TRAIT_LABEL[t]}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Class Year + Recruiting Stars */}
