@@ -104,12 +104,11 @@ export function SetupWizard({ dynastyId, sport, onLogGame }: SetupWizardProps) {
     },
     {
       title: 'Add your roster',
-      description: 'Add players so you can track their season stats and career arcs.',
-      cta: 'Add Player',
+      description: 'Import your roster from a screenshot — or add players one at a time from the Roster page.',
+      cta: 'Import Roster',
       action: () => {
         markStep(1);
-        triggerAutoOpenAddPlayer();
-        nav.goToRoster();
+        nav.goToScreenshotIngestion();
       },
     },
     isCfb

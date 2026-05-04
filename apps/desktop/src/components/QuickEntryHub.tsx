@@ -114,6 +114,7 @@ export function QuickEntryHub({ onLogGame, onEndSeason }: QuickEntryHubProps) {
         </Category>
 
         <Category icon="👥" title="Roster" hasData={hasPlayers}>
+          <ActionPill label="Import Roster" onClick={() => nav.goToScreenshotIngestion()} />
           <ActionPill label="Add Player" onClick={handleAddPlayer} />
           <ActionPill label="Log Stats" onClick={() => nav.goToRoster()} />
         </Category>
