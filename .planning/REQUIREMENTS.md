@@ -18,9 +18,9 @@ Requirements for the Handoff Overhaul milestone. 40 tasks across 10 phases. Sour
 
 ### Security
 
-- [ ] **SEC-01**: No file in `src/` calls `api.anthropic.com` directly — all Anthropic API calls route through the `call_anthropic` Tauri command via `src/lib/ai-bridge.ts`
-- [ ] **SEC-02**: The Anthropic API key is stored in `@tauri-apps/plugin-store` (`dynasty-os.bin`), not in `localStorage` — setting a key is not visible in DevTools → Application → Local Storage
-- [ ] **SEC-03**: All remaining `localStorage.getItem/setItem/removeItem` calls in `src/` are replaced with `await prefs.get/set/delete` from `src/lib/prefs-service.ts`
+- [x] **SEC-01**: No file in `src/` calls `api.anthropic.com` directly — all Anthropic API calls route through the `call_anthropic` Tauri command via `src/lib/ai-bridge.ts`
+- [x] **SEC-02**: The Anthropic API key is stored in `@tauri-apps/plugin-store` (`dynasty-os.bin`), not in `localStorage` — setting a key is not visible in DevTools → Application → Local Storage
+- [x] **SEC-03**: All remaining `localStorage.getItem/setItem/removeItem` calls in `src/` are replaced with `await prefs.get/set/delete` from `src/lib/prefs-service.ts`
 
 ### Data Model
 
@@ -127,9 +127,9 @@ Which phases cover which requirements.
 | SAFE-02 | Phase 19 | Complete |
 | SAFE-03 | Phase 19 | Complete |
 | SAFE-04 | Phase 19 | Complete |
-| SEC-01 | Phase 20 | Pending |
-| SEC-02 | Phase 20 | Pending |
-| SEC-03 | Phase 20 | Pending |
+| SEC-01 | Phase 20 | Complete |
+| SEC-02 | Phase 20 | Complete |
+| SEC-03 | Phase 20 | Complete |
 | DMOD-01 | Phase 21 | Pending |
 | DMOD-02 | Phase 21 | Pending |
 | DMOD-03 | Phase 21 | Pending |
