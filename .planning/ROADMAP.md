@@ -49,7 +49,7 @@ Full details: Phase Details — v2.0 section below.
 ### 🚧 v2.2 Handoff Overhaul (In Progress)
 
 - [x] **Phase 19: Safety & Foundations** - Error boundary, undo type safety, remove zundo dep, fix N+1 leaderboard queries (completed 2026-05-03)
-- [ ] **Phase 20: Security** - Anthropic API via Tauri command, API key to plugin-store, localStorage migration
+- [x] **Phase 20: Security** - Anthropic API via Tauri command, API key to plugin-store, localStorage migration (completed 2026-05-04)
 - [ ] **Phase 21: Data Model** - keyMoments table, Season fields, Player devTrait/dealBreaker, Recruit motivations
 - [ ] **Phase 22: Screenshot Pipeline** - Player stats → DB, depth chart CSV, recruiting-motivations type, multi-image
 - [ ] **Phase 23: Madden Sync Upgrade** - PlayerStats extraction, auto-detect save path
@@ -327,7 +327,7 @@ v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 
 | 17. Data Display and Page Audit | v2.1 | 0/TBD | Not started | - |
 | 18. Error States | v2.1 | 0/TBD | Not started | - |
 | 19. Safety & Foundations | v2.2 | 2/2 | Complete    | 2026-05-04 |
-| 20. Security | v2.2 | 1/3 | In Progress|  |
+| 20. Security | v2.2 | 3/3 | Complete   | 2026-05-04 |
 | 21. Data Model | v2.2 | 0/TBD | Not started | - |
 | 22. Screenshot Pipeline | v2.2 | 0/TBD | Not started | - |
 | 23. Madden Sync Upgrade | v2.2 | 0/TBD | Not started | - |
