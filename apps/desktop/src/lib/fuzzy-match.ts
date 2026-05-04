@@ -33,6 +33,12 @@ export function nameSimilarity(a: string, b: string): number {
   if (na === nb) return 1.0;
   if (na.includes(nb) || nb.includes(na)) return 0.85;
 
+  // Short names (≤2 chars after normalization) have too few unique characters
+  // for set-overlap scoring to be meaningful — the small character sets produce
+  // high scores against unrelated names (e.g., "Bo" vs "Bob" → 1.0). Fall back
+  // to 0 (no match) so these short fragments don't silently match wrong players.
+  if (na.length <= 2 || nb.length <= 2) return 0;
+
   const setA = new Set(na.split(''));
   const setB = new Set(nb.split(''));
   let intersection = 0;
