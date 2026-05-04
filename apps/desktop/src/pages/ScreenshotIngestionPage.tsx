@@ -151,6 +151,7 @@ export function ScreenshotIngestionPage() {
   const [classRank, setClassRank] = useState('');
   const [totalCommits, setTotalCommits] = useState('');
   const [depthEntries, setDepthEntries] = useState<EditableDepthEntry[]>([]);
+  const [depthCsvCopied, setDepthCsvCopied] = useState(false);
 
   const players = usePlayerStore((s) => s.players);
   // matchedPlayerIds[i] = player.id for row i, or '' if unmatched
@@ -393,6 +394,20 @@ export function ScreenshotIngestionPage() {
     } finally {
       setSaving(false);
     }
+  }
+
+  async function handleCopyDepthChartCsv() {
+    const header = 'Position,Player Name,Depth';
+    const rows = depthEntries.map((e) => {
+      // Escape fields that contain commas or quotes (RFC 4180-lite)
+      const escape = (s: string) =>
+        s.includes(',') || s.includes('"') ? `"${s.replace(/"/g, '""')}"` : s;
+      return [escape(e.position), escape(e.playerName), escape(e.depth)].join(',');
+    });
+    const csv = [header, ...rows].join('\n');
+    await navigator.clipboard.writeText(csv);
+    setDepthCsvCopied(true);
+    setTimeout(() => setDepthCsvCopied(false), 2000);
   }
 
   // ── Render helpers ─────────────────────────────────────────────────────────
@@ -859,12 +874,6 @@ export function ScreenshotIngestionPage() {
           {SCREEN_TYPE_LABELS['depth-chart']}
         </h2>
         {renderThumbnail()}
-        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 mb-4">
-          <p className="text-gray-400 text-sm">
-            Review parsed depth chart below. Use this to reference your roster assignments.
-            Depth charts are not saved to the database in V1.
-          </p>
-        </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
             <thead>
@@ -933,6 +942,13 @@ export function ScreenshotIngestionPage() {
             className="px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg"
           >
             Return to Dashboard
+          </button>
+          <button
+            onClick={() => { void handleCopyDepthChartCsv(); }}
+            disabled={depthEntries.length === 0}
+            className="px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold rounded-lg disabled:opacity-50"
+          >
+            {depthCsvCopied ? 'Copied!' : 'Copy as CSV'}
           </button>
         </div>
       </div>
