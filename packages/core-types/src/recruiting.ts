@@ -24,6 +24,12 @@ export interface Recruit {
   stars: number;           // 1-5
   state?: string;
   nationalRank?: number;
+  // v2.2 (Phase 21 DMOD-05): three motivation grades + deal breaker motivation + visit week (1-14)
+  motivation1?: string;
+  motivation2?: string;
+  motivation3?: string;
+  dealBreakerMotivation?: string;
+  visitWeek?: number;
   createdAt: number;
   updatedAt: number;
 }
