@@ -12,6 +12,9 @@ export interface Season {
   playoffResult?: string;
   tagline?: string;
   notes?: string;
+  // v2.2 (Phase 21 DMOD-02): bowl/playoff opponent + free-form key events list (rendered on ProgramTimelinePage)
+  bowlOpponent?: string;
+  keyEvents?: string[];
   createdAt: number;
   updatedAt: number;
 }

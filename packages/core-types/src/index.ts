@@ -17,3 +17,4 @@ export * from './nil-entry';
 export * from './future-game';
 export * from './player-link';
 export * from './ai-cache';
+export * from './key-moment';

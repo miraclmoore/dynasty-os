@@ -18,8 +18,9 @@ import type {
   FutureGame,
   PlayerLink,
   AiCacheEntry,
+  KeyMoment,
 } from '@dynasty-os/core-types';
-import { SCHEMA, SCHEMA_V6, DB_NAME } from './schema';
+import { SCHEMA, SCHEMA_V6, SCHEMA_V7, DB_NAME } from './schema';
 
 export class DynastyDB extends Dexie {
   dynasties!: Table<Dynasty, string>;
@@ -40,6 +41,7 @@ export class DynastyDB extends Dexie {
   futureGames!: Table<FutureGame, string>;
   playerLinks!: Table<PlayerLink, string>;
   aiCache!: Table<AiCacheEntry, string>;
+  keyMoments!: Table<KeyMoment, string>;
 
   constructor() {
     super(DB_NAME);
@@ -47,6 +49,7 @@ export class DynastyDB extends Dexie {
     this.version(4).stores(SCHEMA);
     this.version(5).stores(SCHEMA);
     this.version(6).stores(SCHEMA_V6);
+    this.version(7).stores(SCHEMA_V7);
     this.on('versionchange', () => { this.close(); window.location.reload(); });
   }
 }

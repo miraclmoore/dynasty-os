@@ -18,6 +18,11 @@ export interface Player {
   departureReason?: string;
   birthYear?: number;
   notes?: string;
+  // v2.2 (Phase 21 DMOD-03): cross-sport development trait selector
+  devTrait?: 'normal' | 'star' | 'superstar' | 'xfactor';
+  // v2.2 (Phase 21 DMOD-04): CFB-only deal breaker (one of 14 CFB 26 categories) + redshirt flag
+  dealBreaker?: string;
+  isRedshirt?: boolean;
   createdAt: number;
   updatedAt: number;
 }

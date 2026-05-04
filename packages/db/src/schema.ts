@@ -23,5 +23,13 @@ export const SCHEMA_V6 = {
   aiCache: 'id, dynastyId, cacheKey, contentType, createdAt, [dynastyId+contentType]',
 } as const;
 
+export const SCHEMA_V7 = {
+  ...SCHEMA_V6,
+  // v2.2 (Phase 21 DMOD-01): Rivalry key moments. Indexed by [dynastyId+rivalId]
+  // for the per-rival load query in RivalryTrackerPage. dynastyId on its own
+  // index is needed for dynasty-wide export and cascade-delete on dynasty drop.
+  keyMoments: 'id, dynastyId, rivalId, year, [dynastyId+rivalId]',
+} as const;
+
 export const DB_NAME = 'dynasty-os-db';
-export const DB_VERSION = 6;
+export const DB_VERSION = 7;
