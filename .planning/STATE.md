@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v2.2
 milestone_name: Handoff Overhaul
-status: executing
-stopped_at: Completed 22-03-PLAN.md
-last_updated: "2026-05-04T20:45:37.039Z"
+status: verifying
+stopped_at: Completed 22-05-PLAN.md
+last_updated: "2026-05-04T20:50:40.786Z"
 last_activity: 2026-05-04
 progress:
   total_phases: 19
-  completed_phases: 6
+  completed_phases: 7
   total_plans: 33
-  completed_plans: 31
-  percent: 94
+  completed_plans: 32
+  percent: 97
 ---
 
 # Project State
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 
 Phase: 22 (screenshot-pipeline) — EXECUTING
 Plan: 5 of 5
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-05-04
 
 ## Performance Metrics
@@ -98,6 +98,7 @@ Last activity: 2026-05-04
 | Phase 22 P02 | 2 | 2 tasks | 1 files |
 | Phase 22 P03 | 3 | 1 tasks | 1 files |
 | Phase 22 P04 | 102 | 3 tasks | 3 files |
+| Phase 22 P05 | 1 | 3 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -220,6 +221,9 @@ Recent decisions affecting current work:
 - [Phase 22-02]: PlayerSeason upsert in handleSaveStats: filter().first() check then merge-update or create — prevents duplicate PlayerSeason per player+season without compound index
 - [Phase 22-02]: Combobox 150ms onBlur delay before closing dropdown — ensures onMouseDown on list item fires before blur dismisses the list in WebView
 - [Phase ?]: [Phase 22-03]: navigator.clipboard.writeText used for depth chart CSV export — no Tauri permission required; csv-export.ts skipped (opens disk save dialog)
+- [Phase 22-05]: imageQueue (base64) and imagePaths (paths) as parallel arrays for multi-image ingestion; single-image aliases (imagePath/imageBase64) preserved for thumbnail and existing helpers
+- [Phase 22-05]: State accumulation pattern: mergedGameRows/mergedPlayerRows/mergedRecruitRows/mergedDepthEntries concatenated across parse loop, committed atomically after all images parsed
+- [Phase 22-05]: setMatchedPlayerIds/setPlayerSearchTerms use functional updater (prev => [...prev, ...newIds]) for safe per-iteration appends during async loop
 
 ### Phase 12 Decisions
 
@@ -276,7 +280,7 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-05-04T20:45:37.029Z
+Last session: 2026-05-04T20:50:40.778Z
 Stopped at: Completed 22-03-PLAN.md
 Resume file: None
 

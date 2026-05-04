@@ -51,7 +51,7 @@ Full details: Phase Details — v2.0 section below.
 - [x] **Phase 19: Safety & Foundations** - Error boundary, undo type safety, remove zundo dep, fix N+1 leaderboard queries (completed 2026-05-03)
 - [x] **Phase 20: Security** - Anthropic API via Tauri command, API key to plugin-store, localStorage migration (completed 2026-05-04)
 - [x] **Phase 21: Data Model** - keyMoments table, Season fields, Player devTrait/dealBreaker, Recruit motivations (completed 2026-05-04)
-- [ ] **Phase 22: Screenshot Pipeline** - Player stats → DB, depth chart CSV, recruiting-motivations type, multi-image
+- [x] **Phase 22: Screenshot Pipeline** - Player stats → DB, depth chart CSV, recruiting-motivations type, multi-image (completed 2026-05-04)
 - [ ] **Phase 23: Madden Sync Upgrade** - PlayerStats extraction, auto-detect save path
 - [ ] **Phase 24: Recruiting Tools** - Hard Sell calculator, transfer risk, recruit→roster, draft pick→status
 - [ ] **Phase 25: AI Queue & Features** - Queue processor, explicit blurb, model routing, game narrative trigger
@@ -338,7 +338,7 @@ v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 
 | 19. Safety & Foundations | v2.2 | 2/2 | Complete    | 2026-05-04 |
 | 20. Security | v2.2 | 3/3 | Complete    | 2026-05-04 |
 | 21. Data Model | v2.2 | 4/4 | Complete   | 2026-05-04 |
-| 22. Screenshot Pipeline | v2.2 | 4/5 | In Progress|  |
+| 22. Screenshot Pipeline | v2.2 | 5/5 | Complete   | 2026-05-04 |
 | 23. Madden Sync Upgrade | v2.2 | 0/TBD | Not started | - |
 | 24. Recruiting Tools | v2.2 | 0/TBD | Not started | - |
 | 25. AI Queue & Features | v2.2 | 0/TBD | Not started | - |
