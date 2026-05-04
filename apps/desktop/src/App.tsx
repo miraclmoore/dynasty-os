@@ -3,16 +3,6 @@ import { Toaster } from 'sonner';
 import { useDynastyStore } from './store';
 import { useNavigationStore } from './store/navigation-store';
 import * as prefs from './lib/prefs-service';
-
-// Per Phase 20 D-09: ephemeral one-shot signal for "post-dynasty-creation
-// onboarding pending". Set by LauncherPage after CreateDynastyModal success.
-// Consumed by App on the next activeDynasty change. No persistence needed —
-// this fires within the same session and is meaningless across launches.
-let _onboardingPending = false;
-
-export function signalOnboardingPending(): void {
-  _onboardingPending = true;
-}
 import { migrateKeyMomentsFromPrefsStore } from './lib/key-moments-migration';
 import { TourOverlay } from './components/TourOverlay';
 import { LauncherPage } from './pages/LauncherPage';
@@ -43,6 +33,16 @@ import { RecordBookPage } from './pages/RecordBookPage';
 import { TickerBar } from './components/TickerBar';
 import { CommandPalette } from './components/CommandPalette';
 import { ErrorBoundary } from './components/ErrorBoundary';
+
+// Per Phase 20 D-09: ephemeral one-shot signal for "post-dynasty-creation
+// onboarding pending". Set by LauncherPage after CreateDynastyModal success.
+// Consumed by App on the next activeDynasty change. No persistence needed —
+// this fires within the same session and is meaningless across launches.
+let _onboardingPending = false;
+
+export function signalOnboardingPending(): void {
+  _onboardingPending = true;
+}
 
 function PageContent() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
