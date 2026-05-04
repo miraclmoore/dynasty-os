@@ -137,7 +137,7 @@ export function ScreenshotIngestionPage() {
         screenType as ScreenType,
         imageBase64,
         {
-          teamName: activeDynasty.name,
+          teamName: activeDynasty.teamName,
           season: String(activeSeason?.year ?? ''),
           gameVersion: activeDynasty.gameVersion,
         }
