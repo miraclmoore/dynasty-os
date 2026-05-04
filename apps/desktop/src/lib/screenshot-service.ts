@@ -153,6 +153,23 @@ const SCREEN_TYPE_PROMPTS: Record<ScreenType, string> = {
     'You are parsing a {gameVersion} depth chart screen. Extract each position and its starters/backups: position abbreviation, player name, and depth number (1=starter, 2=backup, etc.). Team context: {teamName} ({season} season). Return ONLY valid JSON matching: {"entries": [{"position": string|null, "playerName": string|null, "depth": number|null}]}. No explanation — JSON only.',
 };
 
+// ── Shape Validation ──────────────────────────────────────────────────────────
+
+/**
+ * Validates that the parsed Claude response contains the expected top-level
+ * array key for the given screen type. Rejects responses that pass TypeScript's
+ * type cast but are structurally wrong (e.g., prompt-injected extra keys or
+ * entirely different JSON shapes).
+ */
+function isValidParsedShape(screenType: ScreenType, obj: Record<string, unknown>): boolean {
+  if (screenType === 'schedule' || screenType === 'nfl-schedule') return Array.isArray(obj.games);
+  if (screenType === 'player-stats' || screenType === 'nfl-player-stats') return Array.isArray(obj.players);
+  if (screenType === 'recruiting') return Array.isArray(obj.recruits);
+  if (screenType === 'depth-chart' || screenType === 'nfl-depth-chart') return Array.isArray(obj.entries);
+  if (screenType === 'recruiting-motivations') return Array.isArray(obj.recruits);
+  return false;
+}
+
 // ── Main Export ───────────────────────────────────────────────────────────────
 
 /**
@@ -218,6 +235,12 @@ export async function parseScreenshot(
     const jsonText = rawText.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '');
 
     const parsed = JSON.parse(jsonText) as Record<string, unknown>;
+
+    // Validate that the required top-level array key is present before returning
+    if (!isValidParsedShape(screenType, parsed)) {
+      console.warn('[ScreenshotService] Claude response failed shape validation:', JSON.stringify(parsed).slice(0, 200));
+      return null;
+    }
 
     // Attach the screenType discriminant and cast to the appropriate shape
     return { ...parsed, screenType } as ParsedScreenData;
