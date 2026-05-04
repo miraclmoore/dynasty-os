@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { Season } from '@dynasty-os/core-types';
+import type { Season, SportType } from '@dynasty-os/core-types';
 import { useSeasonStore } from '../store/season-store';
 
 interface SeasonEndModalProps {
@@ -8,6 +8,7 @@ interface SeasonEndModalProps {
   seasonId: string;
   dynastyId: string;
   currentSeason: Season | null;
+  sport: SportType;
 }
 
 export function SeasonEndModal({
@@ -16,6 +17,7 @@ export function SeasonEndModal({
   seasonId,
   dynastyId,
   currentSeason,
+  sport,
 }: SeasonEndModalProps) {
   const updateSeason = useSeasonStore((s) => s.updateSeason);
   const loading = useSeasonStore((s) => s.loading);
@@ -29,6 +31,8 @@ export function SeasonEndModal({
   );
   const [playoffResult, setPlayoffResult] = useState(currentSeason?.playoffResult ?? '');
   const [notes, setNotes] = useState(currentSeason?.notes ?? '');
+  const [bowlOpponent, setBowlOpponent] = useState(currentSeason?.bowlOpponent ?? '');
+  const [keyEvents, setKeyEvents] = useState((currentSeason?.keyEvents ?? []).join('\n'));
   const [error, setError] = useState('');
 
   async function handleSubmit(e: React.FormEvent) {
@@ -37,6 +41,11 @@ export function SeasonEndModal({
 
     const rankingNum = finalRanking ? parseInt(finalRanking, 10) : undefined;
 
+    const parsedKeyEvents = keyEvents
+      .split('\n')
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
+
     try {
       await updateSeason(seasonId, {
         finalRanking: rankingNum,
@@ -44,6 +53,8 @@ export function SeasonEndModal({
         bowlResult: (bowlGame.trim() && bowlResult) ? bowlResult : undefined,
         playoffResult: playoffResult.trim() || undefined,
         notes: notes.trim() || undefined,
+        bowlOpponent: sport === 'cfb' ? (bowlOpponent.trim() || undefined) : undefined,
+        keyEvents: parsedKeyEvents.length > 0 ? parsedKeyEvents : undefined,
       });
       onClose();
     } catch (err) {
@@ -109,6 +120,22 @@ export function SeasonEndModal({
             />
           </div>
 
+          {/* Bowl / Playoff Opponent — CFB only (DMOD-02) */}
+          {sport === 'cfb' && (
+            <div>
+              <label className="block text-sm text-gray-400 mb-1">
+                Bowl / Playoff Opponent <span className="text-gray-600 text-xs">(optional)</span>
+              </label>
+              <input
+                type="text"
+                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+                placeholder="e.g. Ohio State"
+                value={bowlOpponent}
+                onChange={(e) => setBowlOpponent(e.target.value)}
+              />
+            </div>
+          )}
+
           {/* Bowl Result — only show when bowl game is entered */}
           {bowlGame.trim() && (
             <div>
@@ -137,6 +164,21 @@ export function SeasonEndModal({
               value={playoffResult}
               onChange={(e) => setPlayoffResult(e.target.value)}
             />
+          </div>
+
+          {/* Key Events — both sports (DMOD-02) */}
+          <div>
+            <label className="block text-sm text-gray-400 mb-1">
+              Key Events <span className="text-gray-600 text-xs">(optional)</span>
+            </label>
+            <textarea
+              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500 resize-none"
+              rows={3}
+              placeholder="e.g. Heisman winner, first CFP appearance, program-record wins..."
+              value={keyEvents}
+              onChange={(e) => setKeyEvents(e.target.value)}
+            />
+            <p className="text-xs text-gray-500 mt-1">One per line — shown on program timeline</p>
           </div>
 
           {/* Season Notes */}

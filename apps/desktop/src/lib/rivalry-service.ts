@@ -1,8 +1,6 @@
 import { db } from '@dynasty-os/db';
 import type { Rival } from '@dynasty-os/core-types';
 import { generateId } from './uuid';
-import { getRivalKeyMoments, setRivalKeyMoments } from './prefs-service';
-import type { KeyMoment } from '../store/prefs-store';
 
 export async function createRival(
   input: Omit<Rival, 'id' | 'createdAt' | 'updatedAt'>
@@ -63,22 +61,60 @@ export function calculateSeriesMomentum(
   return totalWeight > 0 ? Math.round((weighted / totalWeight) * 100) / 100 : 0;
 }
 
-// ─── Key Moments (D-08: moved to plugin-store via prefs-service; Phase 21 will move to Dexie) ──
+// ─── Key Moments (DMOD-01: Phase 21 — moved from plugin-store to Dexie) ──
 
+import type { KeyMoment } from '@dynasty-os/core-types';
 export type { KeyMoment };
 
+/**
+ * Returns key moments for a rival, sorted by year descending (most recent first).
+ * Scoped to the rival's dynasty via the [dynastyId+rivalId] compound index — never
+ * leaks moments across dynasties.
+ */
 export async function getKeyMoments(rivalId: string): Promise<KeyMoment[]> {
-  return getRivalKeyMoments(rivalId);
+  const moments = await db.keyMoments.where('rivalId').equals(rivalId).toArray();
+  return moments.sort((a, b) => b.year - a.year);
 }
 
-export async function addKeyMoment(rivalId: string, moment: KeyMoment): Promise<void> {
-  const existing = await getRivalKeyMoments(rivalId);
-  const updated = [...existing, moment].sort((a, b) => b.year - a.year);
-  await setRivalKeyMoments(rivalId, updated);
+/**
+ * Adds a new key moment for a rival. Caller passes dynastyId explicitly so the
+ * row is dynasty-scoped from the start (required for the compound index).
+ */
+export async function addKeyMoment(
+  rivalId: string,
+  dynastyId: string,
+  moment: { year: number; description: string }
+): Promise<KeyMoment> {
+  const now = Date.now();
+  const row: KeyMoment = {
+    id: generateId(),
+    dynastyId,
+    rivalId,
+    year: moment.year,
+    description: moment.description,
+    createdAt: now,
+    updatedAt: now,
+  };
+  await db.keyMoments.add(row);
+  return row;
 }
 
-export async function deleteKeyMoment(rivalId: string, year: number, description: string): Promise<void> {
-  const existing = await getRivalKeyMoments(rivalId);
-  const filtered = existing.filter((m) => !(m.year === year && m.description === description));
-  await setRivalKeyMoments(rivalId, filtered);
+/**
+ * Deletes the matching moment by year + description (multiple moments may share
+ * the same year; description is the discriminator). Falls back to a no-op when
+ * no matching row is found — matches the prior plugin-store behavior.
+ */
+export async function deleteKeyMoment(
+  rivalId: string,
+  year: number,
+  description: string
+): Promise<void> {
+  const matches = await db.keyMoments
+    .where('rivalId')
+    .equals(rivalId)
+    .and((m) => m.year === year && m.description === description)
+    .toArray();
+  if (matches.length > 0) {
+    await db.keyMoments.bulkDelete(matches.map((m) => m.id));
+  }
 }

@@ -466,6 +466,7 @@ export function DashboardPage() {
             seasonId={activeSeason.id}
             dynastyId={activeDynasty.id}
             currentSeason={activeSeason}
+            sport={activeDynasty.sport}
           />
         </>
       )}

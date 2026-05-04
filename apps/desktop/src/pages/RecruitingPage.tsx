@@ -3,6 +3,7 @@ import { useDynastyStore } from '../store';
 import { useSeasonStore } from '../store/season-store';
 import { useRecruitingStore } from '../store/recruiting-store';
 import { useNavigationStore } from '../store/navigation-store';
+import { CFB_DEAL_BREAKER_CATEGORIES } from '../lib/cfb-categories';
 import type { RecruitingClass } from '@dynasty-os/core-types';
 
 const POSITIONS = ['QB', 'RB', 'WR', 'TE', 'OL', 'OT', 'OG', 'C', 'DL', 'DE', 'DT', 'LB', 'CB', 'S', 'K', 'P', 'ATH'];
@@ -23,6 +24,11 @@ interface RecruitFormData {
   stars: number;
   state: string;
   nationalRank: string;
+  motivation1: string;
+  motivation2: string;
+  motivation3: string;
+  dealBreakerMotivation: string;
+  visitWeek: string; // '' or '1'-'14'
 }
 
 const defaultRecruitForm: RecruitFormData = {
@@ -31,6 +37,11 @@ const defaultRecruitForm: RecruitFormData = {
   stars: 3,
   state: '',
   nationalRank: '',
+  motivation1: '',
+  motivation2: '',
+  motivation3: '',
+  dealBreakerMotivation: '',
+  visitWeek: '',
 };
 
 interface ClassFormData {
@@ -169,6 +180,11 @@ export function RecruitingPage() {
       stars: recruitForm.stars,
       state: recruitForm.state.trim() || undefined,
       nationalRank: recruitForm.nationalRank ? parseInt(recruitForm.nationalRank, 10) : undefined,
+      motivation1: recruitForm.motivation1 || undefined,
+      motivation2: recruitForm.motivation2 || undefined,
+      motivation3: recruitForm.motivation3 || undefined,
+      dealBreakerMotivation: recruitForm.dealBreakerMotivation || undefined,
+      visitWeek: recruitForm.visitWeek ? parseInt(recruitForm.visitWeek, 10) : undefined,
     });
 
     setRecruitForm(defaultRecruitForm);
@@ -429,57 +445,122 @@ export function RecruitingPage() {
                   </h3>
 
                   {/* Add recruit form */}
-                  <form onSubmit={handleAddRecruit} className="grid grid-cols-6 gap-2 mb-4">
-                    <input
-                      type="text"
-                      required
-                      value={recruitForm.name}
-                      onChange={(e) => setRecruitForm((f) => ({ ...f, name: e.target.value }))}
-                      placeholder="Recruit Name"
-                      className="col-span-2 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
-                    />
-                    <select
-                      value={recruitForm.position}
-                      onChange={(e) => setRecruitForm((f) => ({ ...f, position: e.target.value }))}
-                      className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
-                    >
-                      {POSITIONS.map((pos) => (
-                        <option key={pos} value={pos}>{pos}</option>
-                      ))}
-                    </select>
-                    <select
-                      value={recruitForm.stars}
-                      onChange={(e) => setRecruitForm((f) => ({ ...f, stars: parseInt(e.target.value, 10) }))}
-                      className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
-                    >
-                      {[5, 4, 3, 2, 1].map((s) => (
-                        <option key={s} value={s}>{s} Star</option>
-                      ))}
-                    </select>
-                    <input
-                      type="text"
-                      value={recruitForm.state}
-                      onChange={(e) => setRecruitForm((f) => ({ ...f, state: e.target.value }))}
-                      placeholder="State"
-                      maxLength={2}
-                      className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
-                    />
-                    <div className="flex gap-2">
+                  <form onSubmit={handleAddRecruit} className="flex flex-col gap-3 mb-4">
+                    <div className="grid grid-cols-6 gap-2">
                       <input
-                        type="number"
-                        min={1}
-                        value={recruitForm.nationalRank}
-                        onChange={(e) => setRecruitForm((f) => ({ ...f, nationalRank: e.target.value }))}
-                        placeholder="Nat'l #"
-                        className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
+                        type="text"
+                        required
+                        value={recruitForm.name}
+                        onChange={(e) => setRecruitForm((f) => ({ ...f, name: e.target.value }))}
+                        placeholder="Recruit Name"
+                        className="col-span-2 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
                       />
-                      <button
-                        type="submit"
-                        disabled={loading}
-                        className="px-3 py-2 bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white text-sm font-semibold rounded-lg transition-colors"
+                      <select
+                        value={recruitForm.position}
+                        onChange={(e) => setRecruitForm((f) => ({ ...f, position: e.target.value }))}
+                        className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
                       >
-                        Add
-                      </button>
+                        {POSITIONS.map((pos) => (
+                          <option key={pos} value={pos}>{pos}</option>
+                        ))}
+                      </select>
+                      <select
+                        value={recruitForm.stars}
+                        onChange={(e) => setRecruitForm((f) => ({ ...f, stars: parseInt(e.target.value, 10) }))}
+                        className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
+                      >
+                        {[5, 4, 3, 2, 1].map((s) => (
+                          <option key={s} value={s}>{s} Star</option>
+                        ))}
+                      </select>
+                      <input
+                        type="text"
+                        value={recruitForm.state}
+                        onChange={(e) => setRecruitForm((f) => ({ ...f, state: e.target.value }))}
+                        placeholder="State"
+                        maxLength={2}
+                        className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
+                      />
+                      <div className="flex gap-2">
+                        <input
+                          type="number"
+                          min={1}
+                          value={recruitForm.nationalRank}
+                          onChange={(e) => setRecruitForm((f) => ({ ...f, nationalRank: e.target.value }))}
+                          placeholder="Nat'l #"
+                          className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
+                        />
+                        <button
+                          type="submit"
+                          disabled={loading}
+                          className="px-3 py-2 bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white text-sm font-semibold rounded-lg transition-colors"
+                        >
+                          Add
+                        </button>
+                      </div>
+                    </div>
+                    {/* Motivations + Visit Week (DMOD-05) */}
+                    <div>
+                      <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Motivations</p>
+                      <div className="grid grid-cols-3 gap-2">
+                        <select
+                          value={recruitForm.motivation1}
+                          onChange={(e) => setRecruitForm((f) => ({ ...f, motivation1: e.target.value }))}
+                          className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
+                          aria-label="Motivation 1"
+                        >
+                          <option value="">Motivation 1 — (optional)</option>
+                          {CFB_DEAL_BREAKER_CATEGORIES.map((c) => (
+                            <option key={c} value={c}>{c}</option>
+                          ))}
+                        </select>
+                        <select
+                          value={recruitForm.motivation2}
+                          onChange={(e) => setRecruitForm((f) => ({ ...f, motivation2: e.target.value }))}
+                          className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
+                          aria-label="Motivation 2"
+                        >
+                          <option value="">Motivation 2 — (optional)</option>
+                          {CFB_DEAL_BREAKER_CATEGORIES.map((c) => (
+                            <option key={c} value={c}>{c}</option>
+                          ))}
+                        </select>
+                        <select
+                          value={recruitForm.motivation3}
+                          onChange={(e) => setRecruitForm((f) => ({ ...f, motivation3: e.target.value }))}
+                          className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
+                          aria-label="Motivation 3"
+                        >
+                          <option value="">Motivation 3 — (optional)</option>
+                          {CFB_DEAL_BREAKER_CATEGORIES.map((c) => (
+                            <option key={c} value={c}>{c}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <select
+                        value={recruitForm.dealBreakerMotivation}
+                        onChange={(e) => setRecruitForm((f) => ({ ...f, dealBreakerMotivation: e.target.value }))}
+                        className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
+                        aria-label="Deal Breaker Motivation"
+                      >
+                        <option value="">Deal Breaker Motivation — (none)</option>
+                        {CFB_DEAL_BREAKER_CATEGORIES.map((c) => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                      </select>
+                      <select
+                        value={recruitForm.visitWeek}
+                        onChange={(e) => setRecruitForm((f) => ({ ...f, visitWeek: e.target.value }))}
+                        className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
+                        aria-label="Official Visit Week"
+                      >
+                        <option value="">Official Visit Week — (not scheduled)</option>
+                        {Array.from({ length: 14 }, (_, i) => i + 1).map((w) => (
+                          <option key={w} value={String(w)}>Week {w}</option>
+                        ))}
+                      </select>
                     </div>
                   </form>
 
@@ -507,7 +588,30 @@ export function RecruitingPage() {
                               key={recruit.id}
                               className="border-b border-gray-700/50 hover:bg-gray-700/30 transition-colors"
                             >
-                              <td className="py-2 pr-4 font-medium text-gray-200">{recruit.name}</td>
+                              <td className="py-2 pr-4 font-medium text-gray-200">
+                                <div className="flex flex-col">
+                                  <span>{recruit.name}</span>
+                                  {(recruit.motivation1 || recruit.motivation2 || recruit.motivation3 || recruit.dealBreakerMotivation || recruit.visitWeek) && (
+                                    <div className="flex items-center gap-1 mt-0.5 flex-wrap">
+                                      {recruit.motivation1 && (
+                                        <span title={`Motivation 1: ${recruit.motivation1}`} className="inline-flex items-center px-2 py-0.5 rounded border text-xs font-semibold text-blue-400 bg-blue-900/30 border-blue-700">M1</span>
+                                      )}
+                                      {recruit.motivation2 && (
+                                        <span title={`Motivation 2: ${recruit.motivation2}`} className="inline-flex items-center px-2 py-0.5 rounded border text-xs font-semibold text-blue-400 bg-blue-900/30 border-blue-700">M2</span>
+                                      )}
+                                      {recruit.motivation3 && (
+                                        <span title={`Motivation 3: ${recruit.motivation3}`} className="inline-flex items-center px-2 py-0.5 rounded border text-xs font-semibold text-blue-400 bg-blue-900/30 border-blue-700">M3</span>
+                                      )}
+                                      {recruit.dealBreakerMotivation && (
+                                        <span title={`Deal Breaker: ${recruit.dealBreakerMotivation}`} className="inline-flex items-center px-2 py-0.5 rounded border text-xs font-semibold bg-orange-900/40 text-orange-300 border-orange-700">DB</span>
+                                      )}
+                                      {recruit.visitWeek != null && (
+                                        <span className="text-xs text-gray-400">Week {recruit.visitWeek}</span>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              </td>
                               <td className="py-2 pr-4 text-gray-400">{recruit.position}</td>
                               <td className="py-2 pr-4">
                                 <span className="text-yellow-400">
