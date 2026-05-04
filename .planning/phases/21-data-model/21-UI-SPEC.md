@@ -1,10 +1,11 @@
 ---
 phase: 21
 slug: data-model
-status: draft
+status: approved
 shadcn_initialized: false
 preset: none
 created: 2026-05-04
+reviewed_at: 2026-05-04
 ---
 
 # Phase 21 — UI Design Contract
