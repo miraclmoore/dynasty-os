@@ -11,13 +11,15 @@ import type {
   PlayerLink,
   KeyMoment,
   Rival,
+  RecruitingClass,
+  Recruit,
 } from '@dynasty-os/core-types';
 import { generateId } from './uuid';
 import { save } from '@tauri-apps/plugin-dialog';
 import { writeTextFile } from '@tauri-apps/plugin-fs';
 
 export interface DynastyExport {
-  version: 1 | 2 | 3;
+  version: 1 | 2 | 3 | 4;
   exportedAt: number;
   dynasty: Dynasty;
   seasons: Season[];
@@ -30,6 +32,8 @@ export interface DynastyExport {
   playerLinks?: PlayerLink[];
   rivals?: Rival[];
   keyMoments?: KeyMoment[];
+  recruitingClasses?: RecruitingClass[];
+  recruits?: Recruit[];
 }
 
 export async function exportDynasty(dynastyId: string): Promise<string> {
@@ -60,9 +64,14 @@ export async function exportDynasty(dynastyId: string): Promise<string> {
   const playerLinks = await db.playerLinks.where('dynastyId').equals(dynastyId).toArray();
   const rivals = await db.rivals.where('dynastyId').equals(dynastyId).toArray();
   const keyMoments = await db.keyMoments.where('dynastyId').equals(dynastyId).toArray();
+  const recruitingClasses = await db.recruitingClasses.where('dynastyId').equals(dynastyId).toArray();
+  const classIds = recruitingClasses.map((c) => c.id);
+  const recruits = classIds.length > 0
+    ? await db.recruits.where('classId').anyOf(classIds).toArray()
+    : [];
 
   const exportData: DynastyExport = {
-    version: 3,
+    version: 4,
     exportedAt: Date.now(),
     dynasty,
     seasons,
@@ -75,6 +84,8 @@ export async function exportDynasty(dynastyId: string): Promise<string> {
     playerLinks,
     rivals,
     keyMoments,
+    recruitingClasses,
+    recruits,
   };
 
   return JSON.stringify(exportData, null, 2);
@@ -109,7 +120,7 @@ export function readFileAsText(file: File): Promise<string> {
 function validateExport(data: unknown): data is DynastyExport {
   if (typeof data !== 'object' || data === null) return false;
   const d = data as Record<string, unknown>;
-  if (d['version'] !== 1 && d['version'] !== 2 && d['version'] !== 3) return false;
+  if (d['version'] !== 1 && d['version'] !== 2 && d['version'] !== 3 && d['version'] !== 4) return false;
   if (typeof d['exportedAt'] !== 'number') return false;
   if (typeof d['dynasty'] !== 'object' || d['dynasty'] === null) return false;
   if (!Array.isArray(d['seasons'])) return false;
@@ -145,7 +156,7 @@ export async function importDynasty(jsonString: string): Promise<Dynasty> {
     // Insert directly with original IDs
     await db.transaction(
       'rw',
-      [db.dynasties, db.seasons, db.games, db.players, db.playerSeasons, db.coachingStaff, db.nilEntries, db.futureGames, db.playerLinks, db.rivals, db.keyMoments],
+      [db.dynasties, db.seasons, db.games, db.players, db.playerSeasons, db.coachingStaff, db.nilEntries, db.futureGames, db.playerLinks, db.rivals, db.keyMoments, db.recruitingClasses, db.recruits],
       async () => {
         await db.dynasties.add(data.dynasty);
         if (data.seasons.length > 0) await db.seasons.bulkAdd(data.seasons);
@@ -158,6 +169,8 @@ export async function importDynasty(jsonString: string): Promise<Dynasty> {
         if (data.playerLinks && data.playerLinks.length > 0) await db.playerLinks.bulkAdd(data.playerLinks);
         if (data.rivals && data.rivals.length > 0) await db.rivals.bulkAdd(data.rivals);
         if (data.keyMoments && data.keyMoments.length > 0) await db.keyMoments.bulkAdd(data.keyMoments);
+        if (data.recruitingClasses && data.recruitingClasses.length > 0) await db.recruitingClasses.bulkAdd(data.recruitingClasses);
+        if (data.recruits && data.recruits.length > 0) await db.recruits.bulkAdd(data.recruits);
       }
     );
     return data.dynasty;
@@ -186,6 +199,10 @@ export async function importDynasty(jsonString: string): Promise<Dynasty> {
   // Map old rival IDs -> new rival IDs
   const rivalIdMap = new Map<string, string>();
   (data.rivals ?? []).forEach((r) => rivalIdMap.set(r.id, generateId()));
+
+  // Map old recruiting class IDs -> new recruiting class IDs
+  const recruitingClassIdMap = new Map<string, string>();
+  (data.recruitingClasses ?? []).forEach((rc) => recruitingClassIdMap.set(rc.id, generateId()));
 
   const newDynasty: Dynasty = {
     ...data.dynasty,
@@ -261,9 +278,23 @@ export async function importDynasty(jsonString: string): Promise<Dynasty> {
     rivalId: rivalIdMap.get(km.rivalId) ?? km.rivalId,
   }));
 
+  const newRecruitingClasses: RecruitingClass[] = (data.recruitingClasses ?? []).map((rc) => ({
+    ...rc,
+    id: recruitingClassIdMap.get(rc.id) ?? generateId(),
+    dynastyId: newDynastyId,
+    seasonId: seasonIdMap.get(rc.seasonId) ?? rc.seasonId,
+  }));
+
+  const newRecruits: Recruit[] = (data.recruits ?? []).map((r) => ({
+    ...r,
+    id: generateId(),
+    dynastyId: newDynastyId,
+    classId: recruitingClassIdMap.get(r.classId) ?? r.classId,
+  }));
+
   await db.transaction(
     'rw',
-    [db.dynasties, db.seasons, db.games, db.players, db.playerSeasons, db.coachingStaff, db.nilEntries, db.futureGames, db.playerLinks, db.rivals, db.keyMoments],
+    [db.dynasties, db.seasons, db.games, db.players, db.playerSeasons, db.coachingStaff, db.nilEntries, db.futureGames, db.playerLinks, db.rivals, db.keyMoments, db.recruitingClasses, db.recruits],
     async () => {
       await db.dynasties.add(newDynasty);
       if (newSeasons.length > 0) await db.seasons.bulkAdd(newSeasons);
@@ -276,6 +307,8 @@ export async function importDynasty(jsonString: string): Promise<Dynasty> {
       if (newPlayerLinks.length > 0) await db.playerLinks.bulkAdd(newPlayerLinks);
       if (newRivals.length > 0) await db.rivals.bulkAdd(newRivals);
       if (newKeyMoments.length > 0) await db.keyMoments.bulkAdd(newKeyMoments);
+      if (newRecruitingClasses.length > 0) await db.recruitingClasses.bulkAdd(newRecruitingClasses);
+      if (newRecruits.length > 0) await db.recruits.bulkAdd(newRecruits);
     }
   );
 
