@@ -17,10 +17,12 @@ import type {
   PlayerStatsParsedData,
   RecruitingParsedData,
   DepthChartParsedData,
+  RecruitingMotivationsParsedData,
   NflScheduleParsedData,
   NflPlayerStatsParsedData,
   NflDepthChartParsedData,
 } from '../lib/screenshot-service';
+import { getHardSellRecommendation } from '../lib/recruiting-calculator';
 import type { GameType, GameResult, HomeAway } from '@dynasty-os/core-types';
 
 // ── Editable row types ────────────────────────────────────────────────────────
@@ -164,7 +166,13 @@ export function ScreenshotIngestionPage() {
   if (!activeDynasty) return null;
 
   const NFL_SCREEN_TYPES: ScreenType[] = ['nfl-schedule', 'nfl-player-stats', 'nfl-depth-chart'];
-  const CFB_SCREEN_TYPES: ScreenType[] = ['schedule', 'player-stats', 'recruiting', 'depth-chart'];
+  const CFB_SCREEN_TYPES: ScreenType[] = [
+    'schedule',
+    'player-stats',
+    'recruiting',
+    'depth-chart',
+    'recruiting-motivations',
+  ];
   const availableScreenTypes = activeDynasty.sport === 'cfb' ? CFB_SCREEN_TYPES : NFL_SCREEN_TYPES;
 
   // ── File Open ──────────────────────────────────────────────────────────────
@@ -272,6 +280,8 @@ export function ScreenshotIngestionPage() {
           depth: String(e.depth ?? ''),
         }))
       );
+    } else if (data.screenType === 'recruiting-motivations') {
+      // Display-only — no editable state needed
     }
   }
 
@@ -955,6 +965,105 @@ export function ScreenshotIngestionPage() {
     );
   }
 
+  function renderRecruitingMotivationsForm() {
+    if (!parsedData || parsedData.screenType !== 'recruiting-motivations') return null;
+    const d = parsedData as RecruitingMotivationsParsedData;
+    // Render the first recruit's motivations (CFB 26 pitch screen is per-prospect)
+    const recruit = (d.recruits ?? [])[0];
+    if (!recruit) return null;
+
+    const recommendation = getHardSellRecommendation(
+      recruit.motivation1Grade,
+      recruit.motivation2Grade,
+      recruit.motivation3Grade,
+    );
+    const isHardSell = recommendation === 'Hard Sell';
+
+    const motivationRows = [
+      { label: recruit.motivation1, grade: recruit.motivation1Grade },
+      { label: recruit.motivation2, grade: recruit.motivation2Grade },
+      { label: recruit.motivation3, grade: recruit.motivation3Grade },
+    ].filter((m) => m.label || m.grade);
+
+    function gradeColor(grade: string | null | undefined): string {
+      if (!grade) return 'text-gray-500';
+      if (grade.startsWith('A')) return 'text-green-400';
+      if (grade.startsWith('B')) return 'text-amber-400';
+      return 'text-red-400';
+    }
+
+    return (
+      <div>
+        <h2 className="text-lg font-semibold text-white mb-2">
+          {SCREEN_TYPE_LABELS['recruiting-motivations']}
+          {recruit.name && (
+            <span className="ml-2 text-base font-normal text-gray-400">— {recruit.name}</span>
+          )}
+        </h2>
+        {renderThumbnail()}
+
+        {/* Inline recommendation banner — only shown when all 3 grades present */}
+        {recommendation && (
+          <div
+            className={`rounded-lg p-4 mb-4 border ${
+              isHardSell
+                ? 'bg-green-900/20 border-green-600/50'
+                : 'bg-amber-900/20 border-amber-600/50'
+            }`}
+          >
+            <p className="text-sm font-semibold text-white">
+              Recommendation:{' '}
+              <span className={isHardSell ? 'text-green-400' : 'text-amber-400'}>
+                {recommendation}
+              </span>
+            </p>
+          </div>
+        )}
+
+        {/* Motivation category table */}
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left">
+            <thead>
+              <tr className="text-gray-400 border-b border-gray-700">
+                <th className="pb-2 pr-4">Motivation</th>
+                <th className="pb-2 pr-4">Grade</th>
+                <th className="pb-2">Deal Breaker</th>
+              </tr>
+            </thead>
+            <tbody>
+              {motivationRows.map((m, i) => (
+                <tr key={i} className="border-b border-gray-800">
+                  <td className="py-2 pr-4 text-white">{m.label ?? '—'}</td>
+                  <td className="py-2 pr-4">
+                    <span className={`font-bold ${gradeColor(m.grade)}`}>
+                      {m.grade ?? '—'}
+                    </span>
+                  </td>
+                  <td className="py-2">
+                    {recruit.dealBreaker === m.label ? (
+                      <span className="text-red-400 font-semibold">Yes</span>
+                    ) : (
+                      <span className="text-gray-500">—</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="flex gap-3 mt-6">
+          <button
+            onClick={goToDashboard}
+            className="px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg"
+          >
+            Done
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   function renderConfirmationForm() {
     if (!parsedData) return null;
     switch (parsedData.screenType) {
@@ -969,6 +1078,8 @@ export function ScreenshotIngestionPage() {
       case 'depth-chart':
       case 'nfl-depth-chart':
         return renderDepthChartForm();
+      case 'recruiting-motivations':
+        return renderRecruitingMotivationsForm();
       default:
         return null;
     }
