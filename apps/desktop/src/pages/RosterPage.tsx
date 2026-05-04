@@ -10,7 +10,7 @@ import { LogPlayerSeasonModal } from '../components/LogPlayerSeasonModal';
 import { getSportConfig } from '@dynasty-os/sport-configs';
 import type { Player, PlayerStatus } from '@dynasty-os/core-types';
 import { exportTableToCsv } from '../lib/csv-export';
-import { AUTO_OPEN_ADD_PLAYER_KEY } from '../components/QuickEntryHub';
+import { consumeAutoOpenAddPlayer } from '../components/QuickEntryHub';
 
 const SPORT_BADGE: Record<string, { label: string; classes: string }> = {
   cfb: { label: 'CFB', classes: 'bg-orange-600 text-orange-100' },
@@ -61,14 +61,7 @@ export function RosterPage() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
   const { players, loading } = usePlayerStore();
 
-  const [addOpen, setAddOpen] = useState(() => {
-    const flag = localStorage.getItem(AUTO_OPEN_ADD_PLAYER_KEY);
-    if (flag === 'true') {
-      localStorage.removeItem(AUTO_OPEN_ADD_PLAYER_KEY);
-      return true;
-    }
-    return false;
-  });
+  const [addOpen, setAddOpen] = useState(() => consumeAutoOpenAddPlayer());
   const [editPlayer, setEditPlayer] = useState<Player | null>(null);
   const [logSeasonPlayer, setLogSeasonPlayer] = useState<Player | null>(null);
 

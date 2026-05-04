@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigationStore } from '../store/navigation-store';
+import { usePrefsStore } from '../store/prefs-store';
+import * as prefs from '../lib/prefs-service';
 
 interface TourOverlayProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
-const STORAGE_KEY = 'dynasty-os-onboarding-v2';
 const SPOTLIGHT_PAD = 8; // px around the highlighted element
 
 interface TourStep {
@@ -147,7 +147,9 @@ export function TourOverlay({ isOpen, onClose }: TourOverlayProps) {
   }, [step, isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const dismiss = useCallback(() => {
-    localStorage.setItem(STORAGE_KEY, 'complete');
+    // Sync store immediately for UI responsiveness, persist async
+    usePrefsStore.getState().setTourComplete(true);
+    void prefs.setTourComplete(true);
     setStep(0);
     setBounds(null);
     // If we're on the roster page, navigate back to dashboard before closing
@@ -316,4 +318,3 @@ export function TourOverlay({ isOpen, onClose }: TourOverlayProps) {
   );
 }
 
-export { STORAGE_KEY as ONBOARDING_STORAGE_KEY };

@@ -4,6 +4,7 @@ import { useDynastyStore } from '../store';
 import { useSeasonStore } from '../store/season-store';
 import { useGameStore } from '../store/game-store';
 import { useNavigationStore } from '../store/navigation-store';
+import { usePrefsStore } from '../store/prefs-store';
 import { DynastySwitcher } from '../components/DynastySwitcher';
 import { SeasonAtGlance } from '../components/SeasonAtGlance';
 import { RecentActivity } from '../components/RecentActivity';
@@ -18,9 +19,8 @@ import { SetupWizard } from '../components/SetupWizard';
 import { CHECKLIST_TASKS, verifyAllTasks } from '../lib/checklist-service';
 import { isAutoExportEnabled, setAutoExportEnabled } from '../lib/auto-export-service';
 import { getTeamLogoUrl } from '../lib/team-logo-service';
+import * as prefs from '../lib/prefs-service';
 import type { GameResult } from '@dynasty-os/core-types';
-
-const CHECKLIST_KEY = (seasonId: string) => `dynasty-os-checklist-${seasonId}`;
 
 const SPORT_BADGE: Record<string, { label: string; classes: string }> = {
   cfb: { label: 'CFB', classes: 'bg-orange-600 text-orange-100' },
@@ -66,16 +66,12 @@ export function DashboardPage() {
   const [autoExport, setAutoExport] = useState(() =>
     activeDynasty ? isAutoExportEnabled(activeDynasty.id) : false
   );
-  const [checklist, setChecklist] = useState<Record<string, boolean>>(() => {
-    if (!activeSeason) return {};
-    try {
-      const stored = localStorage.getItem(CHECKLIST_KEY(activeSeason.id));
-      return stored ? (JSON.parse(stored) as Record<string, boolean>) : {};
-    } catch {
-      return {};
-    }
-  });
   const [verified, setVerified] = useState<Record<string, boolean>>({});
+
+  // Checklist state from PrefsStore (keyed by seasonId, lazy-warmed on season change)
+  const checklist = usePrefsStore((s) =>
+    activeSeason ? (s.checklistState[activeSeason.id] ?? {}) : {}
+  );
 
   useEffect(() => {
     if (!activeDynasty) return;
@@ -88,14 +84,13 @@ export function DashboardPage() {
     useGameStore.getState().loadGames(activeSeason.id);
   }, [activeSeason?.id]);
 
+  // Lazy-warm checklist from plugin-store when activeSeason changes
   useEffect(() => {
     if (!activeSeason) return;
-    try {
-      const stored = localStorage.getItem(CHECKLIST_KEY(activeSeason.id));
-      setChecklist(stored ? (JSON.parse(stored) as Record<string, boolean>) : {});
-    } catch {
-      setChecklist({});
-    }
+    void (async () => {
+      const fresh = await prefs.getChecklistState(activeSeason.id);
+      usePrefsStore.getState().setChecklistState(activeSeason.id, fresh);
+    })();
   }, [activeSeason?.id]);
 
   useEffect(() => {
@@ -115,11 +110,10 @@ export function DashboardPage() {
         duration: 4000,
       });
     }
-    setChecklist((prev) => {
-      const next = { ...prev, [taskId]: !prev[taskId] };
-      localStorage.setItem(CHECKLIST_KEY(activeSeason.id), JSON.stringify(next));
-      return next;
-    });
+    const next = { ...checklist, [taskId]: !checklist[taskId] };
+    // Sync store for immediate UI update, persist async (fire-and-forget)
+    usePrefsStore.getState().setChecklistState(activeSeason.id, next);
+    void prefs.setChecklistState(activeSeason.id, next);
   };
 
   if (!activeDynasty) return null;

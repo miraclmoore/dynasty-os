@@ -7,7 +7,14 @@ import { useCoachingStaffStore } from '../store/coaching-staff-store';
 import { useNilStore } from '../store/nil-store';
 import { useNavigationStore } from '../store/navigation-store';
 
-export const AUTO_OPEN_ADD_PLAYER_KEY = 'dynasty-os-auto-open-add-player';
+// Module-level signal for cross-component auto-open (D-09: ephemeral, no persistence needed)
+let _autoOpenAddPlayer = false;
+export function triggerAutoOpenAddPlayer(): void { _autoOpenAddPlayer = true; }
+export function consumeAutoOpenAddPlayer(): boolean {
+  const was = _autoOpenAddPlayer;
+  _autoOpenAddPlayer = false;
+  return was;
+}
 
 interface QuickEntryHubProps {
   onLogGame: () => void;
@@ -91,7 +98,7 @@ export function QuickEntryHub({ onLogGame, onEndSeason }: QuickEntryHubProps) {
   const nav = useNavigationStore.getState();
 
   const handleAddPlayer = () => {
-    localStorage.setItem(AUTO_OPEN_ADD_PLAYER_KEY, 'true');
+    triggerAutoOpenAddPlayer();
     nav.goToRoster();
   };
 

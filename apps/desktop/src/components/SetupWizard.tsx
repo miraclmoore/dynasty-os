@@ -3,29 +3,12 @@ import { useGameStore } from '../store/game-store';
 import { usePlayerStore } from '../store/player-store';
 import { useRecruitingStore } from '../store/recruiting-store';
 import { useNavigationStore } from '../store/navigation-store';
-import { AUTO_OPEN_ADD_PLAYER_KEY } from './QuickEntryHub';
+import { usePrefsStore } from '../store/prefs-store';
+import type { WizardState } from '../store/prefs-store';
+import * as prefs from '../lib/prefs-service';
+import { triggerAutoOpenAddPlayer } from './QuickEntryHub';
 
-const WIZARD_KEY = (dynastyId: string) => `dynasty-os-setup-wizard-${dynastyId}`;
-
-interface WizardState {
-  dismissed: boolean;
-  completedSteps: number[];
-}
-
-function getWizardState(dynastyId: string): WizardState {
-  try {
-    const stored = localStorage.getItem(WIZARD_KEY(dynastyId));
-    return stored
-      ? (JSON.parse(stored) as WizardState)
-      : { dismissed: false, completedSteps: [] };
-  } catch {
-    return { dismissed: false, completedSteps: [] };
-  }
-}
-
-function saveWizardState(dynastyId: string, state: WizardState) {
-  localStorage.setItem(WIZARD_KEY(dynastyId), JSON.stringify(state));
-}
+const DEFAULT_WIZARD_STATE: WizardState = { dismissed: false, completedSteps: [] };
 
 interface SetupWizardProps {
   dynastyId: string;
@@ -41,9 +24,24 @@ export function SetupWizard({ dynastyId, sport, onLogGame }: SetupWizardProps) {
   const players = usePlayerStore((s) => s.players);
   const classes = useRecruitingStore((s) => s.classes);
 
-  const [wizardState, setWizardState] = useState<WizardState>(() =>
-    getWizardState(dynastyId)
-  );
+  // Read wizard state from PrefsStore (populated lazily on dynastyId change)
+  const wizardState = usePrefsStore((s) => s.setupWizardState[dynastyId] ?? DEFAULT_WIZARD_STATE);
+
+  // Lazy-warm wizard state from plugin-store on dynastyId change
+  useEffect(() => {
+    if (!dynastyId) return;
+    void (async () => {
+      const fresh = await prefs.getSetupWizardState(dynastyId);
+      if (fresh) usePrefsStore.getState().setSetupWizardState(dynastyId, fresh);
+    })();
+  }, [dynastyId]);
+
+  // Helper: update wizard state in PrefsStore + persist to plugin-store
+  function updateWizardState(updates: Partial<WizardState>) {
+    const next = { ...wizardState, ...updates };
+    usePrefsStore.getState().setSetupWizardState(dynastyId, next);
+    void prefs.setSetupWizardState(dynastyId, next);
+  }
 
   // Auto-complete steps if the relevant data already exists
   useEffect(() => {
@@ -65,8 +63,7 @@ export function SetupWizard({ dynastyId, sport, onLogGame }: SetupWizardProps) {
     }
 
     if (changed) {
-      saveWizardState(dynastyId, next);
-      setWizardState(next);
+      updateWizardState(next);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [games.length, players.length, classes.length]);
@@ -83,8 +80,7 @@ export function SetupWizard({ dynastyId, sport, onLogGame }: SetupWizardProps) {
         index,
       ],
     };
-    saveWizardState(dynastyId, next);
-    setWizardState(next);
+    updateWizardState(next);
   }
 
   function handleSkip() {
@@ -92,9 +88,7 @@ export function SetupWizard({ dynastyId, sport, onLogGame }: SetupWizardProps) {
   }
 
   function handleDismiss() {
-    const next: WizardState = { dismissed: true, completedSteps: wizardState.completedSteps };
-    saveWizardState(dynastyId, next);
-    setWizardState(next);
+    updateWizardState({ dismissed: true });
   }
 
   const steps = [
@@ -114,7 +108,7 @@ export function SetupWizard({ dynastyId, sport, onLogGame }: SetupWizardProps) {
       cta: 'Add Player',
       action: () => {
         markStep(1);
-        localStorage.setItem(AUTO_OPEN_ADD_PLAYER_KEY, 'true');
+        triggerAutoOpenAddPlayer();
         nav.goToRoster();
       },
     },

@@ -6,7 +6,7 @@ export interface KeyMoment {
 }
 
 export interface WizardState {
-  step: number;
+  dismissed: boolean;
   completedSteps: number[];
 }
 

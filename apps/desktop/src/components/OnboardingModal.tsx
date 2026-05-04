@@ -1,4 +1,6 @@
 import React, { useRef, useState } from 'react';
+import { usePrefsStore } from '../store/prefs-store';
+import * as prefs from '../lib/prefs-service';
 
 interface OnboardingModalProps {
   isOpen: boolean;
@@ -68,8 +70,6 @@ const STEPS = [
   },
 ];
 
-const STORAGE_KEY = 'dynasty-os-onboarding-v1';
-
 export function OnboardingModal({ isOpen, onClose }: OnboardingModalProps) {
   const [step, setStep] = useState(0);
   const dismissedRef = useRef(false);
@@ -80,14 +80,16 @@ export function OnboardingModal({ isOpen, onClose }: OnboardingModalProps) {
   const isLast = step === STEPS.length - 1;
 
   const finish = () => {
-    localStorage.setItem(STORAGE_KEY, 'complete');
+    usePrefsStore.getState().setOnboardingComplete(true);
+    void prefs.setOnboardingComplete(true);
     dismissedRef.current = true;
     setStep(0);
     onClose();
   };
 
   const skip = () => {
-    localStorage.setItem(STORAGE_KEY, 'complete');
+    usePrefsStore.getState().setOnboardingComplete(true);
+    void prefs.setOnboardingComplete(true);
     dismissedRef.current = true;
     setStep(0);
     onClose();
@@ -172,4 +174,3 @@ export function OnboardingModal({ isOpen, onClose }: OnboardingModalProps) {
   );
 }
 
-export { STORAGE_KEY as ONBOARDING_STORAGE_KEY };
