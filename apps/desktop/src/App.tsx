@@ -2,6 +2,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Toaster } from 'sonner';
 import { useDynastyStore } from './store';
 import { useNavigationStore } from './store/navigation-store';
+import * as prefs from './lib/prefs-service';
+
+// Per Phase 20 D-09: ephemeral one-shot signal for "post-dynasty-creation
+// onboarding pending". Set by LauncherPage after CreateDynastyModal success.
+// Consumed by App on the next activeDynasty change. No persistence needed —
+// this fires within the same session and is meaningless across launches.
+let _onboardingPending = false;
+
+export function signalOnboardingPending(): void {
+  _onboardingPending = true;
+}
 import { TourOverlay } from './components/TourOverlay';
 import { LauncherPage } from './pages/LauncherPage';
 import { DashboardPage } from './pages/DashboardPage';
@@ -97,6 +108,16 @@ function App() {
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
 
   useEffect(() => {
+    // D-01: Conditionally migrate the legacy API key from localStorage to plugin-store.
+    // migrateApiKey() checks for the legacy key internally and is a no-op when it's absent.
+    // Runs at most once per existing user; new users have nothing to migrate.
+    void prefs.migrateApiKey();
+    // D-06: Eagerly load all preferences from plugin-store into PrefsStore so
+    // sync getters (usePrefsStore.getState()) work for downstream code.
+    void prefs.loadAll();
+  }, []);
+
+  useEffect(() => {
     // Tauri WebView cold-launch fix: force focus into document body
     // so keydown listeners receive events on first launch without clicking
     // (STATE.md decision: "Ctrl+K autofocus fix")
@@ -119,10 +140,8 @@ function App() {
   // Auto-open tour for newly created dynasties
   useEffect(() => {
     if (!activeDynasty) return;
-    // Check if this is a fresh dynasty creation by looking for the pending flag
-    const pendingKey = 'dynasty-os-onboarding-pending';
-    if (localStorage.getItem(pendingKey) === 'true') {
-      localStorage.removeItem(pendingKey);
+    if (_onboardingPending) {
+      _onboardingPending = false;
       setOnboardingOpen(true);
     }
   }, [activeDynasty?.id]);
