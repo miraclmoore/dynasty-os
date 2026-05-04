@@ -336,67 +336,6 @@ export function ScreenshotIngestionPage() {
     }
   }
 
-  function initEditableState(data: ParsedScreenData) {
-    if (data.screenType === 'schedule' || data.screenType === 'nfl-schedule') {
-      const d = data as ScheduleParsedData | NflScheduleParsedData;
-      setGameRows(
-        (d.games ?? []).map((g) => ({
-          week: String(g.week ?? ''),
-          opponent: g.opponent ?? '',
-          homeAway: g.homeAway ?? 'Home',
-          teamScore: String(g.teamScore ?? ''),
-          opponentScore: String(g.opponentScore ?? ''),
-          gameType: g.gameType ?? 'regular',
-        }))
-      );
-    } else if (data.screenType === 'player-stats' || data.screenType === 'nfl-player-stats') {
-      const d = data as PlayerStatsParsedData | NflPlayerStatsParsedData;
-      setPlayerRows(
-        (d.players ?? []).map((p) => ({
-          name: p.name ?? '',
-          position: p.position ?? '',
-          stats: Object.fromEntries(
-            Object.entries(p.stats ?? {}).map(([k, v]) => [k, String(v)])
-          ),
-        }))
-      );
-      // Auto-match each parsed player name against the roster
-      const ids: string[] = [];
-      const terms: string[] = [];
-      for (const p of (d.players ?? [])) {
-        const match = findBestPlayerMatch(p.name ?? '', players);
-        ids.push(match?.player.id ?? '');
-        terms.push(match ? `${match.player.firstName} ${match.player.lastName}` : (p.name ?? ''));
-      }
-      setMatchedPlayerIds(ids);
-      setPlayerSearchTerms(terms);
-    } else if (data.screenType === 'recruiting') {
-      const d = data as RecruitingParsedData;
-      setClassRank(String(d.classRank ?? ''));
-      setTotalCommits(String(d.totalCommits ?? ''));
-      setRecruitRows(
-        (d.recruits ?? []).map((r) => ({
-          name: r.name ?? '',
-          position: r.position ?? '',
-          stars: String(r.stars ?? ''),
-          state: r.state ?? '',
-          nationalRank: String(r.nationalRank ?? ''),
-        }))
-      );
-    } else if (data.screenType === 'depth-chart' || data.screenType === 'nfl-depth-chart') {
-      const d = data as DepthChartParsedData | NflDepthChartParsedData;
-      setDepthEntries(
-        (d.entries ?? []).map((e) => ({
-          position: e.position ?? '',
-          playerName: e.playerName ?? '',
-          depth: String(e.depth ?? ''),
-        }))
-      );
-    } else if (data.screenType === 'recruiting-motivations') {
-      // Display-only — no editable state needed
-    }
-  }
-
   // ── Save handlers ──────────────────────────────────────────────────────────
 
   async function handleSaveSchedule() {
