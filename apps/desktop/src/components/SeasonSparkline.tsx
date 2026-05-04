@@ -47,7 +47,7 @@ export function SeasonSparkline({ dynastyId, sport }: SeasonSparklineProps) {
       .catch(() => {});
   }, [dynastyId]);
 
-  if (chartData.length === 0) return null;
+  if (chartData.length < 2) return null;
 
   const color = BAR_COLORS[sport] ?? '#6366f1';
 
