@@ -210,6 +210,8 @@ export function ScreenshotIngestionPage() {
     setCurrentImageIndex(0);
     setParsedData(null);
     setError(null);
+    setMatchedPlayerIds([]);
+    setPlayerSearchTerms([]);
   }
 
   // ── Parse ──────────────────────────────────────────────────────────────────
@@ -231,6 +233,9 @@ export function ScreenshotIngestionPage() {
     const mergedPlayerRows: EditablePlayerRow[] = [];
     const mergedRecruitRows: EditableRecruitRow[] = [];
     const mergedDepthEntries: EditableDepthEntry[] = [];
+    // Local accumulators for player match state (avoids stale-append via functional updaters)
+    const allMatchedIds: string[] = [];
+    const allSearchTerms: string[] = [];
     let lastRecruitMeta = { classRank: '', totalCommits: '' };
     // For display-only types (depth-chart, recruiting-motivations), store last result
     let lastParsedResult: ParsedScreenData | null = null;
@@ -273,16 +278,12 @@ export function ScreenshotIngestionPage() {
             ),
           }));
           mergedPlayerRows.push(...newRows);
-          // Auto-match new rows against roster — append to existing matched IDs
-          const newIds: string[] = [];
-          const newTerms: string[] = [];
+          // Auto-match new rows against roster — collect into local arrays set after loop
           for (const p of (d.players ?? [])) {
             const match = findBestPlayerMatch(p.name ?? '', players);
-            newIds.push(match?.player.id ?? '');
-            newTerms.push(match ? `${match.player.firstName} ${match.player.lastName}` : (p.name ?? ''));
+            allMatchedIds.push(match?.player.id ?? '');
+            allSearchTerms.push(match ? `${match.player.firstName} ${match.player.lastName}` : (p.name ?? ''));
           }
-          setMatchedPlayerIds((prev) => [...prev, ...newIds]);
-          setPlayerSearchTerms((prev) => [...prev, ...newTerms]);
         } else if (result.screenType === 'recruiting') {
           const d = result as RecruitingParsedData;
           lastRecruitMeta = {
@@ -313,7 +314,11 @@ export function ScreenshotIngestionPage() {
 
       // Commit all merged state at once
       if (mergedGameRows.length > 0) setGameRows(mergedGameRows);
-      if (mergedPlayerRows.length > 0) setPlayerRows(mergedPlayerRows);
+      if (mergedPlayerRows.length > 0) {
+        setPlayerRows(mergedPlayerRows);
+        setMatchedPlayerIds(allMatchedIds);
+        setPlayerSearchTerms(allSearchTerms);
+      }
       if (mergedRecruitRows.length > 0) {
         setRecruitRows(mergedRecruitRows);
         setClassRank(lastRecruitMeta.classRank);
