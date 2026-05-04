@@ -1,6 +1,13 @@
 import type { Player, PlayerSeason } from '@dynasty-os/core-types';
 import { computeCareerStats, computeCareerAwards, computeSeasonCount } from './career-stats';
 import { getAiCache, setAiCache } from './ai-cache-service';
+import { callAnthropic } from './ai-bridge';
+import { usePrefsStore } from '../store/prefs-store';
+
+// Re-exports for callsite compatibility (D-02). Consumers (PlayerProfilePage,
+// SeasonRecapPage, ScreenshotIngestionPage) currently import getApiKey/setApiKey
+// from this file; the actual implementation now lives in prefs-service.
+export { getApiKey, setApiKey, clearApiKey } from './prefs-service';
 
 export interface LegacyCardData {
   player: Player;
@@ -8,34 +15,6 @@ export interface LegacyCardData {
   careerAwards: string[];
   seasonCount: number;
   blurb?: string; // AI-generated, may be absent
-}
-
-const LOCAL_STORAGE_KEY = 'dynasty-os-anthropic-api-key';
-
-// ── API Key Management ──────────────────────────────────────────────────────
-
-export function getApiKey(): string | null {
-  try {
-    return localStorage.getItem(LOCAL_STORAGE_KEY);
-  } catch {
-    return null;
-  }
-}
-
-export function setApiKey(key: string): void {
-  try {
-    localStorage.setItem(LOCAL_STORAGE_KEY, key);
-  } catch {
-    // Ignore storage errors
-  }
-}
-
-export function clearApiKey(): void {
-  try {
-    localStorage.removeItem(LOCAL_STORAGE_KEY);
-  } catch {
-    // Ignore storage errors
-  }
 }
 
 // ── Blurb Cache Helpers ──────────────────────────────────────────────────────
@@ -85,8 +64,7 @@ export async function generateLegacyBlurb(
   cardData: LegacyCardData,
   teamName: string
 ): Promise<string | null> {
-  const apiKey = getApiKey();
-  if (!apiKey) {
+  if (!usePrefsStore.getState().hasApiKey) {
     return null;
   }
 
@@ -116,34 +94,23 @@ export async function generateLegacyBlurb(
     `${awardsText}\n` +
     `${departureText}`.trim();
 
+  const systemPrompt =
+    'You are a college football Hall of Fame ceremony announcer. Write a 2-3 sentence Hall of Fame induction blurb for a departing player. Be specific about their stats. Be dramatic but not corny. No emojis.';
+
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 200,
-        system:
-          'You are a college football Hall of Fame ceremony announcer. Write a 2-3 sentence Hall of Fame induction blurb for a departing player. Be specific about their stats. Be dramatic but not corny. No emojis.',
-        messages: [
-          {
-            role: 'user',
-            content: userMessage,
-          },
-        ],
-      }),
+    const data = await callAnthropic({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 200,
+      system: systemPrompt,
+      messages: [
+        {
+          role: 'user',
+          content: userMessage,
+        },
+      ],
     });
 
-    if (!response.ok) {
-      console.warn(`[LegacyCard] Claude API returned ${response.status}: ${response.statusText}`);
-      return null;
-    }
-
-    const data = await response.json();
+    if (!data) return null;
     const text: string | undefined = data?.content?.[0]?.text;
     if (!text) {
       console.warn('[LegacyCard] Claude API response missing text content');

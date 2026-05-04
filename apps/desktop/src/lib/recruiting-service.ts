@@ -1,7 +1,8 @@
 import { db } from '@dynasty-os/db';
 import type { RecruitingClass, Recruit } from '@dynasty-os/core-types';
 import { generateId } from './uuid';
-import { getApiKey } from './legacy-card-service';
+import { usePrefsStore } from '../store/prefs-store';
+import { callAnthropic } from './ai-bridge';
 
 // ── Recruiting Class CRUD ─────────────────────────────────────────────────────
 
@@ -94,8 +95,7 @@ export async function generateClassGrade(classId: string): Promise<GradeResult |
 
     const recruits = await getRecruitsByClass(classId);
 
-    const apiKey = getApiKey();
-    if (!apiKey) {
+    if (!usePrefsStore.getState().hasApiKey) {
       console.warn('[Recruiting] No API key configured');
       return null;
     }
@@ -127,34 +127,19 @@ export async function generateClassGrade(classId: string): Promise<GradeResult |
       `Position Groups Recruited: ${positions.join(', ') || 'None recorded'}\n` +
       `Top Recruits:\n${topRecruitsText || 'None recorded'}`;
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 300,
-        system:
-          'You are a college football recruiting analyst. Evaluate this recruiting class and provide a letter grade and brief analysis. Respond with exactly this format:\nGRADE: [A+/A/A-/B+/B/B-/C+/C/C-/D+/D/D-/F]\nANALYSIS: [2-3 sentences analyzing the class strengths, weaknesses, and position needs addressed]',
-        messages: [
-          {
-            role: 'user',
-            content: userMessage,
-          },
-        ],
-      }),
+    const data = await callAnthropic({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 300,
+      system:
+        'You are a college football recruiting analyst. Evaluate this recruiting class and provide a letter grade and brief analysis. Respond with exactly this format:\nGRADE: [A+/A/A-/B+/B/B-/C+/C/C-/D+/D/D-/F]\nANALYSIS: [2-3 sentences analyzing the class strengths, weaknesses, and position needs addressed]',
+      messages: [
+        {
+          role: 'user',
+          content: userMessage,
+        },
+      ],
     });
-
-    if (!response.ok) {
-      console.warn(`[Recruiting] Claude API returned ${response.status}: ${response.statusText}`);
-      return null;
-    }
-
-    const data = await response.json();
+    if (!data) return null;
     const text: string | undefined = data?.content?.[0]?.text;
     if (!text) {
       console.warn('[Recruiting] Claude API response missing text content');
