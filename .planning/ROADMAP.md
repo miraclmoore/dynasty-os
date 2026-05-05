@@ -6,7 +6,7 @@
 - 🚧 **v2.0 The Living Dynasty** — Phases 10–13 (in progress)
 - 🚧 **v2.1 UX/UI Polish** — Phases 14–18 (in progress)
 - 🚧 **v2.2 Handoff Overhaul** — Phases 19–28 (in progress)
-- 📋 **v3.0 Companion & Platform** — Phases 29+ (planned)
+- 📋 **v3.0 Companion & Platform** — Phases 29–31 (planned)
 
 ## Phases
 
@@ -332,12 +332,42 @@ Plans:
 **Plans**: TBD
 **UI hint**: yes
 
+### Phase 30: Dashboard Widgets
+**Goal**: The dashboard right column is fully utilized with sport-aware widgets that surface the most-checked dynasty data at a glance — eliminating the need to navigate to separate pages for routine checks.
+**Depends on**: Phase 22 (screenshot pipeline stable), Phase 17 (dashboard layout finalized)
+**Motivation**: Research and user feedback show the right column below the Season Checklist is blank real estate. CFB and Madden players have different top-of-mind data; the widgets should adapt by sport. Regression monitoring data is already in the DB — it just needs to be surfaced.
+**Widgets by sport**:
+  - **CFB:** Recruiting Snapshot (current class commits, avg stars, positions needed) + Top Performers (top 3 players by key stat this season)
+  - **Madden:** Injury Report (active injuries with weeks-out and severity) + Top Performers (same as CFB)
+  - **Both:** Regression Watch — roster players whose overallRating dropped season-over-season, flagged inline in the Top Performers or as a standalone alert row
+**Injury detail prerequisite**: Player `status: 'injured'` currently has no detail. Add `injuryWeeksOut` and `injurySeverity` fields to the Player model so Injury Report has data to display. Log via EditPlayerModal.
+**Success Criteria** (what must be TRUE):
+  1. The dashboard right column shows two populated widgets for both CFB and Madden dynasties; no blank space below the Season Checklist when data exists
+  2. CFB widget: Recruiting Snapshot shows commit count, average stars, and top position need for the active recruiting class; Top Performers shows top 3 players with their leading stat
+  3. Madden widget: Injury Report lists all players with `status: 'injured'` including weeks-out and severity; Top Performers shows top 3 players with their leading stat
+  4. Regression Watch flags any player whose overallRating declined more than 2 points season-over-season with a visual indicator on the roster or in the widget
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 31: Award Tracking
+**Goal**: Player awards and honors are tracked per season and surfaced across the app — enriching player profiles, the Legends page, and the Trophy Room with the kind of individual recognition that makes dynasty stories feel real.
+**Depends on**: Phase 30 (dashboard stable before layering more player-profile data)
+**Motivation**: No award data is stored anywhere today. Heisman candidates, All-Americans, conference honors, and coach of the year are the milestones that define legendary seasons — but they're invisible in the app. Community research shows award tracking is one of the most-requested features in dynasty tools. It also unlocks richer Legends cards and more meaningful Trophy Room entries.
+**Schema addition**: New `awards` table — `{ id, dynastyId, playerId, seasonId, awardType, awardName, year }`. `awardType` enum: `'heisman' | 'all-american' | 'conference-player' | 'coach-of-year' | 'other'`.
+**Success Criteria** (what must be TRUE):
+  1. Awards can be logged per player per season from the PlayerProfilePage or RosterPage — at minimum: award name, type, and year
+  2. PlayerProfilePage shows a player's full award history in their career section
+  3. LegendsPage cards display award badges for departed players who earned honors during their career
+  4. TrophyRoomPage includes an Awards section listing all dynasty-wide individual honors by season
+**Plans**: TBD
+**UI hint**: yes
+
 ---
 
 ## Progress
 
 **Execution Order:**
-v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 phases execute 14 → 15 → 16 → 17 → 18. v2.2 phases execute 19 → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28. v3.0 phases execute 29+.
+v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 phases execute 14 → 15 → 16 → 17 → 18. v2.2 phases execute 19 → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28. v3.0 phases execute 29 → 30 → 31.
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -370,3 +400,5 @@ v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 
 | 27. Navigation & Routing | v2.2 | 0/TBD | Not started | - |
 | 28. Polish & Cleanup | v2.2 | 0/TBD | Not started | - |
 | 29. Companion Upload App | v3.0 | 0/TBD | Not started | - |
+| 30. Dashboard Widgets | v3.0 | 0/TBD | Not started | - |
+| 31. Award Tracking | v3.0 | 0/TBD | Not started | - |
