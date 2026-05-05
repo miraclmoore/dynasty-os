@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDynastyStore } from '../store';
+import { useNavigationStore } from '../store/navigation-store';
 import {
   buildBracket,
   pickWinner,
@@ -32,6 +33,7 @@ export function PlayoffSimulatorPage() {
 
 // Separate component so hooks run unconditionally after the guard
 function PlayoffSimulatorContent({ dynastyName }: { dynastyName: string }) {
+  const goToDashboard = useNavigationStore((s) => s.goToDashboard);
   const [bracketSize, setBracketSize] = useState<BracketSize>(12);
   const [teamInputs, setTeamInputs] = useState<string[]>(defaultTeamInputs(12));
   const [bracket, setBracket] = useState<Bracket | null>(null);
@@ -71,10 +73,21 @@ function PlayoffSimulatorContent({ dynastyName }: { dynastyName: string }) {
   return (
     <div className="min-h-screen bg-gray-950 text-white p-6">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white">Playoff Simulator</h1>
-        <p className="text-gray-400 text-sm mt-1">{dynastyName} — CFB Playoff Bracket</p>
-      </div>
+      <header className="border-b border-gray-800 -mx-6 -mt-6 px-6 py-4 mb-6">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={goToDashboard}
+            className="text-gray-400 hover:text-white transition-colors"
+            aria-label="Back to dashboard"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <h1 className="text-xl font-bold tracking-tight">Playoff Simulator</h1>
+          <span className="text-sm text-gray-400">{dynastyName}</span>
+        </div>
+      </header>
 
       {!bracket ? (
         <SetupPhase
