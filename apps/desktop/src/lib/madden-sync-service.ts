@@ -221,6 +221,26 @@ export async function extractSaveData(filePath: string): Promise<ExtractResult> 
 // ── Package version check ─────────────────────────────────────────────────────
 
 /**
+ * Compare two semver strings (strips leading 'v' prefix) and return true if
+ * `latest` is strictly newer than `installed`. Falls back to string inequality
+ * if either value is not parseable as semver.
+ */
+function isNewerVersion(installed: string, latest: string): boolean {
+  const strip = (v: string) => v.replace(/^v/, '');
+  const a = strip(installed).split('.').map(Number);
+  const b = strip(latest).split('.').map(Number);
+  // If either has a non-numeric segment, fall back to string comparison
+  if (a.some(isNaN) || b.some(isNaN)) return strip(installed) !== strip(latest);
+  for (let i = 0; i < Math.max(a.length, b.length); i++) {
+    const av = a[i] ?? 0;
+    const bv = b[i] ?? 0;
+    if (bv > av) return true;
+    if (bv < av) return false;
+  }
+  return false; // equal versions
+}
+
+/**
  * Returns the installed and latest npm versions of madden-franchise.
  * Never throws.
  */
@@ -239,7 +259,7 @@ export async function checkMaddenPackageVersion(): Promise<PackageVersionInfo> {
     }
     const data = await res.json() as { version: string };
     const latest = data.version;
-    return { installed, latest, updateAvailable: installed !== latest };
+    return { installed, latest, updateAvailable: isNewerVersion(installed, latest) };
   } catch {
     return { installed: null, latest: null, updateAvailable: false, error: 'Version check failed' };
   }
