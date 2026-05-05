@@ -252,15 +252,23 @@ function getInstalledVersion() {
 
 // ── Update subcommand ─────────────────────────────────────────────────────────
 
+// NOTE: The `update` subcommand is only supported in development mode.
+// In a packaged macOS .app bundle, __dirname resolves inside the read-only
+// app bundle and `npm install` will fail with a permissions or ENOENT error.
+// For production use, update the madden-franchise dependency at build time
+// and ship a new sidecar binary. The error surface here intentionally includes
+// the "dev only" context so the UI can display an actionable message.
 function updatePackage() {
   try {
     const { execSync } = require('child_process');
+    // DEV ONLY: This writes to __dirname which is read-only in a packaged app.
+    // If running inside an .app bundle this will throw EACCES or ENOENT.
     execSync('npm install madden-franchise@latest', { cwd: __dirname, stdio: 'pipe' });
     const pkgPath = path.join(__dirname, 'node_modules', 'madden-franchise', 'package.json');
     const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
     respond({ success: true, version: pkg.version });
   } catch (err) {
-    fail('update_error', `Failed to update madden-franchise: ${err.message}`);
+    fail('update_error', `Failed to update madden-franchise (note: this command only works in development, not in a packaged app): ${err.message}`);
   }
 }
 
