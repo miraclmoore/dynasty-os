@@ -389,7 +389,10 @@ export function MaddenSyncPage() {
             <button
               onClick={() => {
                 setWatcherPrompt(false);
-                handleExtract();
+                // Only allow re-sync from a terminal state to prevent concurrent syncs
+                if (syncState === 'idle' || syncState === 'validated' || syncState === 'done') {
+                  handleExtract();
+                }
               }}
               className="px-4 py-1.5 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg transition-colors"
             >
