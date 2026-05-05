@@ -48,6 +48,7 @@ Requirements for the Handoff Overhaul milestone. 40 tasks across 10 phases. Sour
 - [ ] **TOOL-02**: CFB roster players with a `dealBreaker` set display an orange warning tag on the roster row; "Show at-risk" filter highlights all players with a deal breaker
 - [ ] **TOOL-03**: A committed recruit card has an "Add to Roster" button that opens `AddPlayerModal` with the recruit's name, position, and star rating pre-filled
 - [ ] **TOOL-04**: Adding a draft pick with a linked `playerId` automatically updates that player's status to `'drafted'`
+- [ ] **TOOL-05**: A Signing Day Class Card can be exported as a PNG via the OS save dialog. The card shows commit count, average star rating, position breakdown, and top 3 recruits by star rating (then nationalRank asc) for the active recruiting class. CFB only. Default filename: `signing-day-{year}.png`. New dependency: `html2canvas`.
 
 ### AI Queue & Features
 
@@ -145,6 +146,7 @@ Which phases cover which requirements.
 | TOOL-02 | Phase 24 | Pending |
 | TOOL-03 | Phase 24 | Pending |
 | TOOL-04 | Phase 24 | Pending |
+| TOOL-05 | Phase 24 | Pending |
 | AIQE-01 | Phase 25 | Pending |
 | AIQE-02 | Phase 25 | Pending |
 | AIQE-03 | Phase 25 | Pending |
@@ -165,10 +167,10 @@ Which phases cover which requirements.
 | POLS-07 | Phase 28 | Pending |
 
 **Coverage:**
-- v2.2 requirements: 40 total
-- Mapped to phases: 40
+- v2.2 requirements: 41 total
+- Mapped to phases: 41
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-05-03*
-*Last updated: 2026-05-03 — v2.2 Handoff Overhaul milestone start*
+*Last updated: 2026-05-05 — TOOL-05 Signing Day Class Card added (Phase 24 Plan 05)*
