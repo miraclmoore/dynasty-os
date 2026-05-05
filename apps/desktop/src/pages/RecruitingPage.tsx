@@ -4,7 +4,9 @@ import { useSeasonStore } from '../store/season-store';
 import { useRecruitingStore } from '../store/recruiting-store';
 import { useNavigationStore } from '../store/navigation-store';
 import { CFB_DEAL_BREAKER_CATEGORIES } from '../lib/cfb-categories';
-import type { RecruitingClass } from '@dynasty-os/core-types';
+import { getHardSellRecommendation, GRADE_POINTS } from '../lib/recruiting-calculator';
+import { AddPlayerModal } from '../components/AddPlayerModal';
+import type { RecruitingClass, Recruit } from '@dynasty-os/core-types';
 
 const POSITIONS = ['QB', 'RB', 'WR', 'TE', 'OL', 'OT', 'OG', 'C', 'DL', 'DE', 'DT', 'LB', 'CB', 'S', 'K', 'P', 'ATH'];
 
@@ -73,6 +75,7 @@ export function RecruitingPage() {
     createClass,
     deleteClass,
     addRecruit,
+    updateRecruit,
     removeRecruit,
     generateGrade,
     setActiveClass,
@@ -84,6 +87,13 @@ export function RecruitingPage() {
   const [classForm, setClassForm] = useState<ClassFormData>(defaultClassForm);
   const [recruitForm, setRecruitForm] = useState<RecruitFormData>(defaultRecruitForm);
   const [generatingGrade, setGeneratingGrade] = useState(false);
+  const [addPlayerInitial, setAddPlayerInitial] = useState<{
+    firstName: string;
+    lastName: string;
+    position: string;
+    stars: number;
+  } | null>(null);
+  const [addPlayerOpen, setAddPlayerOpen] = useState(false);
 
   // Load classes on mount
   useEffect(() => {
@@ -101,6 +111,19 @@ export function RecruitingPage() {
       loadRecruitsForClass(currentSeasonClass.id);
     }
   }, [classes, activeSeason?.id]);
+
+  function handleAddToRoster(recruit: Recruit) {
+    const parts = recruit.name.trim().split(' ');
+    const lastName = parts.pop() ?? '';
+    const firstName = parts.join(' ');
+    setAddPlayerInitial({
+      firstName,
+      lastName,
+      position: recruit.position,
+      stars: recruit.stars,
+    });
+    setAddPlayerOpen(true);
+  }
 
   if (!activeDynasty) return null;
 
@@ -509,9 +532,9 @@ export function RecruitingPage() {
                           className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
                           aria-label="Motivation 1"
                         >
-                          <option value="">Motivation 1 — (optional)</option>
-                          {CFB_DEAL_BREAKER_CATEGORIES.map((c) => (
-                            <option key={c} value={c}>{c}</option>
+                          <option value="">Grade 1 — (optional)</option>
+                          {Object.keys(GRADE_POINTS).map((g) => (
+                            <option key={g} value={g}>{g}</option>
                           ))}
                         </select>
                         <select
@@ -520,9 +543,9 @@ export function RecruitingPage() {
                           className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
                           aria-label="Motivation 2"
                         >
-                          <option value="">Motivation 2 — (optional)</option>
-                          {CFB_DEAL_BREAKER_CATEGORIES.map((c) => (
-                            <option key={c} value={c}>{c}</option>
+                          <option value="">Grade 2 — (optional)</option>
+                          {Object.keys(GRADE_POINTS).map((g) => (
+                            <option key={g} value={g}>{g}</option>
                           ))}
                         </select>
                         <select
@@ -531,12 +554,37 @@ export function RecruitingPage() {
                           className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
                           aria-label="Motivation 3"
                         >
-                          <option value="">Motivation 3 — (optional)</option>
-                          {CFB_DEAL_BREAKER_CATEGORIES.map((c) => (
-                            <option key={c} value={c}>{c}</option>
+                          <option value="">Grade 3 — (optional)</option>
+                          {Object.keys(GRADE_POINTS).map((g) => (
+                            <option key={g} value={g}>{g}</option>
                           ))}
                         </select>
                       </div>
+                      {/* Hard Sell banner — appears immediately when all 3 grades are selected */}
+                      {(() => {
+                        const hardSellRec = getHardSellRecommendation(
+                          recruitForm.motivation1 || null,
+                          recruitForm.motivation2 || null,
+                          recruitForm.motivation3 || null,
+                        );
+                        const isHardSell = hardSellRec === 'Hard Sell';
+                        return hardSellRec ? (
+                          <div
+                            className={`rounded-lg p-4 mb-4 border ${
+                              isHardSell
+                                ? 'bg-green-900/20 border-green-600/50'
+                                : 'bg-amber-900/20 border-amber-600/50'
+                            }`}
+                          >
+                            <p className="text-sm font-semibold text-white">
+                              Recommendation:{' '}
+                              <span className={isHardSell ? 'text-green-400' : 'text-amber-400'}>
+                                {hardSellRec}
+                              </span>
+                            </p>
+                          </div>
+                        ) : null;
+                      })()}
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       <select
@@ -579,6 +627,7 @@ export function RecruitingPage() {
                             <th className="text-left py-2 pr-4">Stars</th>
                             <th className="text-left py-2 pr-4">State</th>
                             <th className="text-left py-2 pr-4">Nat'l Rank</th>
+                            <th className="py-2 pr-4">Status</th>
                             <th className="py-2"></th>
                           </tr>
                         </thead>
@@ -622,6 +671,53 @@ export function RecruitingPage() {
                               <td className="py-2 pr-4 text-gray-400">{recruit.state ?? '—'}</td>
                               <td className="py-2 pr-4 text-gray-400">
                                 {recruit.nationalRank != null ? `#${recruit.nationalRank}` : '—'}
+                              </td>
+                              <td className="py-2 pr-4">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  {/* Hard Sell badge — only when all 3 grades saved */}
+                                  {recruit.motivation1 && recruit.motivation2 && recruit.motivation3 && (() => {
+                                    const rec = getHardSellRecommendation(
+                                      recruit.motivation1,
+                                      recruit.motivation2,
+                                      recruit.motivation3
+                                    );
+                                    if (!rec) return null;
+                                    return (
+                                      <span
+                                        className={`text-xs font-semibold px-2 py-1 rounded border ${
+                                          rec === 'Hard Sell'
+                                            ? 'bg-green-900/30 text-green-400 border-green-700'
+                                            : 'bg-amber-900/30 text-amber-400 border-amber-700'
+                                        }`}
+                                      >
+                                        {rec}
+                                      </span>
+                                    );
+                                  })()}
+                                  {/* isCommitted toggle — always rendered */}
+                                  <button
+                                    type="button"
+                                    onClick={() => updateRecruit(recruit.id, { isCommitted: !recruit.isCommitted })}
+                                    className={`text-xs px-2 py-1 rounded border min-h-8 transition-colors ${
+                                      recruit.isCommitted
+                                        ? 'border-green-700 text-green-300 bg-green-900/30'
+                                        : 'border-gray-600 text-gray-400 bg-gray-700/50 hover:text-gray-200'
+                                    }`}
+                                    title={recruit.isCommitted ? 'Click to mark uncommitted' : 'Click to mark committed'}
+                                  >
+                                    {recruit.isCommitted ? 'Committed' : 'Uncommitted'}
+                                  </button>
+                                  {/* Add to Roster — only when committed */}
+                                  {recruit.isCommitted && (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleAddToRoster(recruit)}
+                                      className="text-xs px-2 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-colors min-h-8"
+                                    >
+                                      Add to Roster
+                                    </button>
+                                  )}
+                                </div>
                               </td>
                               <td className="py-2 text-right">
                                 <button
@@ -714,6 +810,23 @@ export function RecruitingPage() {
           </div>
         )}
       </main>
+
+      {/* Add to Roster modal — pre-filled from committed recruit */}
+      {activeDynasty && addPlayerInitial && (
+        <AddPlayerModal
+          isOpen={addPlayerOpen}
+          onClose={() => {
+            setAddPlayerOpen(false);
+            setAddPlayerInitial(null);
+          }}
+          dynastyId={activeDynasty.id}
+          sport={activeDynasty.sport}
+          initialFirstName={addPlayerInitial.firstName}
+          initialLastName={addPlayerInitial.lastName}
+          initialPosition={addPlayerInitial.position}
+          initialStars={addPlayerInitial.stars}
+        />
+      )}
     </div>
   );
 }
