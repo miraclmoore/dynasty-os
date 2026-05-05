@@ -185,16 +185,19 @@ export function MaddenSyncPage() {
 
   // Start/stop background file watcher based on toggle + save path
   useEffect(() => {
-    if (watcherOn && savePath) {
-      startWatching(savePath, () => {
-        // Show prompt banner when save file changes
-        setWatcherPrompt(true);
-      });
-    } else {
-      stopWatching();
+    if (!watcherOn || !savePath) {
+      void stopWatching();
+      return;
     }
+    // Track cancellation so a stale callback from a previous render does not
+    // fire setWatcherPrompt after unmount or effect re-run
+    let cancelled = false;
+    void startWatching(savePath, () => {
+      if (!cancelled) setWatcherPrompt(true);
+    });
     return () => {
-      stopWatching();
+      cancelled = true;
+      void stopWatching();
     };
   }, [watcherOn, savePath]);
 
