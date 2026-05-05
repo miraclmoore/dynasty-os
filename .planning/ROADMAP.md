@@ -6,6 +6,7 @@
 - 🚧 **v2.0 The Living Dynasty** — Phases 10–13 (in progress)
 - 🚧 **v2.1 UX/UI Polish** — Phases 14–18 (in progress)
 - 🚧 **v2.2 Handoff Overhaul** — Phases 19–28 (in progress)
+- 📋 **v3.0 Companion & Platform** — Phases 29+ (planned)
 
 ## Phases
 
@@ -310,10 +311,33 @@ Plans:
 **Plans**: TBD
 **UI hint**: yes
 
+---
+
+## v3.0 Companion & Platform
+
+### Phase 29: Companion Upload App
+**Goal**: Users on any device (phone, tablet, PC) can upload console screenshots directly to Dynasty OS without cables, AirDrop, or manual file transfer.
+**Depends on**: Phase 22 (screenshot pipeline must be stable before adding a new ingestion path)
+**Motivation**: Console players (Xbox, PS5) have no seamless path to get in-game screenshots into Dynasty OS today. A hosted companion web app eliminates all manual steps — user bookmarks a URL on their phone, uploads the screenshot, and Dynasty OS auto-imports it within seconds.
+**Architecture**:
+  - Companion web app: mobile-optimized Next.js app hosted on Vercel
+  - Temporary storage: Cloudflare R2 (S3-compatible, low cost, auto-expiry)
+  - Pairing: Desktop app generates a short session/device code entered once in the companion app
+  - Sync: Dynasty OS polls for new uploads every 30s, auto-queues them for parsing, deletes from cloud after processing
+  - Works on any platform (Mac, Windows PC, tablet) — no shared WiFi required
+**Success Criteria** (what must be TRUE):
+  1. A user on any device opens the companion web app URL, enters their pairing code, picks a screenshot from their camera roll, and uploads it — Dynasty OS detects and queues it for parsing within 30 seconds, with no manual file transfer
+  2. Uploaded files are deleted from cloud storage immediately after the desktop app downloads them; files older than 24 hours are auto-expired by the bucket policy
+  3. The companion web app is fully usable on a phone screen (375px viewport) — upload button, status feedback, and pairing code entry are all accessible without horizontal scrolling
+**Plans**: TBD
+**UI hint**: yes
+
+---
+
 ## Progress
 
 **Execution Order:**
-v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 phases execute 14 → 15 → 16 → 17 → 18. v2.2 phases execute 19 → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28.
+v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 phases execute 14 → 15 → 16 → 17 → 18. v2.2 phases execute 19 → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28. v3.0 phases execute 29+.
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -345,3 +369,4 @@ v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 
 | 26. Data Entry UX | v2.2 | 0/TBD | Not started | - |
 | 27. Navigation & Routing | v2.2 | 0/TBD | Not started | - |
 | 28. Polish & Cleanup | v2.2 | 0/TBD | Not started | - |
+| 29. Companion Upload App | v3.0 | 0/TBD | Not started | - |
