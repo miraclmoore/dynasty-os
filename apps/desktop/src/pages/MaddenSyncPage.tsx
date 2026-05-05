@@ -22,6 +22,8 @@ import {
   type PackageVersionInfo,
 } from '../lib/madden-sync-service';
 import { startWatching, stopWatching } from '../lib/madden-watcher';
+import { documentDir, tempDir, join } from '@tauri-apps/api/path';
+import { readDir, exists } from '@tauri-apps/plugin-fs';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -75,6 +77,56 @@ function DiffRow({ label, count, skipped }: { label: string; count: number; skip
   );
 }
 
+// ── Auto-discover helpers ─────────────────────────────────────────────────────
+
+const MADDEN_YEARS = [26, 25, 24] as const;
+
+async function discoverFranchiseFiles(): Promise<string[]> {
+  const found: string[] = [];
+  const seen = new Set<string>();
+
+  let docDir = '';
+  let tmpDir = '';
+  try { docDir = await documentDir(); } catch { docDir = ''; }
+  try { tmpDir = await tempDir(); } catch { tmpDir = ''; }
+
+  const candidateDirs: string[] = [];
+  for (const year of MADDEN_YEARS) {
+    if (docDir) {
+      try { candidateDirs.push(await join(docDir, `Madden NFL ${year}`, 'saves')); } catch { /* ignore */ }
+      try { candidateDirs.push(await join(docDir, `Madden NFL ${year}`, 'Saves')); } catch { /* ignore */ }
+    }
+    if (tmpDir) {
+      try { candidateDirs.push(await join(tmpDir, `Madden NFL ${year}`)); } catch { /* ignore */ }
+    }
+  }
+  // Legacy autosave path also documented as the existing hint on the page
+  if (tmpDir) {
+    try { candidateDirs.push(await join(tmpDir, 'Franchise')); } catch { /* ignore */ }
+  }
+
+  for (const dir of candidateDirs) {
+    try {
+      const present = await exists(dir);
+      if (!present) continue;
+      const entries = await readDir(dir);
+      for (const entry of entries) {
+        if (!entry.isFile) continue;
+        if (!entry.name?.toLowerCase().endsWith('.frs')) continue;
+        try {
+          const fullPath = await join(dir, entry.name);
+          if (seen.has(fullPath)) continue;
+          seen.add(fullPath);
+          found.push(fullPath);
+        } catch { /* ignore */ }
+      }
+    } catch {
+      // dir not accessible, permission missing, or readDir threw — continue silently
+    }
+  }
+  return found;
+}
+
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 export function MaddenSyncPage() {
@@ -86,6 +138,7 @@ export function MaddenSyncPage() {
   const savedPath = usePrefsStore((s) => s.maddenSavePath);
   const watcherEnabled = usePrefsStore((s) => s.maddenWatcherEnabled);
 
+  const [discoveredFiles, setDiscoveredFiles] = useState<string[]>([]);
   const [syncState, setSyncState] = useState<SyncState>('idle');
   const [savePath, setSavePath] = useState<string | null>(savedPath);
   const [validation, setValidation] = useState<ValidateResult | null>(null);
@@ -120,6 +173,15 @@ export function MaddenSyncPage() {
       setWatcherOn(watcher);
     })();
   }, [activeDynasty?.id]);
+
+  // Auto-discover .frs files in known Madden save directories on mount
+  useEffect(() => {
+    if (!activeDynasty || activeDynasty.sport !== 'madden') return;
+    void (async () => {
+      const files = await discoverFranchiseFiles();
+      setDiscoveredFiles(files);
+    })();
+  }, [activeDynasty?.id, activeDynasty?.sport]);
 
   // Start/stop background file watcher based on toggle + save path
   useEffect(() => {
@@ -174,6 +236,16 @@ export function MaddenSyncPage() {
   const handlePickFile = async () => {
     const path = await pickSaveFile();
     if (!path) return;
+    setSavePath(path);
+    await storeSavePath(path);
+    setValidation(null);
+    setExtracted(null);
+    setDiff(null);
+    setErrorMsg(null);
+    setSyncState('idle');
+  };
+
+  const handleSelectDiscovered = async (path: string) => {
     setSavePath(path);
     await storeSavePath(path);
     setValidation(null);
@@ -357,6 +429,26 @@ export function MaddenSyncPage() {
               <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">
                 Step 1 — Select Franchise Save File
               </h2>
+
+              {discoveredFiles.length > 0 && (
+                <div className="flex flex-col gap-2">
+                  <p className="text-xs text-gray-500 uppercase tracking-wider">
+                    Detected Save Files
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {discoveredFiles.map((filePath) => (
+                      <button
+                        key={filePath}
+                        onClick={() => handleSelectDiscovered(filePath)}
+                        title={filePath}
+                        className="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-xs text-gray-200 rounded-lg font-mono truncate max-w-xs transition-colors"
+                      >
+                        {filePath.split(/[\\/]/).pop()}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="flex items-center gap-3">
                 <button
