@@ -368,21 +368,24 @@ export interface ExtractResult {
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **What is the exact PlayerStats table name in Madden 24/25/26 .frs files?**
    - What we know: The library reads names dynamically from the binary schema; the README and GitHub source do not document table names beyond `Player`, `SeasonGame`, and `DraftPick`
    - What's unclear: Whether the stats table is named `PlayerStats`, `SeasonStatLine`, `SeasonStats`, or something else entirely
    - Recommendation: Implement the fallback chain with debug logging. On first test with a real .frs file, check the log to confirm which name succeeded. If none succeed, the planner must note in the plan that the developer needs to open the file in bep713's Madden Franchise Editor app to inspect available table names.
+   - **RESOLVED:** Plan 23-01 Task 1 implements a 4-candidate fallback chain `['PlayerStats', 'Player Stats', 'Stats', 'CareerStats']` with debug logging. The first successful table name is used; logs reveal the correct name on first live test.
 
 2. **Does PlayerStats link back to Player by index position or by a reference field?**
    - What we know: The library supports binary reference fields via `getReferenceDataByKey()`; index-position matching is the simpler path
    - What's unclear: Whether the stat records are ordered 1:1 with Player records
    - Recommendation: Implement index-position matching first; add a fallback to name-based fuzzy match (using the existing `findBestPlayerMatch` pattern from Phase 22)
+   - **RESOLVED:** Plan 23-01 Task 1 captures `playerNamesByIndex` from the Player table during extraction, then tags each stat record by name before emitting JSON. The service layer matches by name (case-insensitive), making it robust against ordering changes.
 
 3. **Is `Documents\Madden NFL 25\saves\` the correct path, or is it `Documents\Madden NFL 25\Saves\` (capital S)?**
    - What we know: Windows filesystem is case-insensitive but path strings matter in `readDir`
    - Recommendation: Use `exists()` on both variants, or just try both with the fallback pattern
+   - **RESOLVED:** Plan 23-02 Task 2 scans both `saves` and `Saves` capitalizations for the Documents path, and also scans the Temp path. Whichever resolves first with `.frs` files is shown.
 
 ---
 

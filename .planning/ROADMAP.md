@@ -7,6 +7,7 @@
 - 🚧 **v2.1 UX/UI Polish** — Phases 14–18 (in progress)
 - 🚧 **v2.2 Handoff Overhaul** — Phases 19–28 (in progress)
 - 📋 **v3.0 Companion & Platform** — Phases 29–31 (planned)
+- 📋 **v3.1 Dynasty Stories** — Phases 32–34 (planned)
 
 ## Phases
 
@@ -33,7 +34,7 @@ Full details: `.planning/milestones/v1.0-ROADMAP.md`
 - [x] **Phase 10: Infrastructure Foundation** - Dexie v6 schema (5 new tables), async AI job queue, localStorage→aiCache migration, core-types additions, 4 npm packages, global store scaffolding (completed 2026-02-25)
 - [x] **Phase 11: QOL Wins** - Toast notifications, undo, persistent filters, command palette, CSV export, season checklist, auto-suggest year, recent opponents, inline notes, timeline scrubber (completed 2026-02-25)
 - [x] **Phase 12: Community Features** - Coaching staff tracker, CFB-Madden player continuity, playoff simulator, NIL ledger, schedule builder, trade calculator, class grade comparison, auto-sync, record book, rivalry dashboard expansion (plans 01-06 complete; 12-07 verification checkpoint pending)
-- [ ] **Phase 13: AI Intelligence Layer** - Living Chronicle, Hot Seat, Opponent Dossiers, Generational Arcs, Rival Prophecy, Obituary Room, The Journalist, Cross-Dynasty Intelligence, Momentum Heat Map, What If Engine, Broadcast Booth, DNA Report
+- [ ] **Phase 13: AI Intelligence Layer** - Living Chronicle, Hot Seat, Opponent Dossiers, Generational Arcs, Rival Prophecy, Obituary Room, The Journalist, Cross-Dynasty Intelligence, Momentum Heat Map, What If Engine, Broadcast Booth, DNA Report, AI Season Chronicle, Commissioner Recap Post
 
 Full details: Phase Details — v2.0 section below.
 
@@ -124,13 +125,14 @@ Plans:
 ### Phase 13: AI Intelligence Layer
 **Goal**: Dynasty OS is a living companion that observes, interprets, and narrates the dynasty in real time — AI features are triggered by data events, cached reliably, and sequenced from cheap Haiku features to complex Sonnet synthesis.
 **Depends on**: Phase 12 (stable data model with all new tables consumed and validated; sport-gated patterns established)
-**Requirements**: AINT-01, AINT-02, AINT-03, AINT-04, AINT-05, AINT-06, AINT-07, AINT-08, AINT-09, AINT-10, AINT-11, AINT-12
+**Requirements**: AINT-01, AINT-02, AINT-03, AINT-04, AINT-05, AINT-06, AINT-07, AINT-08, AINT-09, AINT-10, AINT-11, AINT-12, AINT-13, AINT-14
 **Success Criteria** (what must be TRUE):
   1. After each logged game, The Journalist auto-generates a news-wire blurb for significant events (upsets, ranked matchups, rivalry results) and the Hot Seat meter updates the coaching pressure index on the dashboard — both fire asynchronously without blocking the save
   2. User can generate an AI Opponent Intelligence Dossier for any upcoming opponent, a Rival Prophecy predicting rivalry trajectory, and an Obituary Room entry auto-generates when a legendary player departs
   3. User can view a Living Chronicle panel on the season page showing a running AI narrative that updates after each logged game, and a Momentum Heat Map visualizing momentum shifts across the season
   4. User can generate a Generational Player Arc for any player, run the What If Engine on a key dynasty moment, and generate a DNA Report analyzing program identity
   5. User can view Cross-Dynasty Intelligence insights comparing patterns across up to 5 dynasties, and activate Broadcast Booth mode for AI text-to-speech recap fragments with graceful fallback when TTS voices are unavailable
+  6. After a season ends, user can generate an AI Season Chronicle — a sports-column-style narrative of the full season (game results, records broken, award winners, bowl/playoff outcome, recruiting class for CFB) exportable as text — and a formatted Commissioner Recap Post (Discord-ready weekly summary of results, standings shifts, notable stat lines) for both Madden and CFB
 **Plans**: TBD
 
 ## Phase Details — v2.1
@@ -252,17 +254,22 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. After syncing a Madden franchise file, at least one player season record in the database contains non-zero passing, rushing, receiving, or defensive stat values — not just an OVR rating
   2. On the MaddenSyncPage, one or more franchise files are listed as one-click options above the "Browse for file" button without the user manually navigating to the save directory
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 23-01-PLAN.md — PlayerStats extraction in sidecar + RawPlayerStat through service + upsert PlayerSeason via [playerId+year] (MSYN-01)
+- [ ] 23-02-PLAN.md — Auto-detect .frs in Documents/Madden NFL {25,26,27}/saves and Temp/Madden NFL <year> + chip UI + fs:allow-read-dir capabilities (MSYN-02)
 
 ### Phase 24: Recruiting Tools
-**Goal**: CFB coaches have actionable recruiting decision support — Hard Sell calculations, at-risk player tagging, one-click recruit-to-roster promotion, and automatic player status updates on draft picks.
+**Goal**: CFB coaches have actionable recruiting decision support — Hard Sell calculations, at-risk player tagging, one-click recruit-to-roster promotion, automatic player status updates on draft picks, and a shareable Signing Day class card.
 **Depends on**: Phase 21 (Player devTrait/dealBreaker and Recruit motivation fields required for these tools to operate)
-**Requirements**: TOOL-01, TOOL-02, TOOL-03, TOOL-04
+**Requirements**: TOOL-01, TOOL-02, TOOL-03, TOOL-04, TOOL-05
 **Success Criteria** (what must be TRUE):
   1. A recruit card with all three motivation grades filled shows either "Hard Sell" or "Send the House" based on whether the motivation sum is >= 19; the same recommendation appears inline after parsing a recruiting-motivations screenshot
   2. Any CFB roster player with a deal breaker set displays an orange warning tag on the roster row; toggling the "Show at-risk" filter highlights only those players
   3. Clicking "Add to Roster" on a committed recruit opens AddPlayerModal with the recruit's name, position, and star rating already filled in
   4. Adding a draft pick with a linked player ID automatically changes that player's status to `'drafted'` in the database
+  5. User can generate a Signing Day Class Card — a shareable PNG graphic showing commit count, average star rating, position breakdown, and top recruit callouts for the current recruiting class — exportable via the OS save dialog (CFB only)
 **Plans**: TBD
 **UI hint**: yes
 
@@ -353,16 +360,83 @@ Plans:
 **Plans**: TBD
 **UI hint**: yes
 
-### Phase 31: Award Tracking
-**Goal**: Player awards and honors are tracked per season and surfaced across the app — enriching player profiles, the Legends page, and the Trophy Room with the kind of individual recognition that makes dynasty stories feel real.
+### Phase 31: Award Tracking & Cinematic Moments
+**Goal**: Player awards and honors are tracked per season and surfaced across the app — enriching player profiles, the Legends page, and the Trophy Room — and major dynasty milestones (CFP selection, championship, season awards) play as immersive in-app broadcast moments rather than silent menu transitions.
 **Depends on**: Phase 30 (dashboard stable before layering more player-profile data)
-**Motivation**: No award data is stored anywhere today. Heisman candidates, All-Americans, conference honors, and coach of the year are the milestones that define legendary seasons — but they're invisible in the app. Community research shows award tracking is one of the most-requested features in dynasty tools. It also unlocks richer Legends cards and more meaningful Trophy Room entries.
-**Schema addition**: New `awards` table — `{ id, dynastyId, playerId, seasonId, awardType, awardName, year }`. `awardType` enum: `'heisman' | 'all-american' | 'conference-player' | 'coach-of-year' | 'other'`.
+**Motivation**: No award data is stored anywhere today. Heisman candidates, All-Americans, conference honors, and coach of the year are the milestones that define legendary seasons — but they're invisible in the app. Community research shows award tracking is one of the most-requested features in dynasty tools. It also unlocks richer Legends cards and more meaningful Trophy Room entries. The cinematic moment layer directly addresses the EA community's top request: "make awards feel like an event, not a menu."
+**Schema addition**: New `awards` table — `{ id, dynastyId, playerId, seasonId, awardType, awardName, year }`. `awardType` enum: `'heisman' | 'all-american' | 'conference-player' | 'coach-of-year' | 'mvp' | 'dpoy' | 'other'`.
 **Success Criteria** (what must be TRUE):
   1. Awards can be logged per player per season from the PlayerProfilePage or RosterPage — at minimum: award name, type, and year
   2. PlayerProfilePage shows a player's full award history in their career section
   3. LegendsPage cards display award badges for departed players who earned honors during their career
   4. TrophyRoomPage includes an Awards section listing all dynasty-wide individual honors by season
+  5. When a season-ending award or championship is logged, a cinematic full-screen moment triggers — CFB: CFP selection show / Heisman presentation style; Madden: Super Bowl / MVP award style — with a trophy visual, music, and the award or result displayed before returning to the normal UI. Skippable.
+**Plans**: TBD
+**UI hint**: yes
+
+---
+
+## v3.1 Dynasty Stories
+
+### Phase 32: Clip Vault
+**Goal**: Xbox video clips can be attached to game log entries, tagged by play type and player, and browsed in a season clip library — giving every game a highlight reel foundation for both Madden and CFB.
+**Depends on**: Phase 22 (screenshot pipeline stable — clips follow the same import pattern), Phase 26 (Data Entry UX baseline)
+**Motivation**: Dynasty players already clip their best plays via Xbox Game DVR and PS5 Share — they just have nowhere to organize them. Every week, Madden league commissioners manually post "Play of the Week" clips to Discord. CFB players clip recruiting results and upsets for TikTok. No dynasty tracking tool organizes or stores these. Clip Vault makes Dynasty OS the single home for everything: box score, stats, screenshots, and the actual plays.
+**Architecture**:
+  - Clips are stored as local file references (path + metadata) — no cloud upload required
+  - Tauri file picker accepts `.mp4`, `.mov`, `.webm`
+  - Each game log entry gets an optional `clips` array: `{ id, filePath, tag, playerId?, note?, createdAt }`
+  - Clips play inline in the GameLog via the webview's native `<video>` element
+  - A Clip Library page (`/clip-library`) is browseable by season, tag, or player
+**Success Criteria** (what must be TRUE):
+  1. From the GameLog, user can attach one or more local video clips to any game entry — file picker opens, clip is stored by reference, and a thumbnail/play button appears inline on the game row
+  2. User can tag each clip (TD run, pick six, game-winning drive, big hit, special teams, other) and optionally link it to a player in the roster
+  3. A Clip Library page shows all clips for the dynasty, filterable by season, tag, and player — clicking any clip plays it inline
+  4. Works for both Madden and CFB dynasties
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 33: Audio Output
+**Goal**: Dynasty OS generates broadcast-quality audio for both pre-game and end-of-season moments — a Pre-Game Matchup Preview voiced in the style of the sport's broadcast persona, and a narrated Season Recap audio file exportable as `.mp3`.
+**Depends on**: Phase 13 (AI queue and LLM infrastructure), Phase 32 (Clip Vault establishes the media pipeline pattern), Phase 31 (Award data enriches both audio scripts)
+**Motivation**: The EA CFB community's top multimedia request is a "College GameDay-style weekly show." Madden league commissioners manually produce audio podcasts and recaps every week. No third-party dynasty tool produces any audio output. Dynasty OS already has all the data needed — game results, records, player stats, awards, recruiting, rivalry history — to script and voice professional-quality broadcast segments. ElevenLabs provides sports announcer voices; the LLM writes the script; Tauri shells out to stitch the audio.
+**Broadcast Personas**:
+  - **CFB Pre-Game:** College GameDay analyst tone — hype, narrative-forward, recruiting implications, rivalry context, CFP picture
+  - **Madden Pre-Game:** NFL broadcast tone (Joe Buck / Troy Aikman style) — measured, game-breakdown focused, injury report, standings stakes
+  - **Season Recap:** Sport-appropriate narrator voice — retrospective, award-callout, milestone-celebrating
+**Pre-Game Matchup Preview**:
+  - Triggered by "Get the Breakdown" button before opening Log Game modal, or from a scheduled future game
+  - LLM generates a 60–90 second script pulling from: current season record, last 3 results, opponent history (rivalry tracker + past matchups), player stats, award tracking, injury report (Madden), recruiting class rank (CFB), bowl/playoff implications
+  - Optional two-voice mode: LLM writes a short analyst + color commentator dialogue; rendered as alternating TTS clips stitched via ffmpeg
+  - Output plays inline in the app; not exported
+**Season Recap Narration**:
+  - Triggered from the Season page after season end
+  - LLM generates a full narrative script: season arc, key wins/losses, records broken, award winners, bowl/CFP outcome, recruiting class (CFB), top performers
+  - ElevenLabs renders with sport-appropriate announcer voice
+  - Screenshots imported during the season are sequenced as a slideshow synced to the audio
+  - Exported as `.mp3` (audio only) or as a video file (Phase 34)
+**Success Criteria** (what must be TRUE):
+  1. Clicking "Get the Breakdown" before logging a game generates and plays a 60–90 second broadcast-style audio preview — CFB uses a GameDay analyst persona, Madden uses an NFL broadcast persona — pulling from live dynasty data (record, opponent history, player stats, stakes)
+  2. The pre-game preview references at least 3 data points specific to the current matchup (e.g. current record, last result vs this opponent, a player milestone at stake)
+  3. After a season ends, user can trigger a narrated Season Recap — LLM generates the script, ElevenLabs voices it, imported screenshots are sequenced as a slideshow — and export the audio as `.mp3`
+  4. Both features work for Madden and CFB with sport-appropriate persona and data points
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 34: Video & Highlight Export
+**Goal**: Dynasty OS assembles tagged clips into a Season Highlight Reel and produces a full Year in Review video — animated stat slides, screenshot montage, narration from Phase 33 — exportable as `.mp4`.
+**Depends on**: Phase 32 (Clip Vault — tagged clips are the raw material), Phase 33 (Audio Output — narration track used in Year in Review)
+**Motivation**: Madden league commissioners manually produce "Top 10 Plays of the Week" video segments. CFB dynasty players manually edit 20–100 episode YouTube series. No tool automates any of this. Dynasty OS has the clips (Phase 32), the narration (Phase 33), and the screenshots (Phase 22) — Phase 34 assembles them into finished video products. Madden 26's Scott Hanson Weekly Recap was the most praised feature in EA's franchise deep dive; this is the third-party equivalent built around the user's actual data.
+**Architecture**:
+  - ffmpeg invoked via Tauri shell — bundled or system-installed (checked at startup with graceful fallback message if absent)
+  - Season Highlight Reel: user selects tagged clips → ffmpeg concatenates → `.mp4` exported via OS save dialog
+  - Year in Review: animated stat slides generated as canvas frames → combined with screenshot slideshow images → narration `.mp3` from Phase 33 → ffmpeg muxes into final `.mp4`
+  - Animated stat slides: recharts-rendered frames (win/loss record arc, top performer stats, records broken) captured via html2canvas
+**Success Criteria** (what must be TRUE):
+  1. From the Clip Library, user can select any subset of tagged clips and generate a Season Highlight Reel — ffmpeg concatenates them in the chosen order and exports as `.mp4` via the OS save dialog
+  2. From the Season page, user can trigger Year in Review export — animated stat slides, season screenshot montage, and Phase 33 narration are combined into a single `.mp4` file
+  3. If ffmpeg is not detected, a clear message explains how to install it and which features require it — the rest of the app is unaffected
+  4. Both Highlight Reel and Year in Review work for Madden and CFB dynasties
 **Plans**: TBD
 **UI hint**: yes
 
@@ -371,7 +445,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 phases execute 14 → 15 → 16 → 17 → 18. v2.2 phases execute 19 → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28. v3.0 phases execute 29 → 30 → 31.
+v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 phases execute 14 → 15 → 16 → 17 → 18. v2.2 phases execute 19 → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28. v3.0 phases execute 29 → 30 → 31. v3.1 phases execute 32 → 33 → 34.
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -405,4 +479,7 @@ v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 
 | 28. Polish & Cleanup | v2.2 | 0/TBD | Not started | - |
 | 29. Companion Upload App | v3.0 | 0/TBD | Not started | - |
 | 30. Dashboard Widgets | v3.0 | 0/TBD | Not started | - |
-| 31. Award Tracking | v3.0 | 0/TBD | Not started | - |
+| 31. Award Tracking & Cinematic Moments | v3.0 | 0/TBD | Not started | - |
+| 32. Clip Vault | v3.1 | 0/TBD | Not started | - |
+| 33. Audio Output | v3.1 | 0/TBD | Not started | - |
+| 34. Video & Highlight Export | v3.1 | 0/TBD | Not started | - |
