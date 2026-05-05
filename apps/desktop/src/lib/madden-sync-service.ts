@@ -267,7 +267,8 @@ function resolveGameType(raw: string | null): GameType {
   if (!raw) return 'regular';
   const lower = raw.toLowerCase();
   if (lower.includes('playoff') || lower.includes('post')) return 'playoff';
-  if (lower.includes('bowl') || lower.includes('super')) return 'playoff';
+  if (lower.includes('super')) return 'playoff';        // Super Bowl is a playoff game
+  if (lower.includes('bowl')) return 'bowl';            // other bowl games
   if (lower.includes('exhibition') || lower.includes('preseason')) return 'exhibition';
   return 'regular';
 }
