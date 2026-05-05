@@ -310,22 +310,34 @@ export function SeasonRecapPage() {
         </div>
 
         {/* Error state */}
-        {error && !isGenerating && (
-          <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-4 text-center">
-            <p className="text-red-300 text-sm mb-3">
-              {error.includes('API key')
-                ? 'Could not generate recap. Check your API key and try again.'
-                : 'Could not generate recap. Check your API key and try again.'}
-            </p>
-            <button
-              onClick={handleGenerate}
-              disabled={!hasApiKey || !season}
-              className="px-4 py-2 bg-red-700 hover:bg-red-600 text-white text-sm font-semibold rounded-lg transition-colors"
-            >
-              Try Again
-            </button>
-          </div>
-        )}
+        {error && !isGenerating && (() => {
+          const lower = error.toLowerCase();
+          let message = 'Something went wrong while generating your recap.';
+          let hint = 'Try again below. If the problem persists, check your API key in Settings.';
+          if (lower.includes('api key') || lower.includes('authentication') || lower.includes('401') || lower.includes('invalid x-api-key')) {
+            message = 'Your Anthropic API key is missing or invalid.';
+            hint = 'Go to Settings to add or update your API key, then try again.';
+          } else if (lower.includes('rate limit') || lower.includes('429')) {
+            message = 'The Anthropic API rate limit was reached.';
+            hint = 'Wait a moment, then click Try Again.';
+          } else if (lower.includes('network') || lower.includes('failed to fetch') || lower.includes('timeout') || lower.includes('abort')) {
+            message = "Dynasty OS couldn't reach the Anthropic API.";
+            hint = 'Check your internet connection, then click Try Again.';
+          }
+          return (
+            <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-4 text-center">
+              <p className="text-red-300 text-sm mb-1">{message}</p>
+              <p className="text-gray-400 text-xs mb-3">{hint}</p>
+              <button
+                onClick={handleGenerate}
+                disabled={!hasApiKey || !season}
+                className="px-4 py-2 bg-red-700 hover:bg-red-600 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
+              >
+                Try Again
+              </button>
+            </div>
+          );
+        })()}
 
         {/* Narrative display */}
         {narrative && !isGenerating && (

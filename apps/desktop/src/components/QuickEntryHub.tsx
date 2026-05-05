@@ -56,7 +56,7 @@ function Category({
     <div className="bg-gray-800/60 rounded-lg p-3">
       <div className="flex items-center gap-1.5 mb-2">
         <span className="text-sm">{icon}</span>
-        <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider flex-1 truncate">
+        <span className="text-sm font-semibold text-gray-300 flex-1">
           {title}
         </span>
         {hasData !== undefined && <StatusDot active={hasData} />}
