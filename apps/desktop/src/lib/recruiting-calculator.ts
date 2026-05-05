@@ -3,7 +3,7 @@
  * Used for the Rule of 19 Hard Sell calculation.
  * Source: dynasty-os-claude-code-handoff.md lines 963-994
  */
-const GRADE_POINTS: Record<string, number> = {
+export const GRADE_POINTS: Record<string, number> = {
   'A+': 13, 'A': 12, 'A-': 11,
   'B+': 10, 'B': 9,  'B-': 8,
   'C+': 7,  'C': 6,  'C-': 5,

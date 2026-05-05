@@ -4,6 +4,7 @@ import { useSeasonStore } from '../store/season-store';
 import { useRecruitingStore } from '../store/recruiting-store';
 import { useNavigationStore } from '../store/navigation-store';
 import { CFB_DEAL_BREAKER_CATEGORIES } from '../lib/cfb-categories';
+import { getHardSellRecommendation, GRADE_POINTS } from '../lib/recruiting-calculator';
 import type { RecruitingClass } from '@dynasty-os/core-types';
 
 const POSITIONS = ['QB', 'RB', 'WR', 'TE', 'OL', 'OT', 'OG', 'C', 'DL', 'DE', 'DT', 'LB', 'CB', 'S', 'K', 'P', 'ATH'];
@@ -509,9 +510,9 @@ export function RecruitingPage() {
                           className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
                           aria-label="Motivation 1"
                         >
-                          <option value="">Motivation 1 — (optional)</option>
-                          {CFB_DEAL_BREAKER_CATEGORIES.map((c) => (
-                            <option key={c} value={c}>{c}</option>
+                          <option value="">Grade 1 — (optional)</option>
+                          {Object.keys(GRADE_POINTS).map((g) => (
+                            <option key={g} value={g}>{g}</option>
                           ))}
                         </select>
                         <select
@@ -520,9 +521,9 @@ export function RecruitingPage() {
                           className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
                           aria-label="Motivation 2"
                         >
-                          <option value="">Motivation 2 — (optional)</option>
-                          {CFB_DEAL_BREAKER_CATEGORIES.map((c) => (
-                            <option key={c} value={c}>{c}</option>
+                          <option value="">Grade 2 — (optional)</option>
+                          {Object.keys(GRADE_POINTS).map((g) => (
+                            <option key={g} value={g}>{g}</option>
                           ))}
                         </select>
                         <select
@@ -531,12 +532,37 @@ export function RecruitingPage() {
                           className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
                           aria-label="Motivation 3"
                         >
-                          <option value="">Motivation 3 — (optional)</option>
-                          {CFB_DEAL_BREAKER_CATEGORIES.map((c) => (
-                            <option key={c} value={c}>{c}</option>
+                          <option value="">Grade 3 — (optional)</option>
+                          {Object.keys(GRADE_POINTS).map((g) => (
+                            <option key={g} value={g}>{g}</option>
                           ))}
                         </select>
                       </div>
+                      {/* Hard Sell banner — appears immediately when all 3 grades are selected */}
+                      {(() => {
+                        const hardSellRec = getHardSellRecommendation(
+                          recruitForm.motivation1 || null,
+                          recruitForm.motivation2 || null,
+                          recruitForm.motivation3 || null,
+                        );
+                        const isHardSell = hardSellRec === 'Hard Sell';
+                        return hardSellRec ? (
+                          <div
+                            className={`rounded-lg p-4 mb-4 border ${
+                              isHardSell
+                                ? 'bg-green-900/20 border-green-600/50'
+                                : 'bg-amber-900/20 border-amber-600/50'
+                            }`}
+                          >
+                            <p className="text-sm font-semibold text-white">
+                              Recommendation:{' '}
+                              <span className={isHardSell ? 'text-green-400' : 'text-amber-400'}>
+                                {hardSellRec}
+                              </span>
+                            </p>
+                          </div>
+                        ) : null;
+                      })()}
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       <select
