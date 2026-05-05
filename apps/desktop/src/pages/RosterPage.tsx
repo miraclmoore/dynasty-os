@@ -89,6 +89,14 @@ export function RosterPage() {
     useFilterStore.getState().setFilter(PAGE_KEY, 'status', val);
   };
 
+  const [showAtRisk, setShowAtRiskState] = useState<boolean>(
+    (_savedFilters['showAtRisk'] as boolean) ?? false
+  );
+  const setShowAtRisk = (val: boolean) => {
+    setShowAtRiskState(val);
+    useFilterStore.getState().setFilter(PAGE_KEY, 'showAtRisk', val);
+  };
+
   useEffect(() => {
     if (!activeDynasty) return;
     usePlayerStore.getState().loadPlayers(activeDynasty.id);
@@ -110,7 +118,8 @@ export function RosterPage() {
       statusFilter === 'all' ||
       (statusFilter === 'active' && p.status === 'active') ||
       (statusFilter === 'departed' && DEPARTED_STATUSES.includes(p.status));
-    return matchesPosition && matchesStatus;
+    const matchesAtRisk = !showAtRisk || Boolean(p.dealBreaker);
+    return matchesPosition && matchesStatus && matchesAtRisk;
   });
 
   // Sort by position group order then lastName
@@ -232,6 +241,22 @@ export function RosterPage() {
             </div>
           </div>
 
+          {/* At-Risk toggle */}
+          <div className="flex items-end">
+            <button
+              type="button"
+              onClick={() => setShowAtRisk(!showAtRisk)}
+              className={`px-3 py-2 text-sm rounded-lg border transition-colors ${
+                showAtRisk
+                  ? 'bg-orange-900/30 border-orange-700 text-orange-300'
+                  : 'bg-gray-800 border-gray-700 text-gray-400 hover:text-gray-200'
+              }`}
+              title="Show only roster players with a deal breaker set"
+            >
+              {showAtRisk ? 'At-Risk Only' : 'Show At-Risk'}
+            </button>
+          </div>
+
           <div className="ml-auto flex items-end">
             <span className="text-sm text-gray-500">
               {sortedPlayers.length} player{sortedPlayers.length !== 1 ? 's' : ''}
@@ -327,8 +352,8 @@ export function RosterPage() {
                   <tr
                     key={player.id}
                     className={`border-b border-gray-700/50 hover:bg-gray-700/30 cursor-pointer transition-colors ${
-                      idx === sortedPlayers.length - 1 ? 'border-b-0' : ''
-                    }`}
+                      showAtRisk && player.dealBreaker ? 'bg-orange-900/10' : ''
+                    } ${idx === sortedPlayers.length - 1 ? 'border-b-0' : ''}`}
                     onClick={() => handleRowClick(player)}
                   >
                     <td className="px-4 py-3 text-gray-400 font-mono">
