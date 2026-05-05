@@ -318,13 +318,20 @@ export async function computeSyncDiff(
     let opponentScore: number;
     let opponent: string;
 
-    // Try to match by teamName substring
-    if (homeTeamLower.includes(teamLower) || teamLower.includes(homeTeamLower)) {
+    // Try to match by teamName substring — guard against empty strings to avoid
+    // false positives (every string includes '', so a null homeTeam would match everything)
+    if (
+      homeTeamLower.length > 0 &&
+      (homeTeamLower.includes(teamLower) || teamLower.includes(homeTeamLower))
+    ) {
       homeAway = 'home';
       teamScore = g.homeScore;
       opponentScore = g.awayScore;
       opponent = g.awayTeam ?? 'Unknown';
-    } else if (awayTeamLower.includes(teamLower) || teamLower.includes(awayTeamLower)) {
+    } else if (
+      awayTeamLower.length > 0 &&
+      (awayTeamLower.includes(teamLower) || teamLower.includes(awayTeamLower))
+    ) {
       homeAway = 'away';
       teamScore = g.awayScore;
       opponentScore = g.homeScore;
