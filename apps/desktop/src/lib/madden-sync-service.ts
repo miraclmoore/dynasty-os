@@ -1,8 +1,9 @@
 import { Command } from '@tauri-apps/plugin-shell';
 import { open as openDialog } from '@tauri-apps/plugin-dialog';
+import { db } from '@dynasty-os/db';
 import { createGame, getGamesBySeason } from './game-service';
 import { createPlayer, getPlayersByDynasty } from './player-service';
-import { createPlayerSeason, getPlayerSeasonsByDynasty } from './player-season-service';
+import { createPlayerSeason, getPlayerSeasonsByDynasty, updatePlayerSeason } from './player-season-service';
 import { createDraftPick } from './draft-service';
 import type { GameResult, HomeAway, GameType } from '@dynasty-os/core-types';
 import {
@@ -52,11 +53,27 @@ export interface RawDraftPick {
   team: string | null;
 }
 
+export interface RawPlayerStat {
+  playerName: string | null;
+  playerIndex: number | null;
+  passYards: number | null;
+  passTD: number | null;
+  interceptions: number | null;
+  rushYards: number | null;
+  rushTD: number | null;
+  recYards: number | null;
+  recTD: number | null;
+  receptions: number | null;
+  sacks: number | null;
+  tackles: number | null;
+}
+
 export interface ExtractResult {
   gameYear: number | null;
   games: RawGame[];
   players: RawPlayer[];
   draftPicks: RawDraftPick[];
+  playerStats: RawPlayerStat[];
   error?: string;
   message?: string;
 }
@@ -93,6 +110,7 @@ export interface SyncDiff {
   playersSkipped: number;
   draftPicksToAdd: RawDraftPick[];
   draftPicksSkipped: number;
+  playerStats: RawPlayerStat[];
   gameYear: number | null;
 }
 
@@ -193,6 +211,7 @@ export async function extractSaveData(filePath: string): Promise<ExtractResult> 
       games: [],
       players: [],
       draftPicks: [],
+      playerStats: [],
       error: 'parse_error',
       message: 'Could not parse extraction output.',
     };
@@ -353,8 +372,44 @@ export async function computeSyncDiff(
     playersSkipped,
     draftPicksToAdd,
     draftPicksSkipped,
+    playerStats: extracted.playerStats ?? [],
     gameYear: extracted.gameYear,
   };
+}
+
+// ── Commit sync helpers ───────────────────────────────────────────────────────
+
+function mapRawStatsToRecord(raw: RawPlayerStat | null, overall: number | null): Record<string, number> {
+  const stats: Record<string, number> = {};
+  const add = (key: string, val: number | null | undefined) => {
+    if (val != null && val !== 0) stats[key] = Number(val);
+  };
+  add('overall', overall);
+  if (raw) {
+    add('pass_yards', raw.passYards);
+    add('pass_td', raw.passTD);
+    add('interceptions', raw.interceptions);
+    add('rush_yards', raw.rushYards);
+    add('rush_td', raw.rushTD);
+    add('rec_yards', raw.recYards);
+    add('rec_td', raw.recTD);
+    add('receptions', raw.receptions);
+    add('sacks', raw.sacks);
+    add('tackles', raw.tackles);
+  }
+  return stats;
+}
+
+function findStatsForPlayer(
+  playerName: string,
+  playerStats: RawPlayerStat[]
+): RawPlayerStat | null {
+  const target = playerName.trim().toLowerCase();
+  if (!target) return null;
+  for (const s of playerStats) {
+    if (s.playerName && s.playerName.trim().toLowerCase() === target) return s;
+  }
+  return null;
 }
 
 // ── Commit sync ───────────────────────────────────────────────────────────────
@@ -397,7 +452,8 @@ export async function commitSyncDiff(
 
   // Add players
   for (const p of diff.playersToAdd) {
-    const nameParts = (p.name ?? '').split(' ');
+    const fullName = (p.name ?? '').trim();
+    const nameParts = fullName.split(' ');
     const firstName = nameParts[0] ?? '';
     const lastName = nameParts.slice(1).join(' ') || '';
     const player = await createPlayer({
@@ -408,17 +464,64 @@ export async function commitSyncDiff(
       jerseyNumber: p.jerseyNumber ?? undefined,
       status: 'active',
     });
-    // Create a PlayerSeason shell for the current year
     if (player) {
-      await createPlayerSeason({
-        playerId: player.id,
-        dynastyId,
-        seasonId,
-        year,
-        stats: p.overall != null ? { overall: p.overall } : {},
-      });
+      const matchedStat = findStatsForPlayer(fullName, diff.playerStats);
+      const stats = mapRawStatsToRecord(matchedStat, p.overall);
+      const existing = await db.playerSeasons
+        .where('[playerId+year]')
+        .equals([player.id, year])
+        .first();
+      if (existing) {
+        const mergedStats = { ...(existing.stats ?? {}), ...stats };
+        await updatePlayerSeason(existing.id, { stats: mergedStats });
+      } else {
+        await createPlayerSeason({
+          playerId: player.id,
+          dynastyId,
+          seasonId,
+          year,
+          stats,
+        });
+      }
     }
     playersAdded++;
+  }
+
+  // Apply stats to players that already existed in DB (not in playersToAdd)
+  if (diff.playerStats.length > 0) {
+    const existingPlayers = await getPlayersByDynasty(dynastyId);
+    const existingByName = new Map<string, typeof existingPlayers[number]>();
+    for (const ep of existingPlayers) {
+      existingByName.set(`${ep.firstName} ${ep.lastName}`.trim().toLowerCase(), ep);
+    }
+    const newlyAddedNames = new Set(
+      diff.playersToAdd.map((p) => (p.name ?? '').trim().toLowerCase())
+    );
+    for (const stat of diff.playerStats) {
+      if (!stat.playerName) continue;
+      const key = stat.playerName.trim().toLowerCase();
+      if (newlyAddedNames.has(key)) continue; // already handled in the add loop
+      const player = existingByName.get(key);
+      if (!player) continue;
+      const stats = mapRawStatsToRecord(stat, null);
+      if (Object.keys(stats).length === 0) continue;
+      const existingSeason = await db.playerSeasons
+        .where('[playerId+year]')
+        .equals([player.id, year])
+        .first();
+      if (existingSeason) {
+        const mergedStats = { ...(existingSeason.stats ?? {}), ...stats };
+        await updatePlayerSeason(existingSeason.id, { stats: mergedStats });
+      } else {
+        await createPlayerSeason({
+          playerId: player.id,
+          dynastyId,
+          seasonId,
+          year,
+          stats,
+        });
+      }
+    }
   }
 
   // Add draft picks

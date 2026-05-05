@@ -89,6 +89,7 @@ async function extractData(filePath) {
       games: [],
       players: [],
       draftPicks: [],
+      playerStats: [],
     };
 
     // ── Season schedule / game results ──────────────────────────────────────
@@ -130,6 +131,7 @@ async function extractData(filePath) {
     }
 
     // ── Roster / player data ─────────────────────────────────────────────────
+    const playerNamesByIndex = new Map();
     const playerTableNames = ['Player', 'PlayerTable'];
     for (const tableName of playerTableNames) {
       try {
@@ -139,7 +141,8 @@ async function extractData(filePath) {
         await table.readRecords(['FirstName', 'LastName', 'Position',
           'PlayerBestOvr', 'OverallRating', 'Age', 'JerseyNum']);
 
-        for (const record of table.records) {
+        for (let i = 0; i < table.records.length; i++) {
+          const record = table.records[i];
           if (record.isEmpty) continue;
           try {
             const firstName = record.FirstName ?? '';
@@ -147,6 +150,7 @@ async function extractData(filePath) {
             const name = `${firstName} ${lastName}`.trim() || null;
             if (!name) continue;
 
+            playerNamesByIndex.set(i, name);
             result.players.push({
               name,
               position: record.Position ? String(record.Position) : null,
@@ -185,6 +189,46 @@ async function extractData(filePath) {
           } catch (_) { /* skip malformed record */ }
         }
         if (result.draftPicks.length > 0) break;
+      } catch (_) { /* table not in this version */ }
+    }
+
+    // ── Player stats ─────────────────────────────────────────────────────────
+    const statsTableNames = ['PlayerStats', 'Player Stats', 'Stats', 'CareerStats'];
+    const statFieldNames = [
+      'PlayerIdRef', 'PlayerRef',
+      'PassYards', 'PassTD', 'Interceptions',
+      'RushYards', 'RushTD', 'Fumbles',
+      'RecYards', 'RecTD', 'Receptions',
+      'Sacks', 'Tackles', 'TFL',
+    ];
+    for (const tableName of statsTableNames) {
+      try {
+        const table = franchise.getTableByName(tableName);
+        if (!table) continue;
+        await table.readRecords(statFieldNames);
+        for (let i = 0; i < table.records.length; i++) {
+          const record = table.records[i];
+          if (record.isEmpty) continue;
+          try {
+            // Index-position match: PlayerStats record at row i corresponds to Player row i
+            const playerName = playerNamesByIndex.get(i) ?? null;
+            result.playerStats.push({
+              playerName,
+              playerIndex: i,
+              passYards: record.PassYards ?? null,
+              passTD: record.PassTD ?? null,
+              interceptions: record.Interceptions ?? null,
+              rushYards: record.RushYards ?? null,
+              rushTD: record.RushTD ?? null,
+              recYards: record.RecYards ?? null,
+              recTD: record.RecTD ?? null,
+              receptions: record.Receptions ?? null,
+              sacks: record.Sacks ?? null,
+              tackles: record.Tackles ?? null,
+            });
+          } catch (_) { /* skip malformed record */ }
+        }
+        if (result.playerStats.length > 0) break;
       } catch (_) { /* table not in this version */ }
     }
 
