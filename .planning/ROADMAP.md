@@ -54,7 +54,7 @@ Full details: Phase Details — v2.0 section below.
 - [x] **Phase 20: Security** - Anthropic API via Tauri command, API key to plugin-store, localStorage migration (completed 2026-05-04)
 - [x] **Phase 21: Data Model** - keyMoments table, Season fields, Player devTrait/dealBreaker, Recruit motivations (completed 2026-05-04)
 - [x] **Phase 22: Screenshot Pipeline** - Player stats → DB, depth chart CSV, recruiting-motivations type, multi-image (completed 2026-05-04)
-- [ ] **Phase 23: Madden Sync Upgrade** - PlayerStats extraction, auto-detect save path
+- [x] **Phase 23: Madden Sync Upgrade** - PlayerStats extraction, auto-detect save path (completed 2026-05-05)
 - [ ] **Phase 24: Recruiting Tools** - Hard Sell calculator, transfer risk, recruit→roster, draft pick→status
 - [ ] **Phase 25: AI Queue & Features** - Queue processor, explicit blurb, model routing, game narrative trigger
 - [ ] **Phase 26: Data Entry UX** - Quick Score, CSV import, roster CSV, tips panel, video import
@@ -257,8 +257,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 23-01-PLAN.md — PlayerStats extraction in sidecar + RawPlayerStat through service + upsert PlayerSeason via [playerId+year] (MSYN-01)
-- [ ] 23-02-PLAN.md — Auto-detect .frs in Documents/Madden NFL {25,26,27}/saves and Temp/Madden NFL <year> + chip UI + fs:allow-read-dir capabilities (MSYN-02)
+- [x] 23-01-PLAN.md — PlayerStats extraction in sidecar + RawPlayerStat through service + upsert PlayerSeason via [playerId+year] (MSYN-01)
+- [x] 23-02-PLAN.md — Auto-detect .frs in Documents/Madden NFL {25,26,27}/saves and Temp/Madden NFL <year> + chip UI + fs:allow-read-dir capabilities (MSYN-02)
 
 ### Phase 24: Recruiting Tools
 **Goal**: CFB coaches have actionable recruiting decision support — Hard Sell calculations, at-risk player tagging, one-click recruit-to-roster promotion, automatic player status updates on draft picks, and a shareable Signing Day class card.
@@ -471,7 +471,7 @@ v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 
 | 20. Security | v2.2 | 3/3 | Complete    | 2026-05-04 |
 | 21. Data Model | v2.2 | 4/4 | Complete   | 2026-05-04 |
 | 22. Screenshot Pipeline | v2.2 | 5/5 | Complete   | 2026-05-04 |
-| 23. Madden Sync Upgrade | v2.2 | 0/TBD | Not started | - |
+| 23. Madden Sync Upgrade | v2.2 | 2/2 | Complete   | 2026-05-05 |
 | 24. Recruiting Tools | v2.2 | 0/TBD | Not started | - |
 | 25. AI Queue & Features | v2.2 | 0/TBD | Not started | - |
 | 26. Data Entry UX | v2.2 | 0/TBD | Not started | - |
