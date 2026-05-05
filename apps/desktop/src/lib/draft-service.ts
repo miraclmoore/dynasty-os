@@ -14,6 +14,16 @@ export async function createDraftPick(
   };
 
   await db.draftPicks.add(pick);
+
+  // TOOL-04 (Phase 24, D-11/D-12): when a player is linked to this pick,
+  // mark them as drafted unconditionally — overrides any prior status.
+  if (pick.playerId) {
+    await db.players.update(pick.playerId, {
+      status: 'drafted',
+      updatedAt: now,
+    });
+  }
+
   return pick;
 }
 
