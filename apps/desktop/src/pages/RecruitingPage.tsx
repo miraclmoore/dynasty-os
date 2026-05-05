@@ -1,4 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import html2canvas from 'html2canvas';
+import { save } from '@tauri-apps/plugin-dialog';
+import { writeFile } from '@tauri-apps/plugin-fs';
+import { useToastStore } from '../store/toast-store';
 import { useDynastyStore } from '../store';
 import { useSeasonStore } from '../store/season-store';
 import { useRecruitingStore } from '../store/recruiting-store';
@@ -94,6 +98,8 @@ export function RecruitingPage() {
     stars: number;
   } | null>(null);
   const [addPlayerOpen, setAddPlayerOpen] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [exportingCard, setExportingCard] = useState(false);
 
   // Load classes on mount
   useEffect(() => {
@@ -123,6 +129,41 @@ export function RecruitingPage() {
       stars: recruit.stars,
     });
     setAddPlayerOpen(true);
+  }
+
+  async function handleExportCard() {
+    if (!cardRef.current || !activeClass) return;
+    setExportingCard(true);
+    try {
+      const canvas = await html2canvas(cardRef.current, {
+        backgroundColor: null,
+        scale: 2,
+        useCORS: true,
+      });
+      const dataUrl = canvas.toDataURL('image/png');
+      const base64 = dataUrl.replace(/^data:image\/png;base64,/, '');
+      const binaryString = atob(base64);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      const filePath = await save({
+        defaultPath: `signing-day-${activeClass.year}.png`,
+        filters: [{ name: 'PNG', extensions: ['png'] }],
+      });
+      if (!filePath) {
+        // user cancelled — silent return to idle
+        return;
+      }
+      await writeFile(filePath, bytes);
+      const fileName = filePath.split(/[\\/]/).pop() ?? 'signing-day.png';
+      useToastStore.getState().success(`Class card saved to ${fileName}`);
+    } catch (err) {
+      console.error('[ClassCard] Export failed:', err);
+      useToastStore.getState().error('Export failed. Please try again.');
+    } finally {
+      setExportingCard(false);
+    }
   }
 
   if (!activeDynasty) return null;
@@ -222,6 +263,28 @@ export function RecruitingPage() {
 
   const displayClass = activeClass;
   const showClassCreation = !currentSeasonClass && !activeClass;
+
+  // Card data for Signing Day Class Card export
+  const cardCommitCount = recruitsForClass.length;
+  const cardAvgStars =
+    recruitsForClass.length > 0
+      ? (
+          recruitsForClass.reduce((sum, r) => sum + r.stars, 0) /
+          recruitsForClass.length
+        ).toFixed(2)
+      : '—';
+  const cardPosBreakdown: Record<string, number> = {};
+  for (const r of recruitsForClass) {
+    cardPosBreakdown[r.position] = (cardPosBreakdown[r.position] ?? 0) + 1;
+  }
+  const cardTop3 = [...recruitsForClass]
+    .sort((a, b) => {
+      if (b.stars !== a.stars) return b.stars - a.stars;
+      const aRank = a.nationalRank ?? Infinity;
+      const bRank = b.nationalRank ?? Infinity;
+      return aRank - bRank;
+    })
+    .slice(0, 3);
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -441,23 +504,33 @@ export function RecruitingPage() {
                       </div>
                     </div>
                   ) : (
-                    <button
-                      onClick={handleGenerateGrade}
-                      disabled={generatingGrade || loading}
-                      className="w-full px-4 py-2.5 bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
-                    >
-                      {generatingGrade ? (
-                        <>
-                          <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                          </svg>
-                          Generating Analysis...
-                        </>
-                      ) : (
-                        'Generate Signing Day Grade'
-                      )}
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={handleGenerateGrade}
+                        disabled={generatingGrade || loading}
+                        className="flex-1 px-4 py-2.5 bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+                      >
+                        {generatingGrade ? (
+                          <>
+                            <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                            </svg>
+                            Generating Analysis...
+                          </>
+                        ) : (
+                          'Generate Signing Day Grade'
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleExportCard}
+                        disabled={exportingCard || recruitsForClass.length === 0}
+                        className="px-4 py-2 border border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {exportingCard ? 'Generating…' : 'Export Class Card'}
+                      </button>
+                    </div>
                   )}
                 </div>
 
@@ -826,6 +899,73 @@ export function RecruitingPage() {
           initialPosition={addPlayerInitial.position}
           initialStars={addPlayerInitial.stars}
         />
+      )}
+
+      {/* Hidden off-screen Signing Day Class Card render target — html2canvas cannot capture display:none */}
+      {activeClass && (
+        <div
+          ref={cardRef}
+          className="fixed -left-[9999px] top-0 w-[640px] h-[360px] bg-gray-900 text-white p-6 flex flex-col"
+          aria-hidden="true"
+        >
+          {/* Header */}
+          <div className="flex items-baseline justify-between">
+            <div className="text-2xl font-semibold tracking-tight">
+              Signing Day {activeClass.year}
+            </div>
+            <div className="text-xs uppercase tracking-widest text-gray-400">
+              Recruiting Class
+            </div>
+          </div>
+
+          {/* Hero stats row */}
+          <div className="mt-4 flex items-end gap-8">
+            <div>
+              <div className="text-6xl font-black font-display leading-none">
+                {cardCommitCount}
+              </div>
+              <div className="mt-1 text-xs uppercase tracking-widest text-gray-400">
+                Commits
+              </div>
+            </div>
+            <div>
+              <div className="text-6xl font-black font-display leading-none text-amber-400">
+                {cardAvgStars}
+              </div>
+              <div className="mt-1 text-xs uppercase tracking-widest text-gray-400">
+                Avg Stars
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-700/60 my-4" />
+
+          {/* Position breakdown */}
+          <div className="text-sm text-gray-300 flex flex-wrap gap-x-4 gap-y-1">
+            {Object.entries(cardPosBreakdown).map(([pos, count]) => (
+              <span key={pos}>
+                <span className="text-white font-semibold">{pos}</span>:{' '}
+                <span className="text-gray-400">{count}</span>
+              </span>
+            ))}
+          </div>
+
+          {/* Top 3 recruits */}
+          <div className="mt-3 flex flex-col gap-1">
+            {cardTop3.map((r) => (
+              <div key={r.id} className="text-sm">
+                <span className="font-semibold text-white">{r.name}</span>
+                <span className="ml-2 text-amber-400">{'★'.repeat(r.stars)}</span>
+                <span className="ml-2 text-xs text-gray-400">{r.position}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Footer */}
+          <div className="mt-auto pt-2 text-xs text-gray-600">
+            Dynasty OS
+          </div>
+        </div>
       )}
     </div>
   );
