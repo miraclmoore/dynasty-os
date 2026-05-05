@@ -7,8 +7,10 @@ import {
   getRecruitsByClass,
   addRecruit as svcAddRecruit,
   deleteRecruit as svcDeleteRecruit,
+  updateRecruit as svcUpdateRecruit,
   generateClassGrade,
 } from '../lib/recruiting-service';
+import { useToastStore } from './toast-store';
 
 interface RecruitingState {
   classes: RecruitingClass[];
@@ -24,6 +26,7 @@ interface RecruitingActions {
   createClass: (input: Omit<RecruitingClass, 'id' | 'createdAt' | 'updatedAt'>) => Promise<RecruitingClass>;
   deleteClass: (id: string, dynastyId: string) => Promise<void>;
   addRecruit: (input: Omit<Recruit, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>;
+  updateRecruit: (id: string, updates: Partial<Omit<Recruit, 'id'>>) => Promise<void>;
   removeRecruit: (id: string, classId: string) => Promise<void>;
   generateGrade: (classId: string, dynastyId: string) => Promise<void>;
   setActiveClass: (recruitingClass: RecruitingClass | null) => void;
@@ -100,6 +103,28 @@ export const useRecruitingStore = create<RecruitingStore>((set, get) => ({
       set({ recruitsForClass, loading: false });
     } catch (err) {
       set({ error: String(err), loading: false });
+      throw err;
+    }
+  },
+
+  updateRecruit: async (id: string, updates: Partial<Omit<Recruit, 'id'>>) => {
+    // Optimistic: update local state immediately
+    set((state) => ({
+      recruitsForClass: state.recruitsForClass.map((r) =>
+        r.id === id ? { ...r, ...updates } : r
+      ),
+    }));
+    try {
+      await svcUpdateRecruit(id, updates);
+    } catch (err) {
+      // Revert on error — reload from DB using the classId of the first recruit
+      const { recruitsForClass, activeClass } = get();
+      const classId = recruitsForClass[0]?.classId ?? activeClass?.id;
+      if (classId) {
+        const fresh = await getRecruitsByClass(classId);
+        set({ recruitsForClass: fresh });
+      }
+      useToastStore.getState().error('Could not save recruit. Please try again.');
       throw err;
     }
   },

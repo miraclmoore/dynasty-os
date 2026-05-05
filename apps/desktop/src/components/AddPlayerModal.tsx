@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { SportType, PlayerStatus } from '@dynasty-os/core-types';
 import { getSportConfig } from '@dynasty-os/sport-configs';
 import { usePlayerStore } from '../store/player-store';
@@ -9,17 +9,33 @@ interface AddPlayerModalProps {
   onClose: () => void;
   dynastyId: string;
   sport: SportType;
+  // v2.2 (Phase 24 TOOL-03): optional pre-fill for "Add to Roster" flow from RecruitingPage
+  initialFirstName?: string;
+  initialLastName?: string;
+  initialPosition?: string;
+  initialStars?: number;
 }
 
-export function AddPlayerModal({ isOpen, onClose, dynastyId, sport }: AddPlayerModalProps) {
+export function AddPlayerModal({
+  isOpen,
+  onClose,
+  dynastyId,
+  sport,
+  initialFirstName,
+  initialLastName,
+  initialPosition,
+  initialStars,
+}: AddPlayerModalProps) {
   const sportConfig = getSportConfig(sport);
   const loading = usePlayerStore((s) => s.loading);
 
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [position, setPosition] = useState(sportConfig.positions[0] ?? '');
+  const [firstName, setFirstName] = useState(initialFirstName ?? '');
+  const [lastName, setLastName] = useState(initialLastName ?? '');
+  const [position, setPosition] = useState(initialPosition ?? sportConfig.positions[0] ?? '');
   const [jerseyNumber, setJerseyNumber] = useState('');
-  const [recruitingStars, setRecruitingStars] = useState('');
+  const [recruitingStars, setRecruitingStars] = useState(
+    initialStars != null ? String(initialStars) : ''
+  );
   const [homeState, setHomeState] = useState('');
   const [homeCity, setHomeCity] = useState('');
   const [classYear, setClassYear] = useState('');
@@ -44,6 +60,17 @@ export function AddPlayerModal({ isOpen, onClose, dynastyId, sport }: AddPlayerM
     setDevTrait('');
     setError('');
   }
+
+  useEffect(() => {
+    if (isOpen) {
+      setFirstName(initialFirstName ?? '');
+      setLastName(initialLastName ?? '');
+      setPosition(initialPosition ?? sportConfig.positions[0] ?? '');
+      setRecruitingStars(initialStars != null ? String(initialStars) : '');
+    }
+    // Intentionally only depend on isOpen — initial* are stable per open cycle
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

@@ -30,6 +30,8 @@ export interface Recruit {
   motivation3?: string;
   dealBreakerMotivation?: string;
   visitWeek?: number;
+  // v2.2 (Phase 24 TOOL-03): committed status flag for class list + Add to Roster gate
+  isCommitted?: boolean;
   createdAt: number;
   updatedAt: number;
 }

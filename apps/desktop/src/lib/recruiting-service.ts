@@ -73,6 +73,13 @@ export async function deleteRecruit(id: string): Promise<void> {
   await db.recruits.delete(id);
 }
 
+export async function updateRecruit(
+  id: string,
+  updates: Partial<Omit<Recruit, 'id' | 'dynastyId' | 'classId' | 'createdAt'>>
+): Promise<void> {
+  await db.recruits.update(id, { ...updates, updatedAt: Date.now() });
+}
+
 // ── AI Grade Generation ───────────────────────────────────────────────────────
 
 interface GradeResult {
