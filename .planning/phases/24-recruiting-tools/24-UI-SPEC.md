@@ -1,10 +1,11 @@
 ---
 phase: 24
 slug: recruiting-tools
-status: draft
+status: approved
 shadcn_initialized: false
 preset: none
 created: 2026-05-05
+reviewed_at: 2026-05-05
 ---
 
 # Phase 24 — UI Design Contract
@@ -36,7 +37,7 @@ Declared values (multiples of 4 only):
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| xs | 4px | Icon-to-label gaps (`gap-1`), inline badge padding (`px-1.5 py-0.5`) |
+| xs | 4px | Icon-to-label gaps (`gap-1`), inline badge padding (`px-2 py-1`) |
 | sm | 8px | Compact row gaps (`gap-2`), filter bar inter-element spacing |
 | md | 16px | Form field gaps (`gap-4`), section padding (`p-4`) |
 | lg | 24px | Card body padding (`p-5` ~20px, accept), section-to-section gaps (`gap-6`) |
@@ -47,8 +48,8 @@ Declared values (multiples of 4 only):
 Exceptions:
 - Recruit list rows use `py-3 px-4` (12px/16px) — matches existing RosterPage row rhythm; do not change.
 - The Hard Sell banner uses `p-4` (16px) — matches existing ScreenshotIngestionPage banner exactly (source: line 1147).
-- Toggle controls use `py-1.5 px-3` (6px/12px) — matches existing status filter toggle on RosterPage.
-- Inline badge (Hard Sell compact row badge) uses `px-2 py-0.5` (8px/2px) — matches existing STATUS_BADGE pattern.
+- Toggle controls use `py-2 px-3` (8px/12px) — rounded up from non-conforming `py-1.5` to nearest multiple of 4.
+- Inline badge (Hard Sell compact row badge) uses `px-2 py-1` (8px/4px) — rounded up from non-conforming `py-0.5` to nearest multiple of 4.
 
 Source: measured from `RecruitingPage.tsx`, `RosterPage.tsx`, `ScreenshotIngestionPage.tsx` existing elements.
 
@@ -59,13 +60,15 @@ Source: measured from `RecruitingPage.tsx`, `RosterPage.tsx`, `ScreenshotIngesti
 | Role | Size | Weight | Line Height | Tailwind |
 |------|------|--------|-------------|---------|
 | Body / form labels | 14px (text-sm) | 400 (normal) | 1.5 | `text-sm` |
-| UI labels / muted | 12px (text-xs) | 500 (medium) | 1.4 | `text-xs font-medium` |
+| UI labels / muted | 12px (text-xs) | 400 (normal) | 1.4 | `text-xs` |
 | Section headings | 16px (text-base) | 600 (semibold) | 1.2 | `text-base font-semibold` |
-| Page headings | 20px (text-xl) | 700 (bold) | 1.2 | `text-xl font-bold tracking-tight` |
+| Page headings | 20px (text-xl) | 600 (semibold) | 1.2 | `text-xl font-semibold tracking-tight` |
+
+**Allowed weights: 400 (font-normal) and 600 (font-semibold) only.** `font-medium` (500) and `font-bold` (700) are not used in live UI for this phase.
 
 Font family: `font-sans` (Inter) for all UI text in this phase. Display font (Bebas Neue / Oswald) is not used in this phase — reserved for marketing/card export surfaces only.
 
-**Signing Day Class Card export exception:** The PNG card uses `font-display` (Bebas Neue) for the large commit count and avg stars numbers. Body text within the card uses `font-sans` (Inter) at 14px weight 400.
+**Signing Day Class Card export exception (export surface only — does not apply to live UI):** The PNG card uses `font-display` (Bebas Neue) for the large commit count and avg stars numbers. These hero display numbers use `font-black` (900) for maximum visual impact on the export card — this weight is exclusive to the export-only render target and must not appear in any live interactive UI element. Body text within the card uses `font-sans` (Inter) at 14px weight 400.
 
 Source: existing heading and label patterns across `RecruitingPage.tsx`, `RosterPage.tsx`, `DraftTrackerPage.tsx`.
 
@@ -148,8 +151,8 @@ Source: D-04, CONTEXT.md. Exact pattern from `ScreenshotIngestionPage.tsx` lines
 
 **Anatomy:**
 - Inline `<span>` badge on the recruit row, positioned after the recruit name
-- "Hard Sell" badge: `text-xs font-semibold px-2 py-0.5 rounded bg-green-900/30 text-green-400 border border-green-700`
-- "Send the House" badge: `text-xs font-semibold px-2 py-0.5 rounded bg-amber-900/30 text-amber-400 border border-amber-700`
+- "Hard Sell" badge: `text-xs font-semibold px-2 py-1 rounded bg-green-900/30 text-green-400 border border-green-700`
+- "Send the House" badge: `text-xs font-semibold px-2 py-1 rounded bg-amber-900/30 text-amber-400 border border-amber-700`
 - Badge text: exactly `"Hard Sell"` or `"Send the House"` — no truncation
 
 Source: D-06, CONTEXT.md.
@@ -158,8 +161,8 @@ Source: D-06, CONTEXT.md.
 
 **Anatomy:**
 - Inline toggle on each recruit row — use a `<button>` with toggle-style styling (not a checkbox)
-- Uncommitted state: `text-xs px-2 py-0.5 rounded border border-gray-600 text-gray-400 bg-gray-700/50` — label: `"Uncommitted"`
-- Committed state: `text-xs px-2 py-0.5 rounded border border-green-700 text-green-300 bg-green-900/30` — label: `"Committed"`
+- Uncommitted state: `text-xs px-2 py-1 rounded border border-gray-600 text-gray-400 bg-gray-700/50` — label: `"Uncommitted"`
+- Committed state: `text-xs px-2 py-1 rounded border border-green-700 text-green-300 bg-green-900/30` — label: `"Committed"`
 - Clicking toggles `isCommitted` on the recruit record (calls `updateRecruit()` in recruiting-store)
 - Touch target: minimum 32px height (use `min-h-8` if needed to satisfy tap area without visual bloat)
 
@@ -172,7 +175,7 @@ Source: D-02, CONTEXT.md.
 **Anatomy:**
 - `<button>` immediately after the isCommitted toggle on the same row
 - Label: `"Add to Roster"`
-- Classes: `text-xs px-2 py-0.5 rounded bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-colors`
+- Classes: `text-xs px-2 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-colors`
 - Behavior: calls `onClose`-style callback that opens `AddPlayerModal` with pre-filled `firstName`, `lastName` (parsed from `recruit.name` — split on last space), `position`, `recruitingStars`
 - Blue (not amber) distinguishes this as a roster action, not a recruiting entry action
 
@@ -190,10 +193,9 @@ Source: D-07, CONTEXT.md. Existing badge confirmed in `RosterPage.tsx`.
 
 **Anatomy:**
 - Toggle button in the filter bar alongside existing Position and Status filters
-- Off state: `px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 text-gray-400 rounded-lg hover:text-gray-200 transition-colors`
-- On state: `px-3 py-1.5 text-sm bg-orange-900/30 border border-orange-700 text-orange-300 rounded-lg`
-- Label: `"At-Risk"` (off) / `"At-Risk ✓"` — avoid emoji; use `"At-Risk (on)"` alternative if emoji disabled
-- Preferred label pair: `"Show At-Risk"` (off) → `"At-Risk Only"` (on)
+- Off state: `px-3 py-2 text-sm bg-gray-800 border border-gray-700 text-gray-400 rounded-lg hover:text-gray-200 transition-colors`
+- On state: `px-3 py-2 text-sm bg-orange-900/30 border border-orange-700 text-orange-300 rounded-lg`
+- Label: `"Show At-Risk"` (off) → `"At-Risk Only"` (on)
 - Row highlight when filter active: add `bg-orange-900/10` to each row where `player.dealBreaker` is truthy
 - Filter uses `useFilterStore` pattern (same as existing position/status filters, keyed to `'roster'` page)
 
@@ -225,11 +227,11 @@ Source: D-13, CONTEXT.md. Phase 22 Combobox pattern (STATE.md line 222).
 - Container: `fixed -left-[9999px] top-0` (off-screen, not `hidden` — html2canvas cannot capture `display:none`)
 - Card size: 640px wide × 360px tall (16:9 aspect ratio, standard shareable card)
 - Background: `bg-gray-900` with a subtle `bg-field-pattern` overlay (existing CSS class from index.css)
-- Top section: Dynasty name + year in Oswald/heading font, `text-2xl font-bold text-white`
+- Top section: Dynasty name + year in Oswald/heading font, `text-2xl font-semibold text-white`
 - Hero stats row: commit count + avg star rating side by side
-  - Commit count: `text-6xl font-black text-white font-display` (Bebas Neue)
+  - Commit count: `text-6xl font-black text-white font-display` (Bebas Neue — export surface exception, see Typography note)
   - Label below: `text-xs text-gray-400 uppercase tracking-widest`
-  - Avg stars: `text-6xl font-black text-amber-400 font-display`
+  - Avg stars: `text-6xl font-black text-amber-400 font-display` (Bebas Neue — export surface exception)
 - Divider: `border-t border-gray-700/60 my-4`
 - Position breakdown row: horizontal list of `{position}: {count}` in `text-sm text-gray-300`
 - Top 3 recruits list (bottom): name `text-sm font-semibold text-white` + stars `text-yellow-500 text-xs` + position `text-gray-400 text-xs`
@@ -372,17 +374,17 @@ No third-party component registries. No registry vetting required.
 |------|--------|----------------|
 | Add recruit form — motivation row | Grade dropdowns replacing category selects | 3-col grid, same `bg-gray-700` select classes |
 | Add recruit form — below motivation row | Hard Sell banner (live) | Green or amber rounded banner, `p-4`, `text-sm font-semibold` |
-| Recruit list rows | Hard Sell compact badge | `text-xs` green or amber badge pill |
-| Recruit list rows | isCommitted toggle | Gray (off) or green (on) `text-xs` toggle button |
-| Recruit list rows | Add to Roster button | Blue `text-xs` button, only when committed |
+| Recruit list rows | Hard Sell compact badge | `text-xs` green or amber badge pill, `py-1` |
+| Recruit list rows | isCommitted toggle | Gray (off) or green (on) `text-xs` toggle button, `py-1` |
+| Recruit list rows | Add to Roster button | Blue `text-xs` button, `py-1`, only when committed |
 | Class header toolbar | Export Class Card button | Secondary gray border button, beside Generate Grade |
-| Off-screen | Hidden class card render target | 640×360px dark card, Bebas Neue display numbers |
+| Off-screen | Hidden class card render target | 640×360px dark card, Bebas Neue display numbers (export surface only) |
 
 ### RosterPage.tsx
 
 | Area | Change | Visual Contract |
 |------|--------|----------------|
-| Filter bar | Show At-Risk toggle | Gray (off) / orange (on) toggle button beside existing filters |
+| Filter bar | Show At-Risk toggle | Gray (off) / orange (on) toggle button beside existing filters, `py-2` |
 | Player rows with dealBreaker | Row background tint when filter on | `bg-orange-900/10` row tint |
 | Player rows with dealBreaker | DB badge | Already exists — no change to badge styling |
 
