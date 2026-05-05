@@ -4,7 +4,7 @@ import { db } from '@dynasty-os/db';
 import { createGame, getGamesBySeason } from './game-service';
 import { createPlayer, getPlayersByDynasty } from './player-service';
 import { createPlayerSeason, getPlayerSeasonsByDynasty, updatePlayerSeason } from './player-season-service';
-import { createDraftPick } from './draft-service';
+import { createDraftPick, getDraftPicksBySeason } from './draft-service';
 import type { GameResult, HomeAway, GameType } from '@dynasty-os/core-types';
 import {
   getMaddenSavePath,
@@ -358,11 +358,18 @@ export async function computeSyncDiff(
     playersToAdd.push(p);
   }
 
-  // Draft picks — dedupe by round+pick if same season already has entries
+  // Draft picks — dedupe by round+pick against existing picks for this season
+  const existingDraftPicks = await getDraftPicksBySeason(seasonId);
+  const existingPickKeys = new Set(
+    existingDraftPicks.map((dp) => `${dp.round}-${dp.pickNumber ?? ''}`)
+  );
+
   const draftPicksToAdd: RawDraftPick[] = [];
   let draftPicksSkipped = 0;
   for (const dp of extracted.draftPicks) {
     if (dp.round === null && dp.pick === null) { draftPicksSkipped++; continue; }
+    const key = `${dp.round}-${dp.pick ?? ''}`;
+    if (existingPickKeys.has(key)) { draftPicksSkipped++; continue; }
     draftPicksToAdd.push(dp);
   }
 
