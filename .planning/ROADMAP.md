@@ -270,8 +270,20 @@ Plans:
   3. Clicking "Add to Roster" on a committed recruit opens AddPlayerModal with the recruit's name, position, and star rating already filled in
   4. Adding a draft pick with a linked player ID automatically changes that player's status to `'drafted'` in the database
   5. User can generate a Signing Day Class Card — a shareable PNG graphic showing commit count, average star rating, position breakdown, and top recruit callouts for the current recruiting class — exportable via the OS save dialog (CFB only)
-**Plans**: TBD
+**Plans**: 5 plans
 **UI hint**: yes
+
+Plans:
+**Wave 1** *(parallelizable)*
+- [ ] 24-01-PLAN.md — Foundation: Recruit.isCommitted type + recruiting-service.updateRecruit + recruiting-store.updateRecruit + AddPlayerModal initial-value props (TOOL-03 foundation)
+- [ ] 24-03-PLAN.md — RosterPage at-risk filter toggle + row tint via FilterStore (TOOL-02)
+- [ ] 24-04-PLAN.md — draft-service.createDraftPick player-status side effect + DraftTrackerPage searchable player combobox (TOOL-04)
+
+**Wave 2** *(blocked on 24-01)*
+- [ ] 24-02-PLAN.md — Export GRADE_POINTS + RecruitingPage motivation dropdowns + Hard Sell live banner + row badge + isCommitted toggle + Add to Roster wiring (TOOL-01, TOOL-03)
+
+**Wave 3** *(blocked on 24-02 — file conflict on RecruitingPage.tsx)*
+- [ ] 24-05-PLAN.md — Install html2canvas + Signing Day Class Card export button + hidden render target + handleExportCard chain + REQUIREMENTS.md TOOL-05 entry (TOOL-05)
 
 ### Phase 25: AI Queue & Features
 **Goal**: The AI job queue reliably processes pending jobs, legacy blurbs are user-initiated only, model routing is correct, and game narratives are auto-enqueued after each logged game.
