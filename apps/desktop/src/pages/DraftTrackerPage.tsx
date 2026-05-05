@@ -37,6 +37,8 @@ export function DraftTrackerPage() {
   const { goToDashboard, goToPlayerProfile } = useNavigationStore();
 
   const [form, setForm] = useState<PickFormData>(defaultPickForm);
+  const [playerSearch, setPlayerSearch] = useState('');
+  const [playerDropdownOpen, setPlayerDropdownOpen] = useState(false);
 
   // Load picks and players on mount
   useEffect(() => {
@@ -122,6 +124,8 @@ export function DraftTrackerPage() {
       ...defaultPickForm,
       seasonId: f.seasonId,
     }));
+    setPlayerSearch('');
+    setPlayerDropdownOpen(false);
   };
 
   // Group picks by year, descending
@@ -145,6 +149,14 @@ export function DraftTrackerPage() {
     // Return sorted entries descending by year
     return Array.from(map.entries()).sort((a, b) => b[0] - a[0]);
   }, [picks]);
+
+  const filteredPlayers =
+    playerSearch.trim().length >= 1
+      ? players.filter((p) => {
+          const full = `${p.firstName} ${p.lastName}`.toLowerCase();
+          return full.includes(playerSearch.toLowerCase());
+        })
+      : [];
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -177,18 +189,58 @@ export function DraftTrackerPage() {
                 <label className="block text-xs font-medium text-gray-400 mb-1">
                   Link to Player (optional)
                 </label>
-                <select
-                  value={form.playerId}
-                  onChange={(e) => handlePlayerSelect(e.target.value)}
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
-                >
-                  <option value="">— No link —</option>
-                  {players.map((player) => (
-                    <option key={player.id} value={player.id}>
-                      {player.firstName} {player.lastName} ({player.position})
-                    </option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <input
+                    type="text"
+                    role="combobox"
+                    aria-expanded={playerDropdownOpen}
+                    aria-controls={playerDropdownOpen ? 'player-combobox-list' : undefined}
+                    aria-autocomplete="list"
+                    value={playerSearch}
+                    onChange={(e) => {
+                      setPlayerSearch(e.target.value);
+                      setPlayerDropdownOpen(true);
+                      // Clear linked ID until user explicitly selects a row
+                      setForm((f) => ({ ...f, playerId: '' }));
+                    }}
+                    onFocus={() => setPlayerDropdownOpen(true)}
+                    onBlur={() => {
+                      // 150ms delay so onMouseDown on options fires first (Phase 22 WebView pattern)
+                      setTimeout(() => setPlayerDropdownOpen(false), 150);
+                      // Clear linked player if input was cleared without selecting
+                      if (!playerSearch.trim()) {
+                        setForm((f) => ({ ...f, playerId: '' }));
+                      }
+                    }}
+                    placeholder="Search roster by name…"
+                    className={`w-full bg-gray-700 border rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none ${playerDropdownOpen ? 'border-amber-500' : 'border-gray-600'}`}
+                  />
+                  {playerDropdownOpen && playerSearch.trim().length >= 1 && (
+                    <ul id="player-combobox-list" className="absolute z-10 mt-1 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                      {filteredPlayers.length > 0 ? (
+                        filteredPlayers.map((p) => (
+                          <li
+                            key={p.id}
+                            onMouseDown={() => {
+                              // onMouseDown (not onClick) — fires before input onBlur in WebView
+                              handlePlayerSelect(p.id);
+                              setPlayerSearch(`${p.firstName} ${p.lastName}`);
+                              setPlayerDropdownOpen(false);
+                            }}
+                            className="px-3 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer"
+                          >
+                            {p.firstName} {p.lastName}
+                            <span className="ml-2 text-xs text-gray-400">· {p.position}</span>
+                          </li>
+                        ))
+                      ) : (
+                        <li className="px-3 py-2 text-sm text-gray-500 italic">
+                          No matching players
+                        </li>
+                      )}
+                    </ul>
+                  )}
+                </div>
               </div>
 
               <div>
