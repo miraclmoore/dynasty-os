@@ -248,7 +248,18 @@ export function RecordsPage() {
 
       {/* Main content */}
       <main className="max-w-5xl mx-auto px-6 py-6">
-        {/* Tab bar */}
+        {/* No seasons yet — page-level empty state */}
+        {allSeasons.length === 0 && !loading && (
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <p className="text-gray-300 text-base font-medium mb-2">No records yet</p>
+            <p className="text-gray-500 text-sm max-w-sm leading-relaxed">
+              Log player stats across seasons and they'll appear here as single-season and career leaderboards.
+            </p>
+          </div>
+        )}
+
+        {/* Tabs + content — only shown when there are seasons */}
+        {allSeasons.length > 0 && (<>
         <div className="flex gap-2 mb-6">
           <button className={TAB_STYLES('single-season')} onClick={() => setActiveTab('single-season')}>
             Single-Season
@@ -450,6 +461,7 @@ export function RecordsPage() {
             )}
           </div>
         )}
+        </>)}
       </main>
     </div>
   );

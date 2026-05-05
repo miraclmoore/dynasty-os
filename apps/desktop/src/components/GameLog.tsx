@@ -48,11 +48,23 @@ interface GameRecapState {
   narrative: SeasonNarrative | null;
 }
 
+const NOTE_EXPAND_THRESHOLD = 60;
+
 export function GameLog({ games, dynasty, season, activeTone, onUpdateGame }: GameLogProps) {
   const sorted = [...games].sort((a, b) => a.week - b.week);
 
   // Map of gameId → recap state
   const [recapState, setRecapState] = useState<Record<string, GameRecapState>>({});
+  const [expandedNoteIds, setExpandedNoteIds] = useState<Set<string>>(new Set());
+
+  const toggleNote = (gameId: string) => {
+    setExpandedNoteIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(gameId)) next.delete(gameId);
+      else next.add(gameId);
+      return next;
+    });
+  };
 
   if (sorted.length === 0) {
     return (
@@ -197,6 +209,14 @@ export function GameLog({ games, dynasty, season, activeTone, onUpdateGame }: Ga
                         type="text"
                         className="truncate block max-w-[160px]"
                       />
+                      {game.notes && game.notes.length > NOTE_EXPAND_THRESHOLD && (
+                        <button
+                          onClick={() => toggleNote(game.id)}
+                          className="text-xs text-blue-400 hover:text-blue-300 leading-none mt-0.5"
+                        >
+                          {expandedNoteIds.has(game.id) ? 'show less' : 'show more'}
+                        </button>
+                      )}
                     </td>
                     <td className="py-2 pl-3">
                       {isCompleted && (
@@ -228,6 +248,15 @@ export function GameLog({ games, dynasty, season, activeTone, onUpdateGame }: Ga
                       )}
                     </td>
                   </tr>
+
+                  {/* Expanded note row */}
+                  {expandedNoteIds.has(game.id) && game.notes && (
+                    <tr className="border-b border-gray-700/50">
+                      <td colSpan={7} className="py-2 px-4 pb-3">
+                        <p className="text-sm text-gray-300 leading-relaxed">{game.notes}</p>
+                      </td>
+                    </tr>
+                  )}
 
                   {/* Inline recap row */}
                   {recap?.open && (

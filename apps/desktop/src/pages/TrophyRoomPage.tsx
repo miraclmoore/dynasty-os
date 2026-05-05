@@ -68,6 +68,16 @@ export function TrophyRoomPage() {
           )}
         </div>
 
+        {/* No trophies yet — encouragement */}
+        {totalEarned === 0 && !loading && (
+          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-5 text-center">
+            <p className="text-gray-300 text-sm font-medium mb-1">No trophies earned yet</p>
+            <p className="text-gray-500 text-xs leading-relaxed">
+              Win games, claim bowl victories, and capture championships to start filling your trophy room.
+            </p>
+          </div>
+        )}
+
         {/* Category sections */}
         {CATEGORY_ORDER.map((category) => {
           const defs = MILESTONE_DEFINITIONS.filter((d) => d.category === category);
