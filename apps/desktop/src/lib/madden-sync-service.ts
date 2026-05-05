@@ -471,6 +471,7 @@ export async function commitSyncDiff(
     const nameParts = fullName.split(' ');
     const firstName = nameParts[0] ?? '';
     const lastName = nameParts.slice(1).join(' ') || '';
+    // createPlayer always returns Player or throws — no null check needed
     const player = await createPlayer({
       dynastyId,
       firstName,
@@ -479,25 +480,23 @@ export async function commitSyncDiff(
       jerseyNumber: p.jerseyNumber ?? undefined,
       status: 'active',
     });
-    if (player) {
-      const matchedStat = findStatsForPlayer(fullName, diff.playerStats);
-      const stats = mapRawStatsToRecord(matchedStat, p.overall);
-      const existing = await db.playerSeasons
-        .where('[playerId+year]')
-        .equals([player.id, year])
-        .first();
-      if (existing) {
-        const mergedStats = { ...(existing.stats ?? {}), ...stats };
-        await updatePlayerSeason(existing.id, { stats: mergedStats });
-      } else {
-        await createPlayerSeason({
-          playerId: player.id,
-          dynastyId,
-          seasonId,
-          year,
-          stats,
-        });
-      }
+    const matchedStat = findStatsForPlayer(fullName, diff.playerStats);
+    const stats = mapRawStatsToRecord(matchedStat, p.overall);
+    const existing = await db.playerSeasons
+      .where('[playerId+year]')
+      .equals([player.id, year])
+      .first();
+    if (existing) {
+      const mergedStats = { ...(existing.stats ?? {}), ...stats };
+      await updatePlayerSeason(existing.id, { stats: mergedStats });
+    } else {
+      await createPlayerSeason({
+        playerId: player.id,
+        dynastyId,
+        seasonId,
+        year,
+        stats,
+      });
     }
     playersAdded++;
   }
