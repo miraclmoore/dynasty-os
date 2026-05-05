@@ -337,14 +337,18 @@ Plans:
 **Depends on**: Phase 22 (screenshot pipeline stable), Phase 17 (dashboard layout finalized)
 **Motivation**: Research and user feedback show the right column below the Season Checklist is blank real estate. CFB and Madden players have different top-of-mind data; the widgets should adapt by sport. Regression monitoring data is already in the DB — it just needs to be surfaced.
 **Widgets by sport**:
-  - **CFB:** Recruiting Snapshot (current class commits, avg stars, positions needed) + Top Performers (top 3 players by key stat this season)
+  - **CFB:** Recruiting Snapshot (current class commits, avg stars, positions needed) + Top Performers (top 3 players by key stat this season) + Roster Health (position-by-position depth counts, highlights thin positions) + Program Snapshot (all-time record, total championships, years coached — persistent legacy card)
   - **Madden:** Injury Report (active injuries with weeks-out and severity) + Top Performers (same as CFB)
   - **Both:** Regression Watch — roster players whose overallRating dropped season-over-season, flagged inline in the Top Performers or as a standalone alert row
+**CFB widget notes**:
+  - Roster Health requires no new data — computes from existing players + positions; flags any position with fewer than 2 active players as a depth hole
+  - Program Snapshot requires no new data — all-time W-L computed from seasons table, championships from bowl/playoff results, years coached from dynasty start date
+  - Right column scrolls if 4 widgets exceed viewport height; all 4 are shown by default for CFB
 **Injury detail prerequisite**: Player `status: 'injured'` currently has no detail. Add `injuryWeeksOut` and `injurySeverity` fields to the Player model so Injury Report has data to display. Log via EditPlayerModal.
 **Success Criteria** (what must be TRUE):
-  1. The dashboard right column shows two populated widgets for both CFB and Madden dynasties; no blank space below the Season Checklist when data exists
-  2. CFB widget: Recruiting Snapshot shows commit count, average stars, and top position need for the active recruiting class; Top Performers shows top 3 players with their leading stat
-  3. Madden widget: Injury Report lists all players with `status: 'injured'` including weeks-out and severity; Top Performers shows top 3 players with their leading stat
+  1. The dashboard right column shows populated widgets for both CFB and Madden dynasties with no blank space below the Season Checklist when data exists
+  2. CFB: Recruiting Snapshot shows commit count, average stars, and top position need; Top Performers shows top 3 players with their leading stat; Roster Health shows position depth with thin positions highlighted; Program Snapshot shows all-time record, championship count, and years coached
+  3. Madden: Injury Report lists all players with `status: 'injured'` including weeks-out and severity; Top Performers shows top 3 players with their leading stat
   4. Regression Watch flags any player whose overallRating declined more than 2 points season-over-season with a visual indicator on the roster or in the widget
 **Plans**: TBD
 **UI hint**: yes
