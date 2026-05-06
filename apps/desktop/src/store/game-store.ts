@@ -9,6 +9,8 @@ import {
 } from '../lib/game-service';
 import { useToastStore } from './toast-store';
 import { useUndoStore, type UndoableOperation } from './undo-store';
+import { useAiQueueStore } from './ai-queue-store';
+import { usePrefsStore } from './prefs-store';
 
 interface GameState {
   games: Game[];
@@ -49,6 +51,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const games = await getGamesBySeason(input.seasonId);
       set({ games, loading: false });
       useToastStore.getState().success('Game logged', `vs ${input.opponent}`);
+      // Auto-enqueue game-narrative job — fire-and-forget, never blocks save
+      if (usePrefsStore.getState().hasApiKey) {
+        useAiQueueStore.getState().enqueueAiJob({
+          type: 'game-narrative',
+          dynastyId: input.dynastyId,
+          payload: {
+            gameId: game.id,
+            seasonId: input.seasonId,
+            dynastyId: input.dynastyId,
+          },
+        });
+      }
       return game;
     } catch (err) {
       set({ error: String(err), loading: false });
