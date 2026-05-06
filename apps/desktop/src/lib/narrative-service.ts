@@ -309,7 +309,7 @@ export async function getCachedGameNarrative(
 // ── Shared API Call Helper ────────────────────────────────────────────────────
 
 const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
-const SONNET_MODEL = 'claude-sonnet-4-6';
+const SONNET_MODEL = 'claude-sonnet-4-6-20260101';
 
 async function callClaudeApiWithModel(
   systemPrompt: string,
