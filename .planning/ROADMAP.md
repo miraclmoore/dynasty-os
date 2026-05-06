@@ -293,7 +293,12 @@ Plans:
   1. After adding jobs to the AI queue (via any trigger), the queue worker mounted in App.tsx processes them and each job moves from `pending` to `done` or `failed` — no jobs silently accumulate in the pending state indefinitely
   2. Navigating to a player profile page does not trigger any Anthropic API call; a blurb is generated only after the user explicitly clicks "Generate AI Blurb"
   3. After logging a game with an API key configured, a `game-narrative` job appears in the AI queue and is processed with Claude Haiku; a season recap generated via the Narrative page uses Claude Sonnet 4.6
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 25-01-PLAN.md — Add 'game-narrative' to AiJob.type, model routing fix (HAIKU/SONNET constants), auto-enqueue in logGame (AIQE-03, AIQE-04)
+- [ ] 25-02-PLAN.md — PlayerProfilePage button label fix: 'Generate AI Blurb' vs 'Regenerate Blurb' (AIQE-02)
+- [ ] 25-03-PLAN.md — useQueueProcessor hook in App.tsx: processes pending jobs, dispatches game-narrative to generateGameNarrative (AIQE-01)
 
 ### Phase 26: Data Entry UX
 **Goal**: Coaches can log a game in under 5 seconds from the dashboard, bulk-import games and players via CSV, get screenshot capture guidance before parsing, and extract data from video recordings.
