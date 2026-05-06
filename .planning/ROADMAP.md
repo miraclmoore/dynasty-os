@@ -296,8 +296,8 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 25-01-PLAN.md — Add 'game-narrative' to AiJob.type, model routing fix (HAIKU/SONNET constants), auto-enqueue in logGame (AIQE-03, AIQE-04)
-- [ ] 25-02-PLAN.md — PlayerProfilePage button label fix: 'Generate AI Blurb' vs 'Regenerate Blurb' (AIQE-02)
+- [x] 25-01-PLAN.md — Add 'game-narrative' to AiJob.type, model routing fix (HAIKU/SONNET constants), auto-enqueue in logGame (AIQE-03, AIQE-04)
+- [x] 25-02-PLAN.md — PlayerProfilePage button label fix: 'Generate AI Blurb' vs 'Regenerate Blurb' (AIQE-02)
 - [ ] 25-03-PLAN.md — useQueueProcessor hook in App.tsx: processes pending jobs, dispatches game-narrative to generateGameNarrative (AIQE-01)
 
 ### Phase 26: Data Entry UX
@@ -490,7 +490,7 @@ v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 
 | 22. Screenshot Pipeline | v2.2 | 5/5 | Complete   | 2026-05-04 |
 | 23. Madden Sync Upgrade | v2.2 | 2/2 | Complete   | 2026-05-05 |
 | 24. Recruiting Tools | v2.2 | 5/5 | Complete   | 2026-05-05 |
-| 25. AI Queue & Features | v2.2 | 0/TBD | Not started | - |
+| 25. AI Queue & Features | v2.2 | 2/3 | In Progress|  |
 | 26. Data Entry UX | v2.2 | 0/TBD | Not started | - |
 | 27. Navigation & Routing | v2.2 | 0/TBD | Not started | - |
 | 28. Polish & Cleanup | v2.2 | 0/TBD | Not started | - |

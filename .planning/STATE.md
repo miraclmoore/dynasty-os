@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v2.2
 milestone_name: Handoff Overhaul
 status: executing
-stopped_at: Phase 25 planned — ready to execute
-last_updated: "2026-05-05T23:59:00.000Z"
-last_activity: 2026-05-05 -- Phase 25 planned (3 plans, 2 waves)
+stopped_at: Phase 24 UI-SPEC approved
+last_updated: "2026-05-06T04:24:42.417Z"
+last_activity: 2026-05-06 -- Phase 25 execution started
 progress:
   total_phases: 19
   completed_phases: 9
   total_plans: 43
   completed_plans: 39
-  percent: 90
+  percent: 91
 ---
 
 # Project State
@@ -21,13 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-25)
 
 **Core value:** The memory layer, narrative engine, and legacy vault that sports games never built — transforming raw dynasty data into stories that persist, compound, and can be shared.
-**Current focus:** Phase 25 — AI Queue & Features
+**Current focus:** Phase 25 — ai-queue-features
 
 ## Current Position
 
-Phase: 24 (recruiting-tools) — COMPLETE
-Status: Phase 24 complete. Ready to begin Phase 25.
-Last activity: 2026-05-05 -- Phase 24 UAT approved
+Phase: 25 (ai-queue-features) — EXECUTING
+Plan: 1 of 3
+Status: Executing Phase 25
+Last activity: 2026-05-06 -- Phase 25 execution started
 
 ## Performance Metrics
 
