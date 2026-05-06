@@ -299,6 +299,7 @@ Plans:
 - [x] 25-01-PLAN.md — Add 'game-narrative' to AiJob.type, model routing fix (HAIKU/SONNET constants), auto-enqueue in logGame (AIQE-03, AIQE-04)
 - [x] 25-02-PLAN.md — PlayerProfilePage button label fix: 'Generate AI Blurb' vs 'Regenerate Blurb' (AIQE-02)
 - [x] 25-03-PLAN.md — useQueueProcessor hook in App.tsx: processes pending jobs, dispatches game-narrative to generateGameNarrative (AIQE-01)
+- [ ] 25-04-PLAN.md — Gap closure: CR-01 fix (useMemo hooks order) + CR-02 fix (SONNET_MODEL date suffix) (AIQE-02, AIQE-03)
 
 ### Phase 26: Data Entry UX
 **Goal**: Coaches can log a game in under 5 seconds from the dashboard, bulk-import games and players via CSV, get screenshot capture guidance before parsing, and extract data from video recordings.
