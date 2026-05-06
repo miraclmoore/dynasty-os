@@ -9,6 +9,17 @@ import type { DraftPick } from '@dynasty-os/core-types';
 
 const ROUNDS = [1, 2, 3, 4, 5, 6, 7];
 
+const NFL_TEAMS = [
+  'Arizona Cardinals', 'Atlanta Falcons', 'Baltimore Ravens', 'Buffalo Bills',
+  'Carolina Panthers', 'Chicago Bears', 'Cincinnati Bengals', 'Cleveland Browns',
+  'Dallas Cowboys', 'Denver Broncos', 'Detroit Lions', 'Green Bay Packers',
+  'Houston Texans', 'Indianapolis Colts', 'Jacksonville Jaguars', 'Kansas City Chiefs',
+  'Las Vegas Raiders', 'Los Angeles Chargers', 'Los Angeles Rams', 'Miami Dolphins',
+  'Minnesota Vikings', 'New England Patriots', 'New Orleans Saints', 'New York Giants',
+  'New York Jets', 'Philadelphia Eagles', 'Pittsburgh Steelers', 'San Francisco 49ers',
+  'Seattle Seahawks', 'Tampa Bay Buccaneers', 'Tennessee Titans', 'Washington Commanders',
+];
+
 interface PickFormData {
   playerName: string;
   position: string;
@@ -330,14 +341,17 @@ export function DraftTrackerPage() {
                 <label className="block text-xs font-medium text-gray-400 mb-1">
                   NFL Team
                 </label>
-                <input
-                  type="text"
+                <select
                   required
                   value={form.nflTeam}
                   onChange={(e) => setForm((f) => ({ ...f, nflTeam: e.target.value }))}
-                  placeholder="e.g. Chicago Bears"
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
-                />
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
+                >
+                  <option value="">Select Team</option>
+                  {NFL_TEAMS.map((t) => (
+                    <option key={t} value={t}>{t}</option>
+                  ))}
+                </select>
               </div>
             </div>
 

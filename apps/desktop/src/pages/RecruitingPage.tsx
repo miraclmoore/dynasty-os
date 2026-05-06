@@ -13,6 +13,7 @@ import { AddPlayerModal } from '../components/AddPlayerModal';
 import type { RecruitingClass, Recruit } from '@dynasty-os/core-types';
 
 const POSITIONS = ['QB', 'RB', 'WR', 'TE', 'OL', 'OT', 'OG', 'C', 'DL', 'DE', 'DT', 'LB', 'CB', 'S', 'K', 'P', 'ATH'];
+const US_STATES = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'];
 
 type ViewMode = 'entry' | 'history';
 
@@ -542,7 +543,7 @@ export function RecruitingPage() {
 
                   {/* Add recruit form */}
                   <form onSubmit={handleAddRecruit} className="flex flex-col gap-3 mb-4">
-                    <div className="grid grid-cols-6 gap-2">
+                    <div className="grid grid-cols-7 gap-2">
                       <input
                         type="text"
                         required
@@ -569,31 +570,31 @@ export function RecruitingPage() {
                           <option key={s} value={s}>{s} Star</option>
                         ))}
                       </select>
-                      <input
-                        type="text"
+                      <select
                         value={recruitForm.state}
                         onChange={(e) => setRecruitForm((f) => ({ ...f, state: e.target.value }))}
-                        placeholder="State"
-                        maxLength={2}
-                        className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
+                        className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
+                      >
+                        <option value="">State</option>
+                        {US_STATES.map((s) => (
+                          <option key={s} value={s}>{s}</option>
+                        ))}
+                      </select>
+                      <input
+                        type="number"
+                        min={1}
+                        value={recruitForm.nationalRank}
+                        onChange={(e) => setRecruitForm((f) => ({ ...f, nationalRank: e.target.value }))}
+                        placeholder="Nat'l #"
+                        className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 w-full"
                       />
-                      <div className="flex gap-2">
-                        <input
-                          type="number"
-                          min={1}
-                          value={recruitForm.nationalRank}
-                          onChange={(e) => setRecruitForm((f) => ({ ...f, nationalRank: e.target.value }))}
-                          placeholder="Nat'l #"
-                          className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
-                        />
-                        <button
-                          type="submit"
-                          disabled={loading}
-                          className="px-3 py-2 bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white text-sm font-semibold rounded-lg transition-colors"
-                        >
-                          Add
-                        </button>
-                      </div>
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        className="px-3 py-2 bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white text-sm font-semibold rounded-lg transition-colors"
+                      >
+                        Add
+                      </button>
                     </div>
                     {/* Motivations + Visit Week (DMOD-05) */}
                     <div>

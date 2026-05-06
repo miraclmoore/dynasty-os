@@ -55,7 +55,7 @@ Full details: Phase Details — v2.0 section below.
 - [x] **Phase 21: Data Model** - keyMoments table, Season fields, Player devTrait/dealBreaker, Recruit motivations (completed 2026-05-04)
 - [x] **Phase 22: Screenshot Pipeline** - Player stats → DB, depth chart CSV, recruiting-motivations type, multi-image (completed 2026-05-04)
 - [x] **Phase 23: Madden Sync Upgrade** - PlayerStats extraction, auto-detect save path (completed 2026-05-05)
-- [ ] **Phase 24: Recruiting Tools** - Hard Sell calculator, transfer risk, recruit→roster, draft pick→status
+- [x] **Phase 24: Recruiting Tools** - Hard Sell calculator, transfer risk, recruit→roster, draft pick→status (completed 2026-05-05)
 - [ ] **Phase 25: AI Queue & Features** - Queue processor, explicit blurb, model routing, game narrative trigger
 - [ ] **Phase 26: Data Entry UX** - Quick Score, CSV import, roster CSV, tips panel, video import
 - [ ] **Phase 27: Navigation & Routing** - CommandPalette all 24 pages, React Router migration
@@ -275,9 +275,9 @@ Plans:
 
 Plans:
 **Wave 1** *(parallelizable)*
-- [ ] 24-01-PLAN.md — Foundation: Recruit.isCommitted type + recruiting-service.updateRecruit + recruiting-store.updateRecruit + AddPlayerModal initial-value props (TOOL-03 foundation)
-- [ ] 24-03-PLAN.md — RosterPage at-risk filter toggle + row tint via FilterStore (TOOL-02)
-- [ ] 24-04-PLAN.md — draft-service.createDraftPick player-status side effect + DraftTrackerPage searchable player combobox (TOOL-04)
+- [x] 24-01-PLAN.md — Foundation: Recruit.isCommitted type + recruiting-service.updateRecruit + recruiting-store.updateRecruit + AddPlayerModal initial-value props (TOOL-03 foundation)
+- [x] 24-03-PLAN.md — RosterPage at-risk filter toggle + row tint via FilterStore (TOOL-02)
+- [x] 24-04-PLAN.md — draft-service.createDraftPick player-status side effect + DraftTrackerPage searchable player combobox (TOOL-04)
 
 **Wave 2** *(blocked on 24-01)*
 - [x] 24-02-PLAN.md — Export GRADE_POINTS + RecruitingPage motivation dropdowns + Hard Sell live banner + row badge + isCommitted toggle + Add to Roster wiring (TOOL-01, TOOL-03)
@@ -484,7 +484,7 @@ v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 
 | 21. Data Model | v2.2 | 4/4 | Complete   | 2026-05-04 |
 | 22. Screenshot Pipeline | v2.2 | 5/5 | Complete   | 2026-05-04 |
 | 23. Madden Sync Upgrade | v2.2 | 2/2 | Complete   | 2026-05-05 |
-| 24. Recruiting Tools | v2.2 | 2/5 | In Progress|  |
+| 24. Recruiting Tools | v2.2 | 5/5 | Complete   | 2026-05-05 |
 | 25. AI Queue & Features | v2.2 | 0/TBD | Not started | - |
 | 26. Data Entry UX | v2.2 | 0/TBD | Not started | - |
 | 27. Navigation & Routing | v2.2 | 0/TBD | Not started | - |
