@@ -3,7 +3,7 @@ import { generateId } from '../lib/uuid';
 
 export interface AiJob {
   id: string;
-  type: 'legacy-blurb' | 'season-narrative' | 'recruiting-grade' | 'journalist-blurb' | 'hot-seat' | 'dossier' | 'rival-prophecy' | 'obituary' | 'generational-arc' | 'what-if' | 'dna-report' | 'living-chronicle';
+  type: 'legacy-blurb' | 'season-narrative' | 'game-narrative' | 'recruiting-grade' | 'journalist-blurb' | 'hot-seat' | 'dossier' | 'rival-prophecy' | 'obituary' | 'generational-arc' | 'what-if' | 'dna-report' | 'living-chronicle';
   payload: Record<string, unknown>;
   dynastyId: string;
   status: 'pending' | 'running' | 'done' | 'failed';
