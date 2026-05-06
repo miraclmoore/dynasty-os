@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v2.2
 milestone_name: Handoff Overhaul
-status: executing
+status: ready_to_plan
 stopped_at: Phase 24 UI-SPEC approved
 last_updated: "2026-05-06T05:05:04.435Z"
 last_activity: 2026-05-06 -- Phase 25 execution started
 progress:
   total_phases: 19
-  completed_phases: 9
+  completed_phases: 10
   total_plans: 44
   completed_plans: 42
-  percent: 95
+  percent: 53
 ---
 
 # Project State
@@ -25,16 +25,16 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 
 ## Current Position
 
-Phase: 25 (ai-queue-features) — EXECUTING
-Plan: 1 of 4
-Status: Executing Phase 25
-Last activity: 2026-05-06 -- Phase 25 execution started
+Phase: 26
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-05-06
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 39
+- Total plans completed: 43
 - Average duration: ~4.7 min
 - Total execution time: ~123 min
 

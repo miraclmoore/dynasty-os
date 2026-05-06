@@ -52,10 +52,10 @@ Requirements for the Handoff Overhaul milestone. 40 tasks across 10 phases. Sour
 
 ### AI Queue & Features
 
-- [ ] **AIQE-01**: The AI job queue processor runs pending jobs and transitions them `pending → running → done/failed`; no jobs silently accumulate; queue worker is mounted in `App.tsx`
-- [ ] **AIQE-02**: Navigating to a player profile does NOT trigger an automatic API call for legacy blurb generation; blurb is generated only when the user clicks "Generate AI Blurb"
-- [ ] **AIQE-03**: Game narratives are generated with Claude Haiku (`claude-haiku-4-5-20251001`); season narratives are generated with Claude Sonnet 4.6
-- [ ] **AIQE-04**: After logging a game, a `game-narrative` job is auto-enqueued in the background if an API key is configured
+- [x] **AIQE-01**: The AI job queue processor runs pending jobs and transitions them `pending → running → done/failed`; no jobs silently accumulate; queue worker is mounted in `App.tsx`
+- [x] **AIQE-02**: Navigating to a player profile does NOT trigger an automatic API call for legacy blurb generation; blurb is generated only when the user clicks "Generate AI Blurb"
+- [x] **AIQE-03**: Game narratives are generated with Claude Haiku (`claude-haiku-4-5-20251001`); season narratives are generated with Claude Sonnet 4.6
+- [x] **AIQE-04**: After logging a game, a `game-narrative` job is auto-enqueued in the background if an API key is configured
 
 ### Data Entry UX
 
@@ -147,10 +147,10 @@ Which phases cover which requirements.
 | TOOL-03 | Phase 24 | Pending |
 | TOOL-04 | Phase 24 | Pending |
 | TOOL-05 | Phase 24 | Pending |
-| AIQE-01 | Phase 25 | Pending |
-| AIQE-02 | Phase 25 | Pending |
-| AIQE-03 | Phase 25 | Pending |
-| AIQE-04 | Phase 25 | Pending |
+| AIQE-01 | Phase 25 | Complete |
+| AIQE-02 | Phase 25 | Complete |
+| AIQE-03 | Phase 25 | Complete |
+| AIQE-04 | Phase 25 | Complete |
 | UXEN-01 | Phase 26 | Pending |
 | UXEN-02 | Phase 26 | Pending |
 | UXEN-03 | Phase 26 | Pending |
