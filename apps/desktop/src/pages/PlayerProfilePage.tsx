@@ -389,9 +389,9 @@ export function PlayerProfilePage() {
                   onClick={handleRegenerateBlurb}
                   disabled={blurbLoading || !hasApiKey}
                   className="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed text-gray-300 text-xs rounded-lg transition-colors"
-                  title={!hasApiKey ? 'Set an API key below to generate blurbs' : 'Regenerate AI blurb'}
+                  title={!hasApiKey ? 'Set an API key below to generate blurbs' : legacyBlurb ? 'Regenerate AI blurb' : 'Generate AI blurb for this player'}
                 >
-                  {blurbLoading ? 'Generating...' : 'Regenerate Blurb'}
+                  {blurbLoading ? 'Generating...' : legacyBlurb ? 'Regenerate Blurb' : 'Generate AI Blurb'}
                 </button>
                 <LegacyCardExport
                   cardRef={legacyCardRef as React.RefObject<HTMLDivElement>}
