@@ -258,19 +258,24 @@ export function DraftTrackerPage() {
                 <label className="block text-xs font-medium text-gray-400 mb-1">
                   Season
                 </label>
-                <select
-                  value={form.seasonId}
-                  onChange={(e) => setForm((f) => ({ ...f, seasonId: e.target.value }))}
-                  required
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
-                >
-                  <option value="">Select season...</option>
-                  {seasons.map((season) => (
-                    <option key={season.id} value={season.id}>
-                      {season.year}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select
+                    value={form.seasonId}
+                    onChange={(e) => setForm((f) => ({ ...f, seasonId: e.target.value }))}
+                    required
+                    className="w-full appearance-none bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 pr-8 text-sm text-white focus:outline-none focus:border-amber-500"
+                  >
+                    <option value="">Select season...</option>
+                    {seasons.map((season) => (
+                      <option key={season.id} value={season.id}>
+                        {season.year}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center text-gray-400">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -311,15 +316,20 @@ export function DraftTrackerPage() {
                 <label className="block text-xs font-medium text-gray-400 mb-1">
                   Round
                 </label>
-                <select
-                  value={form.round}
-                  onChange={(e) => setForm((f) => ({ ...f, round: parseInt(e.target.value, 10) }))}
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
-                >
-                  {ROUNDS.map((r) => (
-                    <option key={r} value={r}>Round {r}</option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select
+                    value={form.round}
+                    onChange={(e) => setForm((f) => ({ ...f, round: parseInt(e.target.value, 10) }))}
+                    className="w-full appearance-none bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 pr-8 text-sm text-white focus:outline-none focus:border-amber-500"
+                  >
+                    {ROUNDS.map((r) => (
+                      <option key={r} value={r}>Round {r}</option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center text-gray-400">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  </div>
+                </div>
               </div>
 
               <div>
@@ -333,7 +343,7 @@ export function DraftTrackerPage() {
                   value={form.pickNumber}
                   onChange={(e) => setForm((f) => ({ ...f, pickNumber: e.target.value }))}
                   placeholder="e.g. 1"
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 />
               </div>
 
@@ -341,17 +351,22 @@ export function DraftTrackerPage() {
                 <label className="block text-xs font-medium text-gray-400 mb-1">
                   NFL Team
                 </label>
-                <select
-                  required
-                  value={form.nflTeam}
-                  onChange={(e) => setForm((f) => ({ ...f, nflTeam: e.target.value }))}
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
-                >
-                  <option value="">Select Team</option>
-                  {NFL_TEAMS.map((t) => (
-                    <option key={t} value={t}>{t}</option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select
+                    required
+                    value={form.nflTeam}
+                    onChange={(e) => setForm((f) => ({ ...f, nflTeam: e.target.value }))}
+                    className="w-full appearance-none bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 pr-8 text-sm text-white focus:outline-none focus:border-amber-500"
+                  >
+                    <option value="">Select Team</option>
+                    {NFL_TEAMS.map((t) => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center text-gray-400">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  </div>
+                </div>
               </div>
             </div>
 
