@@ -432,7 +432,7 @@ async function callClaudeApiWithModel(
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Tone for auto-enqueued game narrative**
    - What we know: `generateGameNarrative` requires a `tone` parameter (`'espn' | 'hometown' | 'legend'`). The GameLog currently passes `activeTone` from the DashboardPage's tone selector state.
