@@ -34,6 +34,8 @@ END your response with exactly this format on its own line: TAGLINE: [three-word
 
 const OUTPUT_INSTRUCTION_GAME = `Write a 1-paragraph post-game recap (4–6 sentences). Do not use emojis.
 
+Choose the narrative angle that best fits THIS specific game — do not default to defense. If the score was high, lead with offensive production. If there was a comeback or overtime, lead with resilience. If a rivalry or ranked opponent was involved, lead with the stakes. Only lead with defense if the margin was genuinely built by a shutout or bend-don't-break performance. Every game recap should feel distinct from the others.
+
 END your response with exactly this format on its own line: TAGLINE: [three-word tagline]. The tagline must be EXACTLY 3 words — no more, no less. It should capture the essence of this game.`;
 
 function buildDataConstraintBlock(dynasty: Dynasty): string {

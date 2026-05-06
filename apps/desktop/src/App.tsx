@@ -34,6 +34,7 @@ import { TickerBar } from './components/TickerBar';
 import { CommandPalette } from './components/CommandPalette';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { useAiQueueStore, type AiJob } from './store/ai-queue-store';
+import { useToastStore } from './store/toast-store';
 import { db } from '@dynasty-os/db';
 import { generateGameNarrative } from './lib/narrative-service';
 
@@ -139,6 +140,11 @@ function App() {
   const pendingAiJobs = useAiQueueStore((s) => s.pendingAiJobs);
   const processingRef = useRef(false);
 
+  // Reset any jobs that were left in 'running' from a previous session (e.g. force-quit)
+  useEffect(() => {
+    useAiQueueStore.getState().resetStuckJobs();
+  }, []);
+
   useEffect(() => {
     const pending = pendingAiJobs.find((j) => j.status === 'pending');
     if (!pending || processingRef.current) return;
@@ -149,6 +155,9 @@ function App() {
     processJob(pending)
       .then(() => {
         useAiQueueStore.getState().updateJobStatus(pending.id, 'done');
+        if (pending.type === 'game-narrative') {
+          useToastStore.getState().success('Game recap ready', 'Click the game in the log to read it');
+        }
       })
       .catch(() => {
         useAiQueueStore.getState().updateJobStatus(pending.id, 'failed');

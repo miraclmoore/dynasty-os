@@ -65,6 +65,9 @@ export function DashboardPage() {
 
   const [logGameOpen, setLogGameOpen] = useState(false);
   const [seasonEndOpen, setSeasonEndOpen] = useState(false);
+  const hasApiKey = usePrefsStore((s) => s.hasApiKey);
+  const [apiKeyInput, setApiKeyInput] = useState('');
+  const [apiKeySaved, setApiKeySaved] = useState(false);
   const [autoExport, setAutoExport] = useState(() =>
     activeDynasty ? isAutoExportEnabled(activeDynasty.id) : false
   );
@@ -269,6 +272,38 @@ export function DashboardPage() {
               Auto-export on save
             </span>
           </label>
+        </div>
+
+        {/* AI API key */}
+        <div className="px-3 py-2 border-t border-gray-800">
+          <p className="text-xs text-gray-500 mb-1.5">
+            Anthropic key{' '}
+            {hasApiKey ? (
+              <span className="text-green-400">✓ configured</span>
+            ) : (
+              <span className="text-amber-400">not set</span>
+            )}
+          </p>
+          <div className="flex gap-1">
+            <input
+              type="password"
+              value={apiKeyInput}
+              onChange={(e) => { setApiKeyInput(e.target.value); setApiKeySaved(false); }}
+              placeholder="sk-ant-..."
+              className="flex-1 min-w-0 text-xs bg-gray-800 border border-gray-700 rounded px-2 py-1 text-gray-200 placeholder-gray-600 focus:outline-none focus:border-amber-500"
+            />
+            <button
+              disabled={!apiKeyInput.trim()}
+              onClick={async () => {
+                await prefs.setApiKey(apiKeyInput.trim());
+                setApiKeyInput('');
+                setApiKeySaved(true);
+              }}
+              className="text-xs px-2 py-1 rounded bg-amber-600 hover:bg-amber-500 text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+            >
+              {apiKeySaved ? 'Saved!' : 'Save'}
+            </button>
+          </div>
         </div>
 
         {/* Dynasty switcher at bottom */}

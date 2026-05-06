@@ -17,6 +17,7 @@ interface AiQueueActions {
   enqueueAiJob: (job: Omit<AiJob, 'id' | 'status' | 'enqueuedAt'>) => void;
   updateJobStatus: (id: string, status: AiJob['status']) => void;
   clearCompleted: () => void;
+  resetStuckJobs: () => void;
 }
 
 export const useAiQueueStore = create<AiQueueState & AiQueueActions>((set) => ({
@@ -38,6 +39,12 @@ export const useAiQueueStore = create<AiQueueState & AiQueueActions>((set) => ({
     set((state) => ({
       pendingAiJobs: state.pendingAiJobs.filter(
         (j) => j.status !== 'done' && j.status !== 'failed'
+      ),
+    })),
+  resetStuckJobs: () =>
+    set((state) => ({
+      pendingAiJobs: state.pendingAiJobs.map((j) =>
+        j.status === 'running' ? { ...j, status: 'pending' } : j
       ),
     })),
 }));
