@@ -216,6 +216,13 @@ export function PlayerProfilePage() {
     setTimeout(() => setApiKeyStatus('idle'), 2000);
   }
 
+  // Legacy Card data for departed players
+  const legacyCardData = useMemo(() => {
+    if (!player || player.status === 'active') return null;
+    const cardData = buildLegacyCardData(player, playerSeasons);
+    return { ...cardData, blurb: legacyBlurb };
+  }, [player, playerSeasons, legacyBlurb]);
+
   if (!activeDynasty) return null;
 
   if (!player) {
@@ -235,13 +242,6 @@ export function PlayerProfilePage() {
   }
 
   const isActive = player.status === 'active';
-
-  // Legacy Card data for departed players
-  const legacyCardData = useMemo(() => {
-    if (isActive) return null;
-    const cardData = buildLegacyCardData(player, playerSeasons);
-    return { ...cardData, blurb: legacyBlurb };
-  }, [isActive, player, playerSeasons, legacyBlurb]);
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
