@@ -33,12 +33,38 @@ import { RecordBookPage } from './pages/RecordBookPage';
 import { TickerBar } from './components/TickerBar';
 import { CommandPalette } from './components/CommandPalette';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { useAiQueueStore, type AiJob } from './store/ai-queue-store';
+import { db } from '@dynasty-os/db';
+import { generateGameNarrative } from './lib/narrative-service';
 
 // Per Phase 20 D-09: ephemeral one-shot signal for "post-dynasty-creation
 // onboarding pending". Set by LauncherPage after CreateDynastyModal success.
 // Consumed by App on the next activeDynasty change. No persistence needed —
 // this fires within the same session and is meaningless across launches.
 let _onboardingPending = false;
+
+// ── AI Queue Job Processor ────────────────────────────────────────────────────
+// Module-level helper: executes a single AiJob to completion.
+// Called from the useQueueProcessor hook inside App.
+// Only handles known job types; unknown types fall through as no-ops (T-25-06).
+async function processJob(job: AiJob): Promise<void> {
+  if (job.type === 'game-narrative') {
+    const { gameId, seasonId, dynastyId } = job.payload as {
+      gameId: string;
+      seasonId: string;
+      dynastyId: string;
+    };
+    const [game, season, dynasty] = await Promise.all([
+      db.games.get(gameId),
+      db.seasons.get(seasonId),
+      db.dynasties.get(dynastyId),
+    ]);
+    if (!game || !season || !dynasty) return;
+    // generateGameNarrative uses HAIKU_MODEL internally; caches result in aiCache
+    await generateGameNarrative(dynasty, season, game, 'espn');
+  }
+  // Future job types added here
+}
 
 export function signalOnboardingPending(): void {
   _onboardingPending = true;
@@ -107,6 +133,32 @@ function App() {
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [onboardingOpen, setOnboardingOpen] = useState(false);
   const activeDynasty = useDynastyStore((s) => s.activeDynasty);
+
+  // AI queue processor — processes one job at a time, never blocks UI (AIQE-01)
+  // processingRef guard prevents concurrent job dispatch (T-25-07)
+  const pendingAiJobs = useAiQueueStore((s) => s.pendingAiJobs);
+  const processingRef = useRef(false);
+
+  useEffect(() => {
+    const pending = pendingAiJobs.find((j) => j.status === 'pending');
+    if (!pending || processingRef.current) return;
+
+    processingRef.current = true;
+    useAiQueueStore.getState().updateJobStatus(pending.id, 'running');
+
+    processJob(pending)
+      .then(() => {
+        useAiQueueStore.getState().updateJobStatus(pending.id, 'done');
+      })
+      .catch(() => {
+        useAiQueueStore.getState().updateJobStatus(pending.id, 'failed');
+      })
+      .finally(() => {
+        processingRef.current = false;
+        // clearCompleted() removes done/failed jobs after every cycle (T-25-08)
+        useAiQueueStore.getState().clearCompleted();
+      });
+  }, [pendingAiJobs]);
 
   useEffect(() => {
     // D-01: Migrate legacy API key, then D-06: load all prefs.
