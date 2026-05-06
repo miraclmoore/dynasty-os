@@ -308,21 +308,25 @@ export async function getCachedGameNarrative(
 
 // ── Shared API Call Helper ────────────────────────────────────────────────────
 
-async function callClaudeApi(
+const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
+const SONNET_MODEL = 'claude-sonnet-4-6';
+
+async function callClaudeApiWithModel(
   systemPrompt: string,
   userMessage: string,
-  maxTokens: number
+  maxTokens: number,
+  model: string
 ): Promise<string | null> {
   if (!usePrefsStore.getState().hasApiKey) return null;
 
   const data = await callAnthropic({
-    model: 'claude-sonnet-4-6',
+    model,
     max_tokens: maxTokens,
     system: systemPrompt,
     messages: [{ role: 'user', content: userMessage }],
   });
   if (!data) return null;
-  const rawText: string | undefined = data?.content?.[0]?.text;
+  const rawText: string | undefined = (data as { content?: Array<{ text?: string }> })?.content?.[0]?.text;
   if (!rawText) {
     console.warn('[NarrativeService] Claude API response missing text content');
     return null;
@@ -383,7 +387,7 @@ export async function generateSeasonNarrative(
     const systemPrompt = buildSystemPrompt(tone, dynasty, false);
     const userMessage = buildSeasonUserMessage(ctx);
 
-    const rawText = await callClaudeApi(systemPrompt, userMessage, 1000);
+    const rawText = await callClaudeApiWithModel(systemPrompt, userMessage, 1000, SONNET_MODEL);
     if (!rawText) return null;
 
     const narrative = parseNarrativeResponse(rawText, tone);
@@ -419,7 +423,7 @@ export async function generateGameNarrative(
     const systemPrompt = buildSystemPrompt(tone, dynasty, true);
     const userMessage = buildGameUserMessage(dynasty, season, game, conference);
 
-    const rawText = await callClaudeApi(systemPrompt, userMessage, 400);
+    const rawText = await callClaudeApiWithModel(systemPrompt, userMessage, 400, HAIKU_MODEL);
     if (!rawText) return null;
 
     const narrative = parseNarrativeResponse(rawText, tone);
