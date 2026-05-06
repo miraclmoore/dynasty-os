@@ -56,7 +56,7 @@ Full details: Phase Details — v2.0 section below.
 - [x] **Phase 22: Screenshot Pipeline** - Player stats → DB, depth chart CSV, recruiting-motivations type, multi-image (completed 2026-05-04)
 - [x] **Phase 23: Madden Sync Upgrade** - PlayerStats extraction, auto-detect save path (completed 2026-05-05)
 - [x] **Phase 24: Recruiting Tools** - Hard Sell calculator, transfer risk, recruit→roster, draft pick→status (completed 2026-05-05)
-- [ ] **Phase 25: AI Queue & Features** - Queue processor, explicit blurb, model routing, game narrative trigger
+- [x] **Phase 25: AI Queue & Features** - Queue processor, explicit blurb, model routing, game narrative trigger (completed 2026-05-06)
 - [ ] **Phase 26: Data Entry UX** - Quick Score, CSV import, roster CSV, tips panel, video import
 - [ ] **Phase 27: Navigation & Routing** - CommandPalette all 24 pages, React Router migration
 - [ ] **Phase 28: Polish & Cleanup** - Dev trait trade calc, filter persist, component refactor, TickerBar, registry, timeline, final build check
@@ -298,7 +298,7 @@ Plans:
 Plans:
 - [x] 25-01-PLAN.md — Add 'game-narrative' to AiJob.type, model routing fix (HAIKU/SONNET constants), auto-enqueue in logGame (AIQE-03, AIQE-04)
 - [x] 25-02-PLAN.md — PlayerProfilePage button label fix: 'Generate AI Blurb' vs 'Regenerate Blurb' (AIQE-02)
-- [ ] 25-03-PLAN.md — useQueueProcessor hook in App.tsx: processes pending jobs, dispatches game-narrative to generateGameNarrative (AIQE-01)
+- [x] 25-03-PLAN.md — useQueueProcessor hook in App.tsx: processes pending jobs, dispatches game-narrative to generateGameNarrative (AIQE-01)
 
 ### Phase 26: Data Entry UX
 **Goal**: Coaches can log a game in under 5 seconds from the dashboard, bulk-import games and players via CSV, get screenshot capture guidance before parsing, and extract data from video recordings.
@@ -490,7 +490,7 @@ v1.0 phases executed 1 → 9. v2.0 phases execute 10 → 11 → 12 → 13. v2.1 
 | 22. Screenshot Pipeline | v2.2 | 5/5 | Complete   | 2026-05-04 |
 | 23. Madden Sync Upgrade | v2.2 | 2/2 | Complete   | 2026-05-05 |
 | 24. Recruiting Tools | v2.2 | 5/5 | Complete   | 2026-05-05 |
-| 25. AI Queue & Features | v2.2 | 2/3 | In Progress|  |
+| 25. AI Queue & Features | v2.2 | 3/3 | Complete   | 2026-05-06 |
 | 26. Data Entry UX | v2.2 | 0/TBD | Not started | - |
 | 27. Navigation & Routing | v2.2 | 0/TBD | Not started | - |
 | 28. Polish & Cleanup | v2.2 | 0/TBD | Not started | - |
